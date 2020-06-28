@@ -1,0 +1,75 @@
+.container
+{
+    text-align: center;
+    margin-top: 2%; 
+    font-size: 40px;
+}
+
+a{
+  text-decoration: none;
+  
+}
+
+.blue{
+    color: rgb(55, 0, 255);
+};
+.red{
+    color: red;
+};
+.gold{
+    color:rgb(255, 187, 0);
+};
+.green{
+    color:rgb(14, 85, 31);
+};
+  
+  .example-full-width {
+    width: 100%;
+  }
+  
+  .mat-form-field-appearance-outline .mat-form-field-infix {
+    padding: 0em 0 0em 0;
+}
+.buttonCss{
+    background-color: dodgerblue;
+    color: white;
+    
+}
+.nameCss{
+    color: dodgerblue;
+}
+.mat-card-actions{
+    padding: 8px;
+}
+.mat-button{
+    padding:0px;
+} 
+/* 
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+.login-form{
+    flex: 1;
+    display:flex;
+    flex-direction: column;
+  align-items: center;
+
+}
+button{
+    max-width: 20px;
+    max-height: 30px;
+    padding: 1px;
+}
+.container
+{ max-width: 400px;
+   
+    text-align: center;
+    margin-top: 10%; 
+    font-size: 40px;
+    font-size: inherit;
+    
+   
+   
+} */

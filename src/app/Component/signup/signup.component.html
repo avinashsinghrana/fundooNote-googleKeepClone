@@ -1,0 +1,101 @@
+<div fxLayout="row" fxLayoutAlign="center center">
+  <mat-card class="container" fxFlex="30%" flex-wrap: wrap fxFlex.xs="100%">
+    <div fxLayout="column">
+      <mat-card-title style="font-size: 30px; color: coral;">
+      Fundoo
+      </mat-card-title>
+      <mat-card-content style="font-size: 18px; font: arial sans-serif;">sign up</mat-card-content>
+    </div>
+
+    <form [formGroup]="registerForm">
+      <mat-card-content>
+        <div fxLayout="column" fxFlex="100" class="1">
+          <!-- first name -->
+          <div fxLayout="column" fxLayoutAlign="center">
+            <mat-form-field appearance="outline">
+              <mat-label>First Name</mat-label>
+              <input matInput placeholder="First Name" id="name" name="firstName" formControlName="firstName"
+                [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }" required>
+              <mat-icon matSuffix>person</mat-icon>
+              <mat-error *ngIf="registerForm.hasError('required', ['firstName'])">
+                First Name is required
+              </mat-error>
+              <mat-error *ngIf="registerForm.hasError('firstName', ['firstName'])">
+                Enter valid First Name
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <!-- last name -->
+          <div fxLayout="column" fxLayoutAlign="center">
+            <mat-form-field appearance="outline">
+              <mat-label>Last Name</mat-label>
+              <input matInput placeholder="First Name" id="name" name="lastName" formControlName="lastName"
+                [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }" required>
+              <mat-icon matSuffix>person</mat-icon>
+              <mat-error *ngIf="registerForm.hasError('required', ['lastName'])">
+                Last Name is required
+              </mat-error>
+              <mat-error *ngIf="registerForm.hasError('lastName', ['lastName'])">
+                Enter valid Last Name
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <!-- email -->
+          <div fxLayout="column" fxLayoutAlign="center">
+            <mat-form-field appearance="outline">
+              <mat-label>Email Id</mat-label>
+              <input matInput placeholder="emailId" id="Emailid" name="emailId" formControlName="email"
+                [ngClass]="{ 'is-invalid': submitted && f.email.errors }" required>
+              <mat-icon matSuffix>email</mat-icon>
+              <mat-error *ngIf="registerForm.hasError('required', ['email'])">
+                Email is required
+              </mat-error>
+              <mat-error *ngIf="registerForm.hasError('email', ['email'])">
+                Enter valid email
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <!-- password -->
+          <div fxLayout="column" fxLayoutAlign="center">
+            <mat-form-field appearance="outline">
+              <mat-label>password</mat-label>
+              <input matInput placeholder="Password" id="pswd" formControlName="password" [type]="hide ? 'password' : 'text'"
+                type="password" name="password" required [ngClass]="{ 'is-invalid': submitted && f.password.errors }">
+              <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}
+              </mat-icon>
+              <mat-error *ngIf="registerForm.hasError('required', ['password'])">
+                Password is required
+              </mat-error>
+              <mat-error *ngIf="registerForm.hasError('minLength(8)', ['password'])">
+                Enter a strong password
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <!-- service -->
+          <div fxLayout="column" fxLayoutAlign="center">
+            <mat-form-field appearance="outline">
+              <mat-label>Service</mat-label>
+              <input matInput placeholder="service" id="Service" name="service" formControlName="service"
+                [ngClass]="{ 'is-invalid': submitted && f.service.errors }" required>
+              <mat-icon matSuffix>label_important</mat-icon>
+              <mat-error *ngIf="registerForm.hasError('required', ['service'])">
+                Service is required
+              </mat-error>
+              <mat-error *ngIf="registerForm.hasError('service', ['service'])">
+                Provide Appropriate service
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+        </div>
+      </mat-card-content>
+    </form>
+    <mat-card-actions fxLayout="row" fxLayoutAlign="space-between center" style="margin-bottom: 5px;">
+      <button mat-raised-button style="margin-right: 7px;" name="Register" id="rgstr" class="buttonCss" >sign Up</button>
+      <button mat-raised-button class="buttonCss" id="login" name="Login"style="margin: 0 0;" routerLink='/login'>Login</button>
+    </mat-card-actions>
+    </mat-card>
+</div>

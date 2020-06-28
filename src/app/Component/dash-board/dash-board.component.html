@@ -1,0 +1,92 @@
+<mat-toolbar class="toolbar">
+  <button mat-icon-button (click)="isExpanded = !isExpanded">
+    <mat-icon>menu</mat-icon>
+  </button>
+ <!--  <img src="C:\Users\cpsharma\Desktop/bridgelabz.png" alt="my img" style="width:40px;height:30px;"> -->
+  <div class="example-app-name">Fundoo Note</div>
+   
+  <input type="text" placeholder="Search.." name="search" class="search">
+  <div fxFlex fxLayout fxLayoutAlign="flex-end">
+    <ul flexLayout="row" fxLayoutGap="15px" class="menu-icons">
+    <li><button><mat-icon  (click)="refresh()" class="material-icons-outlined">refresh</mat-icon></button></li>
+    <li><mat-icon class="material-icons-outlined">settings</mat-icon></li>
+    <li><mat-icon class="material-icons-outlined">view_stream</mat-icon></li>
+    <li><mat-icon class="material-icons-outlined">account_circle</mat-icon></li>
+  </ul>
+  </div>
+</mat-toolbar>
+<hr>
+<mat-sidenav-container class="example-container" >
+  <mat-sidenav 
+    #sidenav
+    class="example-sidenav"
+    mode="side"
+    opened="true"
+    (mouseenter)="mouseenter()"
+    (mouseleave)="mouseleave()"
+  >
+  <mat-nav-list>
+      <mat-list-item>
+        <button mat-button routerLink="/dash-board" > 
+      <mat-icon  class="material-icons-outlined orange600"  >emoji_objects</mat-icon>
+<span class="full-width" *ngIf="isExpanded || isShowing">Notes</span>
+        </button>
+</mat-list-item>
+<mat-list-item>
+  <button mat-button routerLink="/reminders" > 
+      <mat-icon   class="material-icons-outlined orange600" >notifications</mat-icon>
+      <span class="full-width" *ngIf="isExpanded || isShowing">Reminders</span> 
+  </button>
+    </mat-list-item>
+<mat-list-item>
+  <button mat-button routerLink="/dash-board" > 
+      <mat-icon  class="material-icons-outlined orange600" >edit</mat-icon> 
+      <span class="full-width" *ngIf="isExpanded || isShowing">Edit labels</span>
+  </button>
+</mat-list-item>
+<mat-list-item>
+ <button mat-button routerLink="/archive" > 
+      <mat-icon  class="material-icons-outlined orange600" >archive</mat-icon>
+      <span class="full-width" *ngIf="isExpanded || isShowing">Archive</span> 
+    </button> 
+    </mat-list-item>
+    
+    <mat-list-item>
+      <button mat-button routerLink="/delete-note"> 
+      <mat-icon  class="material-icons-outlined orange600" >delete</mat-icon>
+      <span class="full-width" *ngIf="isExpanded || isShowing">Trash</span> 
+    </button>
+    </mat-list-item>
+</mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="example-sidenav-content">
+    <mat-expansion-panel  [expanded]="step === 0" (opened)="setStep(0)" hideToggle class="mat-expansion-panel">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Note
+        </mat-panel-title>
+        <mat-panel-description>
+         Take a note...
+           <mat-icon class="brush">brush</mat-icon> 
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+  
+      <!-- <mat-form-field>
+        <mat-label>First name</mat-label>
+        <input matInput>
+      </mat-form-field>
+  
+      <mat-form-field>
+        <mat-label>Age</mat-label>
+        <input matInput type="number" min="1">
+      </mat-form-field> -->
+  
+      <mat-action-row>
+        <app-icon-collector></app-icon-collector>
+        <button mat-button color="primary" (click)="nextStep()" >close</button>
+      </mat-action-row> 
+    </mat-expansion-panel>
+  </mat-sidenav-content>
+  </mat-sidenav-container>
+
