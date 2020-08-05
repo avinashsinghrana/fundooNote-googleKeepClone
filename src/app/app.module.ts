@@ -16,6 +16,7 @@ import { ArchiveComponent } from './Component/archive/archive.component';
 import { DeleteNoteComponent } from './Component/delete-note/delete-note.component';
 import { RemindersComponent } from './Component/reminders/reminders.component';
 import { IconCollectorComponent } from './Component/icon-collector/icon-collector.component';
+import {MatTableModule} from '@angular/material/table';
 
 
 
@@ -31,22 +32,22 @@ import { IconCollectorComponent } from './Component/icon-collector/icon-collecto
     DeleteNoteComponent,
     RemindersComponent,
     IconCollectorComponent,
-   
+
 
   ],
-  imports: [
-    BrowserAnimationsModule,
-    FlexLayoutModule,
-    AppRoutingModule,
-    FormsModule,
-    MaterialModule,
-    BrowserModule,
-    ReactiveFormsModule,
-    HttpClientModule
-   
-    
-    
-  ],
+    imports: [
+        BrowserAnimationsModule,
+        FlexLayoutModule,
+        AppRoutingModule,
+        FormsModule,
+        MaterialModule,
+        BrowserModule,
+        ReactiveFormsModule,
+        HttpClientModule,
+        MatTableModule
+
+
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

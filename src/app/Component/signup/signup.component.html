@@ -11,11 +11,12 @@
       <mat-card-content>
         <div fxLayout="column" fxFlex="100" class="1">
           <!-- first name -->
+        <div fxLayout="row" fxFlex="100" class="1">
           <div fxLayout="column" fxLayoutAlign="center">
             <mat-form-field appearance="outline">
               <mat-label>First Name</mat-label>
               <input matInput placeholder="First Name" id="name" name="firstName" formControlName="firstName"
-                [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }" required>
+                     [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }" required>
               <mat-icon matSuffix>person</mat-icon>
               <mat-error *ngIf="registerForm.hasError('required', ['firstName'])">
                 First Name is required
@@ -25,12 +26,11 @@
               </mat-error>
             </mat-form-field>
           </div>
-          <!-- last name -->
           <div fxLayout="column" fxLayoutAlign="center">
             <mat-form-field appearance="outline">
               <mat-label>Last Name</mat-label>
-              <input matInput placeholder="First Name" id="name" name="lastName" formControlName="lastName"
-                [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }" required>
+              <input matInput placeholder="First Name" id="Lname" name="lastName" formControlName="lastName"
+                     [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }" required>
               <mat-icon matSuffix>person</mat-icon>
               <mat-error *ngIf="registerForm.hasError('required', ['lastName'])">
                 Last Name is required
@@ -40,6 +40,36 @@
               </mat-error>
             </mat-form-field>
           </div>
+        </div>
+<!--          <div fxLayout="column" fxLayoutAlign="center">-->
+<!--            <mat-form-field appearance="outline">-->
+<!--              <mat-label>First Name</mat-label>-->
+<!--              <input matInput placeholder="First Name" id="name" name="firstName" formControlName="firstName"-->
+<!--                [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }" required>-->
+<!--              <mat-icon matSuffix>person</mat-icon>-->
+<!--              <mat-error *ngIf="registerForm.hasError('required', ['firstName'])">-->
+<!--                First Name is required-->
+<!--              </mat-error>-->
+<!--              <mat-error *ngIf="registerForm.hasError('firstName', ['firstName'])">-->
+<!--                Enter valid First Name-->
+<!--              </mat-error>-->
+<!--            </mat-form-field>-->
+<!--          </div>-->
+          <!-- last name -->
+<!--          <div fxLayout="column" fxLayoutAlign="center">-->
+<!--            <mat-form-field appearance="outline">-->
+<!--              <mat-label>Last Name</mat-label>-->
+<!--              <input matInput placeholder="First Name" id="name" name="lastName" formControlName="lastName"-->
+<!--                [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }" required>-->
+<!--              <mat-icon matSuffix>person</mat-icon>-->
+<!--              <mat-error *ngIf="registerForm.hasError('required', ['lastName'])">-->
+<!--                Last Name is required-->
+<!--              </mat-error>-->
+<!--              <mat-error *ngIf="registerForm.hasError('lastName', ['lastName'])">-->
+<!--                Enter valid Last Name-->
+<!--              </mat-error>-->
+<!--            </mat-form-field>-->
+<!--          </div>-->
 
           <!-- email -->
           <div fxLayout="column" fxLayoutAlign="center">
