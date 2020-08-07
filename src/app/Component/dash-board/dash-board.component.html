@@ -2,10 +2,10 @@
   <button class="menu" mat-icon-button (click)="isExpanded = !isExpanded">
     <mat-icon>menu</mat-icon>
   </button>
-  <img src="https://www.gstatic.com/images/branding/product/1x/keep_48dp.png" style="width: 40px; height: 40px; padding-right: 4px ; line-height: normal;
+  <img src="https://www.gstatic.com/images/branding/product/1x/keep_48dp.png" style="width: 32px; height: 32px; padding-left: 0px;padding-top: 5px; padding-right: 4px ; line-height: normal;
     position: relative; padding-bottom: 2px;
-    padding-left: 20px;"/>
-  <div class="example-app-name">Fundoo Note</div>
+    "/>
+  <div class="example-app-name">FundooNote</div>
 <mat-card class="search">
   <mat-icon >search</mat-icon>
   <input matInput type="text" placeholder="Search" class="searchBar" >
@@ -15,15 +15,15 @@
   <div fxFlex fxLayout fxLayoutAlign="flex-end">
     <ul flexLayout="row" fxLayoutGap="15px" class="menu-icons">
       <li><button class="matbutton"><mat-icon  (click)="refresh()" class="material-icons-outlined">refresh</mat-icon></button></li>
-      <li><button class="matbutton"><mat-icon class="material-icons-outlined"  (click)="view('grid')" *ngIf="viewState == 'list'">view_agenda</mat-icon></button>
-        <button class="matbutton"><mat-icon  (click)="view('list')" *ngIf="viewState == 'grid'">grid_view</mat-icon></button></li>
+      <li><button class="matbutton"><mat-icon   (click)="view('list')" *ngIf="viewState == 'grid'">view_agenda</mat-icon></button>
+        <button class="matbutton"><mat-icon  (click)="view('grid')" *ngIf="viewState == 'list'">grid_view</mat-icon></button></li>
 <!--      <li><mat-icon class="material-icons-outlined">settings</mat-icon></li>-->
 
     </ul>
 
     <ul flexLayout="row" fxLayoutGap="15px" class="menu-icons2">
 <!--    <li><mat-icon class="material-icons-outlined">apps</mat-icon></li>-->
-      <li><button class="matbutton"><mat-icon class="material-icons-outlined" (click)="login()">account_circle</mat-icon></button>
+      <li><button class="matbutton1"><mat-icon class="material-icons-outlined" (click)="login()">account_circle</mat-icon></button>
 <!--      <img src="loginImage">-->
     </li>
   </ul>
@@ -39,50 +39,43 @@
     (mouseenter)="mouseenter()"
     (mouseleave)="mouseleave()"
   >
-  <mat-nav-list>
-      <mat-list-item>
-        <button class="button" mat-button routerLink="/dash-board" >
+  <mat-nav-list class="navside">
+      <mat-list-item routerLink="/dash-board">
       <mat-icon  class="material-icons-outlined orange600"  >emoji_objects</mat-icon>
-<span class="full-width" *ngIf="isExpanded || isShowing">Notes</span>
-        </button>
+<span  class="full-width" *ngIf="isExpanded || isShowing">Notes</span>
 </mat-list-item>
+<!--    remaindrer-->
 <mat-list-item>
-  <button  class="button" mat-button routerLink="/reminders" >
       <mat-icon   class="material-icons-outlined orange600" >notifications</mat-icon>
-      <span class="full-width1" *ngIf="isExpanded || isShowing">Reminders</span>
-  </button>
-    </mat-list-item>
-<mat-list-item>
-  <button class="button" mat-button routerLink="/dash-board" >
-      <mat-icon  class="material-icons-outlined orange600" >edit</mat-icon>
-      <span class="full-width2" *ngIf="isExpanded || isShowing">Edit labels</span>
-  </button>
-</mat-list-item>
-<mat-list-item>
- <button class="button"  mat-button routerLink="/archive" >
-      <mat-icon  class="material-icons-outlined orange600" >archive</mat-icon>
-      <span class="full-width3" *ngIf="isExpanded || isShowing">Archive</span>
-    </button>
+      <span class="full-width" *ngIf="isExpanded || isShowing">Reminders</span>
     </mat-list-item>
 
-    <mat-list-item>
-      <button class="button" mat-button routerLink="/delete-note">
+<mat-list-item routerLink="/dash-board">
+      <mat-icon  class="material-icons-outlined orange600" >edit</mat-icon>
+      <span class="full-width" *ngIf="isExpanded || isShowing">Edit labels</span>
+</mat-list-item>
+
+<mat-list-item routerLink="/archive">
+      <mat-icon  class="material-icons-outlined orange600" >archive</mat-icon>
+      <span class="full-width" *ngIf="isExpanded || isShowing">Archive</span>
+    </mat-list-item>
+
+    <mat-list-item routerLink="/delete-note">
       <mat-icon  class="material-icons-outlined orange600" >delete</mat-icon>
-      <span class="full-width4" *ngIf="isExpanded || isShowing">Trash</span>
-    </button>
+      <span class="full-width" *ngIf="isExpanded || isShowing">Trash</span>
     </mat-list-item>
 </mat-nav-list>
   </mat-sidenav>
 
   <mat-sidenav-content class="example-sidenav-content">
-
+<div>
     <mat-card *ngIf="!popup" (click)="onPopup()" class="matcard" flex fxLayout="row">
-
       <input matInput type="text" placeholder="Take a Note..." class="topinput">
       <button mat-icon-button   matTooltip="Brush" routerLink="/dashboard"  >
         <mat-icon matSuffix class="material-icons-outlined " style="font-size: 24px !important">brush</mat-icon>
       </button>
     </mat-card>
+
 
     <mat-card *ngIf="popup"  class="matcard1"    [formGroup]="createNote">
       <div>
@@ -90,22 +83,30 @@
       </div>
 
       <div >
-        <textarea  type="text" formControlName="description" placeholder="Take a note..."  class="input"
+        <input  type="text" formControlName="description" placeholder="Take a note..."  class="input"
                style="margin-top:2%"
-                   style="color: #202124; direction: ltr;font-family: 'Roboto',arial,sans-serif;font-size: .875rem;" ></textarea>
+                   style="color: #202124; direction: ltr;font-family: 'Roboto',arial,sans-serif;font-size: .875rem;" />
       </div>
 
       <mat-action-row   >
-        <div  class="iconCollector" fxLayout="row">
+        <div  class="iconCollector" style="margin-left: -29px;" fxLayout="row">
           <app-icon-collector></app-icon-collector>
-          <button mat-button color="primary" (click)="note()">close</button>
+          <button mat-button style="margin-left: 273px;margin-top: 13px;" color="primary" (click)="note()">close</button>
 
         </div>
 
+
       </mat-action-row>
+
     </mat-card>
+</div>
+    <div style="margin-top: 10px;margin-left: 82px; height: 576px;overflow-x: hidden;overflow-y: hidden">
+      <app-create-note></app-create-note>
+    </div>
 
   </mat-sidenav-content>
 
   </mat-sidenav-container>
+
+
 

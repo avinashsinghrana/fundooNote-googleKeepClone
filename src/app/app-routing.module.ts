@@ -4,7 +4,7 @@ import { LoginComponent } from "../app/Component/login/login.component"
 import { SignupComponent } from "../app/Component/signup/signup.component"
 import { ForgetPasswordComponent } from './Component/forget-password/forget-password.component';
 import { ResetPasswordComponent } from './Component/reset-password/reset-password.component';
-import{ DashBoardComponent } from './Component/dash-board/dash-board.component';
+import { DashBoardComponent } from './Component/dash-board/dash-board.component';
 import { ArchiveComponent } from './Component/archive/archive.component';
 import { DeleteNoteComponent } from './Component/delete-note/delete-note.component';
 import { RemindersComponent } from './Component/reminders/reminders.component';

@@ -4,12 +4,16 @@
 
 
 html ,body {
-    height: 100%;
+    height: inherit;
     font-family: 'Roboto',sans-serif;
+  //overflow-y: hidden;
+  //overflow-x: hidden;
 
 }
 
 body{
     margin: 0;
-    
+  overflow-x: hidden;
+  overflow-y: hidden;
+
 }

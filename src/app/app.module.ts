@@ -17,6 +17,7 @@ import { DeleteNoteComponent } from './Component/delete-note/delete-note.compone
 import { RemindersComponent } from './Component/reminders/reminders.component';
 import { IconCollectorComponent } from './Component/icon-collector/icon-collector.component';
 import {MatTableModule} from '@angular/material/table';
+import { CreateNoteComponent } from './Component/create-note/create-note.component';
 
 
 
@@ -32,6 +33,7 @@ import {MatTableModule} from '@angular/material/table';
     DeleteNoteComponent,
     RemindersComponent,
     IconCollectorComponent,
+    CreateNoteComponent,
 
 
   ],

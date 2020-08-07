@@ -1,11 +1,14 @@
-import {Component, Inject, OnInit, ViewChild} from '@angular/core';
-import { MatSidenav } from '@angular/material/sidenav';
-import { Router } from '@angular/router';
-import{ Location } from '@angular/common';
+import {Component, Inject, Input, OnInit, ViewChild} from '@angular/core';
+import {MatSidenav} from '@angular/material/sidenav';
+import {Router} from '@angular/router';
+import {Location} from '@angular/common';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {NoteServiceService} from '../../Service/note-service.service';
 import {LoginComponent} from '../login/login.component';
 import {MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
+import {getHttpsCall} from '../utils';
+import {BehaviorSubject} from 'rxjs';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-dash-board',
@@ -13,19 +16,20 @@ import {MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
   styleUrls: ['./dash-board.component.scss']
 })
 export class DashBoardComponent implements OnInit {
-  title='refreshPage';
-
+  title = 'refreshPage';
+  // private noteData: any = new BehaviorSubject<any>([]);
   step = 0;
-  loginStatus: boolean = false;
+  noteData: any = [];
+  loginStatus = false;
   img: string = null;
-  viewState : string = 'list';
+  viewState = 'grid';
   panelOpenState = false;
   @ViewChild('sidenav') sidenav: MatSidenav;
   isExpanded = true;
   isShowing = false;
-   popup: boolean;
+  popup: boolean;
   createNote: FormGroup;
-  @Inject(MAT_DIALOG_DATA) dialog: MatDialog;
+  private token: string;
 
   mouseenter() {
     if (!this.isExpanded) {
@@ -43,18 +47,20 @@ export class DashBoardComponent implements OnInit {
               public noteService: NoteServiceService,
               public formBuilder: FormBuilder,
               public location: Location,
-              ) { }
+              public dialog: MatDialog,
+              public snack: MatSnackBar,
+  ) {
+  }
 
   ngOnInit(): void {
-    this.noteService.currentLoginStatus$.subscribe(data => {
-      console.log('user status');
-    });
+    // this.noteService.currentLoginStatus$.subscribe(data => {
+    //   console.log('user status');
+    // });
     this.createNote = this.formBuilder.group({
       title: '',
       description: ''
-    })
+    });
   }
-
 
   setStep(index: number) {
     this.step = index;
@@ -69,39 +75,43 @@ export class DashBoardComponent implements OnInit {
   }
 
   refresh(): void {
-    this.router.navigateByUrl("/", { skipLocationChange: true}).then()
-      this.router.navigate([decodeURI(this.location.path())]);
-
+    location.reload();
   }
+
   onPopup() {
     this.popup = true;
   }
 
   note() {
+    this.token = localStorage.getItem('token');
+    if (this.createNote) {
+      this.noteService.note(this.createNote.value, this.token).subscribe((response: any) => {
+          console.log('response', response);
+          location.reload();
 
-
-    // this.token = localStorage.getItem('token');
-    // if (this.createNote)
-    //   this.NoteService.note(this.createNote.value,this.token).subscribe((response: any) => {
-    //       console.log("response",response);
-    //       this.popup=false;
-    //     }
-    //   )}
+        }
+      );
+    }
     this.popup = false;
+
   }
+
 
   view(state: any) {
     this.viewState = state;
-    console.log('state changed to  : '   ,  state);
-    console.log('view state changed to  : '   ,  this.viewState);
+    localStorage.setItem('status', this.viewState);
+    console.log('state changed to  : ', state);
+    console.log('view state changed to  : ', this.viewState);
   }
 
   login() {
-    if(!this.loginStatus.valueOf()){
-      this.dialog.open(LoginComponent, {
-        width: '28%',
-        height: 'auto'
-      });
+    if (localStorage.getItem('token') === null) {
+      // this.dialog.open(LoginComponent, {
+      //   width: 'inherit'
+      // });
+      this.router.navigate(['login']);
+    } else {
+      this.snack.open('already logedin', 'ok', {duration: 2000});
     }
   }
 }

@@ -1,0 +1,55 @@
+<div style="margin-top: 20px; margin-left: 50px; width: 96%;height: fit-content" fxLayout="row wrap" fxLayoutGap="10px"
+     fxLayoutAlign="start center" fxLayoutAlign.xs="center center" *ngIf="grid()== true">
+  <div fxFlex='280px' fxFlex.xs='100' *ngFor="let items of allNotes">
+    <mat-card style="margin-top: 10px; overflow-x: hidden; " fxFlex="100%;color: #5f6368;">
+      <form>
+        <mat-card-content >
+
+          <!-- <div *ngIf="items.image!=null">
+            <img style="width: 100%;" src="{{items.image}}">
+          </div> -->
+          <div>
+            {{items.title}}
+          </div>
+          <div>
+            {{items.description}}
+          </div>
+        </mat-card-content>
+      </form>
+      <div style="padding-left: 0px;
+      padding-right: 0px;margin-left: -50px;margin-bottom: -28px">
+        <app-icon-collector></app-icon-collector>
+        <!-- <app-icons [isTrash]="isTrash" [isArchive]="isArchive" [noteData]="items"></app-icons> -->
+      </div>
+    </mat-card>
+  </div>
+</div>
+
+
+<div style="margin-top: 20px; overflow-x: hidden; margin-left: 50px; width: 96%;" fxLayout="column wrap" fxLayoutGap="10px"
+     fxLayoutAlign="start center" fxLayoutAlign.xs="center center" *ngIf="grid()== false">
+  <div  fxFlex.xs='100' *ngFor="let items of allNotes" >
+    <mat-card style="margin-top: 10px;height: 128px;
+              width: 709px;
+              margin-left: -114px;margin-block-start: 0px;color: #5f6368; margin-block-end: 0px; margin-block: 0px" fxFlex="100%"  >
+      <form>
+        <mat-card-content >
+
+          <!-- <div *ngIf="items.image!=null">
+            <img style="width: 100%;" src="{{items.image}}">
+          </div> -->
+          <div>
+            {{items.title}}
+          </div>
+          <div>
+            {{items.description}}
+          </div>
+        </mat-card-content>
+      </form>
+      <div style="padding-left: 0px;
+      padding-right: 0px; margin-left: -54px;margin-bottom: -100px" >
+        <app-icon-collector ></app-icon-collector>
+      </div>
+    </mat-card>
+  </div>
+</div>
