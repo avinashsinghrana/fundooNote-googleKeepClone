@@ -17,16 +17,16 @@
 
   <div fxFlex fxLayout fxLayoutAlign="flex-end">
     <ul flexLayout="row" fxLayoutGap="15px" class="menu-icons">
-      <li><button class="matbutton"><mat-icon  (click)="refresh()" class="material-icons-outlined">refresh</mat-icon></button></li>
-      <li><button class="matbutton"><mat-icon   (click)="view('list')" *ngIf="viewState == 'grid'">view_agenda</mat-icon></button>
-        <button class="matbutton"><mat-icon  (click)="view('grid')" *ngIf="viewState == 'list'">grid_view</mat-icon></button></li>
+      <li><button class="matbutton"><mat-icon matTooltip="refresh" (click)="refresh()" class="material-icons-outlined">refresh</mat-icon></button></li>
+      <li><button class="matbutton"><mat-icon  matTooltip="list" (click)="view('list')" *ngIf="viewState == 'grid'">view_agenda</mat-icon></button>
+        <button class="matbutton"><mat-icon matTooltip="grid" (click)="view('grid')" *ngIf="viewState == 'list'">grid_view</mat-icon></button></li>
 <!--      <li><mat-icon class="material-icons-outlined">settings</mat-icon></li>-->
 
     </ul>
 
     <ul flexLayout="row" fxLayoutGap="15px" class="menu-icons2">
 <!--    <li><mat-icon class="material-icons-outlined">apps</mat-icon></li>-->
-      <li><button class="matbutton1"><mat-icon class="material-icons-outlined" (click)="login()">account_circle</mat-icon></button>
+      <li><button class="matbutton1"><mat-icon matTooltip="account" class="material-icons-outlined" (click)="login()">account_circle</mat-icon></button>
 <!--      <img src="loginImage">-->
     </li>
   </ul>

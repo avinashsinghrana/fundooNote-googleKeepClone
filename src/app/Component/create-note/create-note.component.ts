@@ -28,6 +28,7 @@ export class CreateNoteComponent implements OnInit {
     {key: "carribeangreen",    value: "#05d59e", friendlyName: "Carribean Green" },
     {key: "bluejeans",    value: "#5bbfea", friendlyName: "Blue Jeans" },
     {key: "cyancornflower",    value: "#1089b1", friendlyName: "Cyan Cornflower" },]
+  indexStatus: number;
 
   constructor(private noteService: NoteServiceService,
               public formBuilder: FormBuilder,
@@ -44,14 +45,16 @@ export class CreateNoteComponent implements OnInit {
     this.getAllNotes();
   }
 
-  mouseenter() {
+  mouseenter(i: number) {
     console.log('mouseenter',this.isShowing)
       this.isShowing = true;
+    this.indexStatus = i;
   }
 
   mouseleave() {
     console.log('mouseleave',this.isShowing)
       this.isShowing = false;
+    this.indexStatus = -1;
   }
 
   onPopup() {
@@ -88,5 +91,9 @@ export class CreateNoteComponent implements OnInit {
     } else {
       return false;
     }
+  }
+
+  indexget() {
+
   }
 }

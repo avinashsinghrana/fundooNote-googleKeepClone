@@ -1,26 +1,29 @@
 <div>
   <mat-card *ngIf="!popup" (click)="onPopup()" class="matcard" flex fxLayout="row">
     <input matInput type="text" placeholder="Take a Note..." class="topinput">
-    <button mat-icon-button   matTooltip="Brush" routerLink="/dashboard"  >
-      <mat-icon matSuffix class="material-icons-outlined " style="font-size: 24px; margin-top: -7px !important">brush</mat-icon>
+    <button mat-icon-button matTooltip="Brush" routerLink="/dashboard">
+      <mat-icon matSuffix class="material-icons-outlined " style="font-size: 24px; margin-top: -7px !important">brush
+      </mat-icon>
     </button>
   </mat-card>
 
 
-  <mat-card *ngIf="popup"  class="matcard1"    [formGroup]="createNote">
+  <mat-card *ngIf="popup" class="matcard1" [formGroup]="createNote">
     <div>
-      <input matInput type="text" formControlName="title" placeholder="Title" class="input2" style=" font-size: 1rem;" />
+      <input matInput type="text" formControlName="title" placeholder="Title" class="input2" style=" font-size: 1rem;"/>
     </div>
 
-    <div >
-      <textarea  type="text" formControlName="description" placeholder="Take a note..."  class="input"
-                 style="margin-top:2%; color: #202124; direction: ltr;font-family: 'Roboto',arial,sans-serif;font-size: .875rem;overflow-y: hidden" ></textarea>
+    <div>
+      <textarea type="text" formControlName="description" placeholder="Take a note..." class="input"
+                style="margin-top:2%; color: #202124; direction: ltr;font-family: 'Roboto',arial,sans-serif;font-size: .875rem;overflow-y: hidden"></textarea>
     </div>
 
-    <mat-action-row   >
-      <div  class="iconCollector" style="margin-left: -29px;" fxLayout="row">
-        <div style="margin-left: -16px"><app-icon-collector></app-icon-collector></div>
-        <button mat-button style="margin-left: 375px;margin-top: 13px;" color="primary" (click)="note()">close</button>
+    <mat-action-row>
+      <div matTooltip="close" class="iconCollector" style="margin-left: -29px;margin-bottom: -15px;" fxLayout="row">
+        <div style="margin-left: -16px;">
+          <app-icon-collector></app-icon-collector>
+        </div>
+        <button mat-button style="margin-left: 324px;margin-top: 13px;" color="primary" (click)="note()">close</button>
 
       </div>
 
@@ -31,92 +34,131 @@
 </div>
 <!--new note creation-->
 <div style="margin-left:-45px; margin-top: 1% ">
-<div style="margin-top: 0px;overflow-y: hidden; margin-left: 50px; width: 96%;" fxLayout="row wrap" fxLayoutGap="10px"
-     fxLayoutAlign="start center" fxLayoutAlign.xs="center center" *ngIf="grid()== true">
-  <div fxFlex='280px' fxFlex.xs='100' *ngFor="let items of allNotes | noteSort: searchTerm">
-    <mat-card style="margin-top: 10px; overflow-x: hidden;margin-left: 8px " fxFlex="100%;color: #5f6368;">
-        <mat-card-content >
+  <div style="margin-top: 0px;overflow-y: hidden; margin-left: 50px; width: 96%;" fxLayout="row wrap" fxLayoutGap="10px"
+       fxLayoutAlign="start center" fxLayoutAlign.xs="center center" *ngIf="grid()== true">
+    <div fxFlex='280px' fxFlex.xs='100' *ngFor="let items of allNotes | noteSort: searchTerm; let i = index">
+      <mat-card style="margin-top: 10px; overflow-x: hidden;margin-left: 8px " fxFlex="100%;color: #5f6368;">
+        <mat-card-content>
 
           <!-- <div *ngIf="items.image!=null">
             <img style="width: 100%;" src="{{items.image}}">
           </div> -->
-          <div>
+          <div style="font-family: Roboto, Helvetica Neue, sans-serif;font-size: medium;font-weight: bold">
             {{items.title}}
           </div>
           <div>
             {{items.description}}
           </div>
         </mat-card-content>
-      <div (mouseenter)="mouseenter()"
-      (mouseleave)="mouseleave()" *ngIf="isShowing" style="padding-left: 0px;
+        <div (mouseenter)="mouseenter(i)"
+             (mouseleave)="mouseleave()" style="padding-left: 0px;
       padding-right: 0px;margin-left: -50px;margin-bottom: -28px">
-        <app-icon-collector></app-icon-collector>
-        <!-- <app-icons [isTrash]="isTrash" [isArchive]="isArchive" [noteData]="items"></app-icons> -->
-      </div>
-    </mat-card>
+          <ul style="list-style-type:none" fxLayout="row">
+            <li>
+
+              <button mat-icon-button class="iconButton">
+                <mat-icon *ngIf="isShowing && indexStatus === i" matTooltip="reminder" class="material-icons-outlined md-18">notifications
+                </mat-icon>
+
+              </button>
+            </li>
+
+            <li>
+              <button mat-icon-button class="iconButton">
+                <mat-icon *ngIf="isShowing && indexStatus === i" matTooltip="color" class="material-icons-outlined md-18">palette</mat-icon>
+              </button>
+            </li>
+
+            <li>
+              <button mat-icon-button class="iconButton">
+                <mat-icon *ngIf="isShowing && indexStatus === i" matTooltip="archive" class="material-icons-outlined md-18">archive
+                </mat-icon>
+
+              </button>
+            </li>
+            <li>
+
+              <button mat-icon-button class="iconButton">
+                <mat-icon *ngIf="isShowing && indexStatus === i" matTooltip="delete" class="material-icons-outlined md-18">delete</mat-icon>
+
+              </button>
+            </li>
+            <li>
+
+              <button mat-icon-button class="iconButton">
+                <mat-icon *ngIf="isShowing && indexStatus === i" matTooltip="more" class="material-icons-outlined md-18">more_vert</mat-icon>
+
+              </button>
+            </li>
+          </ul>
+        </div>
+      </mat-card>
+    </div>
   </div>
-</div>
 
 
-<div style="margin-top: 20px; overflow-x: hidden;overflow-y: hidden; margin-left: 50px; width: 96%;" fxLayout="column wrap" fxLayoutGap="10px"
-     fxLayoutAlign="start center" fxLayoutAlign.xs="center center" *ngIf="grid()== false">
-  <div  fxFlex.xs='100' *ngFor="let items of allNotes | noteSort: searchTerm" >
-    <mat-card style="margin-top: 10px;height: 128px;width: 690px;
-margin-left: -107px;margin-block-start: 0px;color: #5f6368; margin-block-end: 0px; margin-block: 0px" fxFlex="100%"  >
-        <mat-card-content >
+  <div style="margin-top: 20px; overflow-x: hidden;overflow-y: hidden; margin-left: 50px; width: 96%;"
+       fxLayout="column wrap" fxLayoutGap="10px"
+       fxLayoutAlign="start center" fxLayoutAlign.xs="center center" *ngIf="grid()== false">
+    <div fxFlex.xs='100' *ngFor="let items of allNotes | noteSort: searchTerm; let i = index">
+      <mat-card style="margin-top: 10px;height: 128px;width: 690px;
+margin-left: -80px;margin-block-start: 0px;color: #5f6368; margin-block-end: 0px; margin-block: 0px" fxFlex="100%">
+        <mat-card-content>
 
           <!-- <div *ngIf="items.image!=null">
             <img style="width: 100%;" src="{{items.image}}">
           </div> -->
-          <div>
+          <div style="font-family: Roboto, Helvetica Neue, sans-serif;font-size: medium;color: #202124;opacity: 85%">
             {{items.title}}
           </div>
           <div>
             {{items.description}}
           </div>
         </mat-card-content>
-      <div (mouseenter)="mouseenter()"
-           (mouseleave)="mouseleave()" style="padding-left: 0px;
-      padding-right: 0px; margin-left: -54px;margin-bottom: -100px" >
-        <ul style="list-style-type:none" fxLayout="row">
-          <li>
+        <div (mouseenter)="mouseenter(i)"
+             (mouseleave)="mouseleave()" style="padding-left: 0px;
+      padding-right: 0px; margin-left: -54px;margin-bottom: -100px">
+          <ul style="list-style-type:none" fxLayout="row">
+            <li>
 
-            <button mat-icon-button class="iconButton" >
-              <mat-icon *ngIf="isShowing"  class="material-icons-outlined md-18" >notifications</mat-icon>
+              <button mat-icon-button class="iconButton">
+                <mat-icon *ngIf="isShowing && indexStatus === i" matTooltip="reminder" class="material-icons-outlined md-18">notifications
+                </mat-icon>
 
-            </button>
-          </li>
+              </button>
+            </li>
 
-          <li>
-            <button mat-icon-button class="iconButton" >
-              <mat-icon *ngIf="isShowing" class="material-icons-outlined md-18" >palette</mat-icon>
-            </button>
-          </li>
+            <li>
+              <button mat-icon-button class="iconButton">
+                <mat-icon *ngIf="isShowing && indexStatus === i" matTooltip="color" class="material-icons-outlined md-18">palette</mat-icon>
+              </button>
+            </li>
 
-          <li>
-            <button mat-icon-button class="iconButton" >
-              <mat-icon *ngIf="isShowing" class="material-icons-outlined md-18" >archive</mat-icon>
+            <li>
+              <button mat-icon-button class="iconButton">
+                <mat-icon *ngIf="isShowing && indexStatus === i" matTooltip="archive" class="material-icons-outlined md-18">archive
+                </mat-icon>
 
-            </button>
-          </li>
-          <li>
+              </button>
+            </li>
+            <li>
 
-            <button mat-icon-button class="iconButton">
-              <mat-icon *ngIf="isShowing" class="material-icons-outlined md-18" >delete</mat-icon>
+              <button mat-icon-button class="iconButton">
+                <mat-icon *ngIf="isShowing && indexStatus === i" matTooltip="delete" class="material-icons-outlined md-18">delete</mat-icon>
 
-            </button>
-          </li>
-          <li>
+              </button>
+            </li>
+            <li>
 
-            <button mat-icon-button class="iconButton">
-              <mat-icon *ngIf="isShowing" class="material-icons-outlined md-18" >more_vert</mat-icon>
+              <button mat-icon-button class="iconButton">
+                <mat-icon *ngIf="isShowing && indexStatus === i" matTooltip="more" class="material-icons-outlined md-18">more_vert</mat-icon>
 
-            </button>
-          </li>
-        </ul>
+              </button>
+            </li>
+          </ul>
 
-      </div>
-    </mat-card>
+        </div>
+      </mat-card>
+    </div>
   </div>
-</div>
 </div>
