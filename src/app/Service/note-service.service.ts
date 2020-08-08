@@ -12,6 +12,8 @@ export class NoteServiceService {
   currentLoginStatus$ = this.loginSource.asObservable();
   private noteSource = new Subject<any>();
   currentNotes$ = this.noteSource.asObservable();
+  private searchSource = new Subject<string>();
+  currentSearch$ = this.searchSource.asObservable();
 
 
   constructor(private httpService: HttpService) {
@@ -33,6 +35,10 @@ export class NoteServiceService {
   GetAllNotes(token: string) {
     return this.httpService.GET('/notes/getNotesList?access_token='+ token);
 
+  }
+
+  changeEvent(searchTerm: string) {
+    this.searchSource.next(searchTerm);
   }
 }
 

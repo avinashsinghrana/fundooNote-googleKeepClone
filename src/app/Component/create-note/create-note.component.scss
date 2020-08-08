@@ -1,0 +1,92 @@
+
+.matcard {
+  box-shadow: gray;
+  margin-left: 143px;
+  margin-right: 40%;
+  margin-top: 20px;
+  padding: 7px;
+  min-width: 360px;
+  height: 48px;
+  width: 596px;
+}
+.mat-card1:hover {
+  box-shadow: 0 4px 8px 0 rgba(70, 71, 70, 0.2),
+  0 6px 20px 0 rgba(29, 29, 29, 0.19);
+}
+
+.mat-card:hover {
+  box-shadow: 0 4px 8px 0 rgba(70, 71, 70, 0.2),
+  0 6px 20px 0 rgba(29, 29, 29, 0.19);
+}
+
+.matcard1 {
+  box-shadow: gray;
+  margin-left: 143px;
+  margin-right: 40%;
+  margin-top: 42px;
+  min-width: 360px;
+  width: 596px;
+  box-shadow: #5f6368;
+  padding: 7px;
+  height: 101%;
+}
+
+.topinput {
+  border: none;
+  width: 100%;
+  outline-color: white;
+  letter-spacing: .01428571em;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: .875rem;
+  font-weight: 400;
+  line-height: 1.25rem;
+}
+
+.input {
+  border: 2px;
+  min-height: 65px;
+  outline-color: white;
+  margin-bottom: -14px;
+  width: 586px;
+  color: #202124;
+  direction: ltr;
+  margin-left: 3px;
+  resize: vertical;
+  font-size: medium;
+  font-family: 'Roboto', arial, sans-serif;
+  min-width: 360px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 1px;
+
+}
+
+.input2 {
+  padding: 1px;
+  margin-left: 3px;
+  border: 2px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: bold;
+  opacity: 80%;
+  outline-color: white;
+  margin-bottom: 9px;
+  width: 596px;
+  height: 27px;
+}
+
+.material-icons-outlined{
+  color: #5f6368;
+
+}
+.material-icons.md-18 { font-size: 18px; }
+
+.iconButton{
+  background-color: transparent!important;
+  background-repeat: no-repeat;
+  border: none;
+  cursor:pointer;
+  overflow: hidden;
+  outline:none;
+  font-size: 0.8em;
+  padding: 0px;
+}

@@ -8,7 +8,10 @@
   <div class="example-app-name">FundooNote</div>
 <mat-card class="search">
   <mat-icon >search</mat-icon>
-  <input matInput type="text" placeholder="Search" class="searchBar" >
+  <input
+    (input)="onKey($event)"
+    [(ngModel)]="searchTerm"
+    matInput type="text" placeholder="Search" class="searchBar" >
   <mat-icon id="close">close</mat-icon>
   </mat-card>
 
@@ -68,39 +71,7 @@
   </mat-sidenav>
 
   <mat-sidenav-content class="example-sidenav-content">
-<div>
-    <mat-card *ngIf="!popup" (click)="onPopup()" class="matcard" flex fxLayout="row">
-      <input matInput type="text" placeholder="Take a Note..." class="topinput">
-      <button mat-icon-button   matTooltip="Brush" routerLink="/dashboard"  >
-        <mat-icon matSuffix class="material-icons-outlined " style="font-size: 24px !important">brush</mat-icon>
-      </button>
-    </mat-card>
-
-
-    <mat-card *ngIf="popup"  class="matcard1"    [formGroup]="createNote">
-      <div>
-        <input matInput type="text" formControlName="title" placeholder="Title" class="input2" style=" font-size: 1rem;" />
-      </div>
-
-      <div >
-        <input  type="text" formControlName="description" placeholder="Take a note..."  class="input"
-               style="margin-top:2%"
-                   style="color: #202124; direction: ltr;font-family: 'Roboto',arial,sans-serif;font-size: .875rem;" />
-      </div>
-
-      <mat-action-row   >
-        <div  class="iconCollector" style="margin-left: -29px;" fxLayout="row">
-          <app-icon-collector></app-icon-collector>
-          <button mat-button style="margin-left: 273px;margin-top: 13px;" color="primary" (click)="note()">close</button>
-
-        </div>
-
-
-      </mat-action-row>
-
-    </mat-card>
-</div>
-    <div style="margin-top: 10px;margin-left: 82px; height: 576px;overflow-x: hidden;overflow-y: hidden">
+    <div style="margin-top: 10px;margin-left: 82px;overflow-x: hidden;overflow-y: hidden">
       <app-create-note></app-create-note>
     </div>
 

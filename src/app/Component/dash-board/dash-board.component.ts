@@ -19,17 +19,16 @@ export class DashBoardComponent implements OnInit {
   title = 'refreshPage';
   // private noteData: any = new BehaviorSubject<any>([]);
   step = 0;
-  noteData: any = [];
   loginStatus = false;
   img: string = null;
-  viewState = 'grid';
-  panelOpenState = false;
+  viewState = 'list';
   @ViewChild('sidenav') sidenav: MatSidenav;
   isExpanded = true;
   isShowing = false;
   popup: boolean;
   createNote: FormGroup;
   private token: string;
+  searchTerm: string;
 
   mouseenter() {
     if (!this.isExpanded) {
@@ -45,21 +44,12 @@ export class DashBoardComponent implements OnInit {
 
   constructor(public router: Router,
               public noteService: NoteServiceService,
-              public formBuilder: FormBuilder,
-              public location: Location,
               public dialog: MatDialog,
               public snack: MatSnackBar,
   ) {
   }
 
   ngOnInit(): void {
-    // this.noteService.currentLoginStatus$.subscribe(data => {
-    //   console.log('user status');
-    // });
-    this.createNote = this.formBuilder.group({
-      title: '',
-      description: ''
-    });
   }
 
   setStep(index: number) {
@@ -78,24 +68,6 @@ export class DashBoardComponent implements OnInit {
     location.reload();
   }
 
-  onPopup() {
-    this.popup = true;
-  }
-
-  note() {
-    this.token = localStorage.getItem('token');
-    if (this.createNote) {
-      this.noteService.note(this.createNote.value, this.token).subscribe((response: any) => {
-          console.log('response', response);
-          location.reload();
-
-        }
-      );
-    }
-    this.popup = false;
-
-  }
-
 
   view(state: any) {
     this.viewState = state;
@@ -111,7 +83,11 @@ export class DashBoardComponent implements OnInit {
       // });
       this.router.navigate(['login']);
     } else {
-      this.snack.open('already logedin', 'ok', {duration: 2000});
+      this.snack.open('Hi, ' + localStorage.getItem('fullName') +', you are on dashboard! ', 'ok', {duration: 2000});
     }
+  }
+
+  onKey(event) {
+    this.noteService.changeEvent(this.searchTerm);
   }
 }

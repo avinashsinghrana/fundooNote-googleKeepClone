@@ -1,6 +1,6 @@
 export class Note{
 
-  // color: ""
+  color: ""
   // createdDate: "2020-08-06T05:54:58.869Z"
   description: string;
   id: string;

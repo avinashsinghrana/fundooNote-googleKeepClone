@@ -42,8 +42,9 @@ export class LoginComponent implements OnInit {
       this.loginService.login(this.login.value).subscribe((response: any) => {
         console.log("response", response);
         localStorage.setItem("token", response.id);
-        localStorage.setItem("fullName", response.data.firstName + " " + response.data.lastName);
-        localStorage.setItem("email", response.data.email);
+        localStorage.setItem("fullName", response.firstName + " " + response.lastName);
+        localStorage.setItem("email", response.email);
+        localStorage.setItem("email", response.userId);
         this.snackBar.open(
           "Login Successfully",
           "undo",

@@ -18,6 +18,7 @@ import { RemindersComponent } from './Component/reminders/reminders.component';
 import { IconCollectorComponent } from './Component/icon-collector/icon-collector.component';
 import {MatTableModule} from '@angular/material/table';
 import { CreateNoteComponent } from './Component/create-note/create-note.component';
+import { NoteSortPipe } from './Component/create-note/note-sort.pipe';
 
 
 
@@ -34,6 +35,7 @@ import { CreateNoteComponent } from './Component/create-note/create-note.compone
     RemindersComponent,
     IconCollectorComponent,
     CreateNoteComponent,
+    NoteSortPipe,
 
 
   ],
