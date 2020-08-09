@@ -14,7 +14,7 @@ export class Note{
   // noteCheckLists: []
   // noteLabels: []
   // questionAndAnswerNotes: []
-  // reminder: []
+  reminder: []
   title: string;
   // user: {firstName: "Vicky", lastName: "Kumar", role: "user", service: "basic", createdDate: "2020-08-06T04:59:15.075Z", …}
 

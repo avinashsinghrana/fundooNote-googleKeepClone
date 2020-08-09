@@ -14,6 +14,8 @@ export class NoteServiceService {
   currentNotes$ = this.noteSource.asObservable();
   private searchSource = new Subject<string>();
   currentSearch$ = this.searchSource.asObservable();
+  private lebelSource = new Subject<string[]>();
+  currentLebelList$ = this.loginSource.asObservable();
 
 
   constructor(private httpService: HttpService) {
@@ -39,6 +41,10 @@ export class NoteServiceService {
 
   changeEvent(searchTerm: string) {
     this.searchSource.next(searchTerm);
+  }
+
+  changeLebelList(message: string[]){
+    this.lebelSource.next(message);
   }
 }
 

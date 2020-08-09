@@ -130,6 +130,7 @@ outline-width: 0px;
   margin-left: 5px;
   outline-color: #5f6368;
   outline-offset: unset;
+  font-size: medium;
   //margin-left: 6%;
   //    inline-size: 42%;
   //   padding: 10px;
@@ -249,6 +250,12 @@ outline-width: 0px;
 
 .navside {
   width: 229px;
+  height: 98%;
+  overflow-y: hidden;
+}
+
+.navside1 {
+  width: 70px;
   height: 98%;
   overflow-y: hidden;
 }

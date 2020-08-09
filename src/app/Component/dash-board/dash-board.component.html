@@ -1,81 +1,149 @@
-<div class="container"><mat-toolbar class="toolbar">
-  <button class="menu" mat-icon-button (click)="isExpanded = !isExpanded">
-    <mat-icon>menu</mat-icon>
-  </button>
-  <img src="https://www.gstatic.com/images/branding/product/1x/keep_48dp.png" style="width: 32px; height: 32px; padding-left: 0px;padding-top: 5px; padding-right: 4px ; line-height: normal;
+<div class="container">
+  <mat-toolbar class="toolbar">
+    <button class="menu" mat-icon-button (click)="passMenuStatus()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <img *ngIf="currentSelect == 'notes'" src="https://www.gstatic.com/images/branding/product/1x/keep_48dp.png" style="width: 32px; height: 32px; padding-left: 0px;padding-top: 5px; padding-right: 4px ; line-height: normal;
     position: relative; padding-bottom: 2px;
     "/>
-  <div class="example-app-name">FundooNote</div>
-<mat-card class="search">
-  <mat-icon >search</mat-icon>
-  <input
-    (input)="onKey($event)"
-    [(ngModel)]="searchTerm"
-    matInput type="text" placeholder="Search" class="searchBar" >
-  <mat-icon id="close">close</mat-icon>
-  </mat-card>
+    <img *ngIf="currentSelect == null" src="https://www.gstatic.com/images/branding/product/1x/keep_48dp.png" style="width: 32px; height: 32px; padding-left: 0px;padding-top: 5px; padding-right: 4px ; line-height: normal;
+    position: relative; padding-bottom: 2px;
+    "/>
+    <div *ngIf="currentSelect == 'notes'" class="example-app-name">FundooNote</div>
+    <div *ngIf="currentSelect == null " class="example-app-name">FundooNote</div>
+    <div *ngIf="currentSelect == 'reminders'" class="example-app-name">Reminders</div>
+    <div *ngIf="currentSelect == 'archive'" class="example-app-name">Archive</div>
+    <div *ngIf="currentSelect == 'trash'" class="example-app-name">Trash</div>
+    <mat-card class="search">
+      <mat-icon>search</mat-icon>
+      <input
+        (input)="onKey($event)"
+        [(ngModel)]="searchTerm"
+        matInput type="text" placeholder="Search" class="searchBar">
+      <mat-icon id="close">close</mat-icon>
+    </mat-card>
 
-  <div fxFlex fxLayout fxLayoutAlign="flex-end">
-    <ul flexLayout="row" fxLayoutGap="15px" class="menu-icons">
-      <li><button class="matbutton"><mat-icon matTooltip="refresh" (click)="refresh()" class="material-icons-outlined">refresh</mat-icon></button></li>
-      <li><button class="matbutton"><mat-icon  matTooltip="list" (click)="view('list')" *ngIf="viewState == 'grid'">view_agenda</mat-icon></button>
-        <button class="matbutton"><mat-icon matTooltip="grid" (click)="view('grid')" *ngIf="viewState == 'list'">grid_view</mat-icon></button></li>
-<!--      <li><mat-icon class="material-icons-outlined">settings</mat-icon></li>-->
+    <div fxFlex fxLayout fxLayoutAlign="flex-end">
+      <ul flexLayout="row" fxLayoutGap="15px" class="menu-icons">
+        <li>
+          <button class="matbutton">
+            <mat-icon matTooltip="refresh" (click)="refresh()" class="material-icons-outlined">refresh</mat-icon>
+          </button>
+        </li>
+        <li>
+          <button class="matbutton">
+            <mat-icon matTooltip="list" (click)="view('list')" *ngIf="viewState == 'grid'">view_agenda</mat-icon>
+          </button>
+          <button class="matbutton">
+            <mat-icon matTooltip="grid" (click)="view('grid')" *ngIf="viewState == 'list'">grid_view</mat-icon>
+          </button>
+        </li>
+        <!--      <li><mat-icon class="material-icons-outlined">settings</mat-icon></li>-->
 
-    </ul>
+      </ul>
 
-    <ul flexLayout="row" fxLayoutGap="15px" class="menu-icons2">
-<!--    <li><mat-icon class="material-icons-outlined">apps</mat-icon></li>-->
-      <li><button class="matbutton1"><mat-icon matTooltip="account" class="material-icons-outlined" (click)="login()">account_circle</mat-icon></button>
-<!--      <img src="loginImage">-->
-    </li>
-  </ul>
-  </div>
-</mat-toolbar>
-<hr>
-<mat-sidenav-container class="example-container" >
-  <mat-sidenav
-    #sidenav
-    class="example-sidenav"
-    mode="side"
-    opened="true"
-    (mouseenter)="mouseenter()"
-    (mouseleave)="mouseleave()"
-  >
-  <mat-nav-list class="navside">
-      <mat-list-item routerLink="/dash-board">
-      <mat-icon  class="material-icons-outlined orange600"  >emoji_objects</mat-icon>
-<span  class="full-width" *ngIf="isExpanded || isShowing">Notes</span>
-</mat-list-item>
-<!--    remaindrer-->
-<mat-list-item>
-      <mat-icon   class="material-icons-outlined orange600" >notifications</mat-icon>
-      <span class="full-width" *ngIf="isExpanded || isShowing">Reminders</span>
-    </mat-list-item>
-
-<mat-list-item routerLink="/dash-board">
-      <mat-icon  class="material-icons-outlined orange600" >edit</mat-icon>
-      <span class="full-width" *ngIf="isExpanded || isShowing">Edit labels</span>
-</mat-list-item>
-
-<mat-list-item routerLink="/archive">
-      <mat-icon  class="material-icons-outlined orange600" >archive</mat-icon>
-      <span class="full-width" *ngIf="isExpanded || isShowing">Archive</span>
-    </mat-list-item>
-
-    <mat-list-item routerLink="/delete-note">
-      <mat-icon  class="material-icons-outlined orange600" >delete</mat-icon>
-      <span class="full-width" *ngIf="isExpanded || isShowing">Trash</span>
-    </mat-list-item>
-</mat-nav-list>
-  </mat-sidenav>
-
-  <mat-sidenav-content class="example-sidenav-content">
-    <div style="margin-top: 10px;margin-left: 82px;overflow-x: hidden;overflow-y: hidden">
-      <app-create-note></app-create-note>
+      <ul flexLayout="row" fxLayoutGap="15px" class="menu-icons2">
+        <!--    <li><mat-icon class="material-icons-outlined">apps</mat-icon></li>-->
+        <li>
+          <button class="matbutton1">
+            <mat-icon matTooltip="account" class="material-icons-outlined" (click)="login()">account_circle</mat-icon>
+          </button>
+          <!--      <img src="loginImage">-->
+        </li>
+      </ul>
     </div>
+  </mat-toolbar>
+  <hr>
+<!--  *ngIf="sidenavshow && !isExpanded"-->
+  <mat-sidenav-container class="example-container">
+    <mat-sidenav
+      #sidenav
+      class="example-sidenav"
+      mode="side"
+      opened="true"
+      (mouseenter)="mouseenter()"
+      (mouseleave)="mouseleave()"
+          >
+            <mat-nav-list class="navside">
+              <mat-list-item [ngStyle]="calculateStyles('notes')" (click)="currentSelection('notes')"
+                             >
+                <mat-icon class="material-icons-outlined orange600">emoji_objects</mat-icon>
+                <span class="full-width" *ngIf="isExpanded || isShowing">Notes</span>
+              </mat-list-item>
+              <!--remaindrer-->
+        <mat-list-item [ngStyle]="calculateStyles('reminders')" (click)="currentSelection('reminders')">
+          <mat-icon class="material-icons-outlined orange600">notifications</mat-icon>
+          <span class="full-width" *ngIf="isExpanded || isShowing">Reminders</span>
+        </mat-list-item>
+        <div *ngFor="let lebel for lebelList">
+        <mat-list-item [ngStyle]="calculateStyles(lebel.lebelName)" (click)="currentSelection('reminders')">
+          <mat-icon class="material-icons-outlined orange600">label</mat-icon>
+          <span class="full-width" *ngIf="isExpanded || isShowing">{{lebel.lebelName}}</span>
+        </mat-list-item>
+        </div>
+        <mat-list-item  (click)="currentSelection('editLabels')"
+                       >
+          <mat-icon class="material-icons-outlined orange600">edit</mat-icon>
+          <span class="full-width" *ngIf="isExpanded || isShowing">Edit labels</span>
+        </mat-list-item>
 
-  </mat-sidenav-content>
+        <mat-list-item [ngStyle]="calculateStyles('archive')" (click)="currentSelection('archive')"
+                       >
+          <mat-icon class="material-icons-outlined orange600">archive</mat-icon>
+          <span class="full-width" *ngIf="isExpanded || isShowing">Archive</span>
+        </mat-list-item>
+
+        <mat-list-item [ngStyle]="calculateStyles('trash')" (click)="currentSelection('trash')"
+                      >
+          <mat-icon class="material-icons-outlined orange600">delete</mat-icon>
+          <span class="full-width" *ngIf="isExpanded || isShowing">Trash</span>
+        </mat-list-item>
+      </mat-nav-list>
+    </mat-sidenav>
+
+<!--    <mat-sidenav-->
+<!--      #sidenav1-->
+<!--      class="example-sidenav"-->
+<!--      mode="side"-->
+<!--      opened = "true"-->
+<!--      (mouseenter)="mouseenter()"-->
+<!--      (mouseleave)="mouseleave()"-->
+<!--      *ngIf="!sidenavshow && !isExpanded"-->
+<!--    >-->
+<!--      <mat-nav-list class="navside1">-->
+<!--        <mat-list-item [ngStyle]="calculateStyles('notes')"-->
+<!--                       routerLink="/create-node">-->
+<!--          <mat-icon class="material-icons-outlined orange600">emoji_objects</mat-icon>-->
+<!--          <span class="full-width" *ngIf="isExpanded || isShowing">Notes</span>-->
+<!--        </mat-list-item>-->
+<!--        &lt;!&ndash;    remaindrer&ndash;&gt;-->
+<!--        <mat-list-item [ngStyle]="calculateStyles('reminders')">-->
+<!--          <mat-icon class="material-icons-outlined orange600">notifications</mat-icon>-->
+<!--        </mat-list-item>-->
+
+<!--        <mat-list-item [ngStyle]="calculateStyles('editLabels')"-->
+<!--                       routerLink="/dash-board">-->
+<!--          <mat-icon class="material-icons-outlined orange600">edit</mat-icon>-->
+<!--        </mat-list-item>-->
+
+<!--        <mat-list-item [ngStyle]="calculateStyles('archive')"-->
+<!--                       routerLink="/archive">-->
+<!--          <mat-icon class="material-icons-outlined orange600">archive</mat-icon>-->
+<!--        </mat-list-item>-->
+
+<!--        <mat-list-item [ngStyle]="calculateStyles('trash')"-->
+<!--                       routerLink="/delete-note">-->
+<!--          <mat-icon class="material-icons-outlined orange600">delete</mat-icon>-->
+<!--        </mat-list-item>-->
+<!--      </mat-nav-list>-->
+<!--    </mat-sidenav>-->
+
+    <mat-sidenav-content class="example-sidenav-content">
+      <div style="margin-top: 10px;margin-left: 82px;overflow-x: hidden;overflow-y: hidden">
+        <router-outlet></router-outlet>
+      </div>
+
+    </mat-sidenav-content>
   </mat-sidenav-container>
 </div>
 

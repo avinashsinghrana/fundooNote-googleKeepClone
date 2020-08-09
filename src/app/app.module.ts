@@ -19,6 +19,7 @@ import { IconCollectorComponent } from './Component/icon-collector/icon-collecto
 import {MatTableModule} from '@angular/material/table';
 import { CreateNoteComponent } from './Component/create-note/create-note.component';
 import { NoteSortPipe } from './Component/create-note/note-sort.pipe';
+import {LebelDialogComponent} from './Component/lebel-dialog/lebel-dialog.component';
 
 
 
@@ -36,6 +37,7 @@ import { NoteSortPipe } from './Component/create-note/note-sort.pipe';
     IconCollectorComponent,
     CreateNoteComponent,
     NoteSortPipe,
+    LebelDialogComponent,
 
 
   ],
