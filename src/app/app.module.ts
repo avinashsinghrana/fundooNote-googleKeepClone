@@ -18,8 +18,10 @@ import { RemindersComponent } from './Component/reminders/reminders.component';
 import { IconCollectorComponent } from './Component/icon-collector/icon-collector.component';
 import {MatTableModule} from '@angular/material/table';
 import { CreateNoteComponent } from './Component/create-note/create-note.component';
-import { NoteSortPipe } from './Component/create-note/note-sort.pipe';
+import { NoteSortPipe } from './Component/utils/note-sort.pipe';
 import {LebelDialogComponent} from './Component/lebel-dialog/lebel-dialog.component';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {LabelSortPipe} from './Component/utils/label-sort.pipe';
 
 
 
@@ -37,6 +39,7 @@ import {LebelDialogComponent} from './Component/lebel-dialog/lebel-dialog.compon
     IconCollectorComponent,
     CreateNoteComponent,
     NoteSortPipe,
+    LabelSortPipe,
     LebelDialogComponent,
 
 
@@ -50,7 +53,8 @@ import {LebelDialogComponent} from './Component/lebel-dialog/lebel-dialog.compon
         BrowserModule,
         ReactiveFormsModule,
         HttpClientModule,
-        MatTableModule
+        MatTableModule,
+        MatCheckboxModule
 
 
     ],

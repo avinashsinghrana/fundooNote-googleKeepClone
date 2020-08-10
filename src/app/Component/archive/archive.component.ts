@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Observable} from 'rxjs';
 import {Note} from '../../model/Note';
-import {NoteServiceService} from '../../Service/note-service.service';
+import {NoteServiceService} from '../utils/note-service.service';
 
 @Component({
   selector: 'app-archive',

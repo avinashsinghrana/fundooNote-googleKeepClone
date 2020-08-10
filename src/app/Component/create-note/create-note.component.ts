@@ -1,9 +1,11 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {NoteServiceService} from '../../Service/note-service.service';
-import {getHttpsCall} from "../utils";
-import {Observable} from "rxjs";
+import {NoteServiceService} from '../utils/note-service.service';
+import {crudHttpsCallWithToken, getHttpsCall} from '../utils/utils';
+import {Observable} from 'rxjs';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {Note} from '../../model/Note';
+import {map, shareReplay} from 'rxjs/operators';
+import {Label} from '../../model/Label';
 
 @Component({
   selector: 'app-create-note',
@@ -12,49 +14,57 @@ import {Note} from '../../model/Note';
 })
 export class CreateNoteComponent implements OnInit {
   notes$: Observable<any>;
-  allNotes: Note[];
+  createNote$: Observable<any>;
+  allNonPinedNote: Note[] = [];
   popup: boolean;
   createNote: FormGroup;
   private token: string;
   isExpanded = false;
   isShowing = false;
   searchTerm: string;
+  allPinedNote: Note[] = [];
+  allLebel: Label[] = [];
+
   public colorList = [
-    {key: "orange", value: "#fa761e", friendlyName: "Orange" },
-    {key: "male",       value: "#4488ff", friendlyName: "Male Color" },
-    {key: "female",     value: "#ff44aa", friendlyName: "Female Color" },
-    {key: "gargoylegas",  value: "#fde84e", friendlyName: "Gargoyle Gas" },
-    {key: "androidgreen",   value: "#9ac53e", friendlyName: "Android Green" },
-    {key: "carribeangreen",    value: "#05d59e", friendlyName: "Carribean Green" },
-    {key: "bluejeans",    value: "#5bbfea", friendlyName: "Blue Jeans" },
-    {key: "cyancornflower",    value: "#1089b1", friendlyName: "Cyan Cornflower" },]
-  indexStatus: number;
+    {key: 'orange', value: '#fa761e', friendlyName: 'Orange'},
+    {key: 'male', value: '#4488ff', friendlyName: 'Male Color'},
+    {key: 'female', value: '#ff44aa', friendlyName: 'Female Color'},
+    {key: 'gargoylegas', value: '#fde84e', friendlyName: 'Gargoyle Gas'},
+    {key: 'androidgreen', value: '#9ac53e', friendlyName: 'Android Green'},
+    {key: 'carribeangreen', value: '#05d59e', friendlyName: 'Carribean Green'},
+    {key: 'bluejeans', value: '#5bbfea', friendlyName: 'Blue Jeans'},
+    {key: 'cyancornflower', value: '#1089b1', friendlyName: 'Cyan Cornflower'},];
+  indexStatus: string;
+  labelSearchTerm: any;
 
   constructor(private noteService: NoteServiceService,
               public formBuilder: FormBuilder,
-              ) {}
+  ) {
+  }
 
   ngOnInit(): void {
+    this.token = localStorage.getItem('token');
+    this.getAllNotes();
     this.noteService.currentSearch$.subscribe(response => {
       this.searchTerm = response;
+    });
+    this.noteService.currentLebelList$.subscribe(response => {
+      this.allLebel = response;
     });
     this.createNote = this.formBuilder.group({
       title: '',
       description: ''
     });
-    this.getAllNotes();
   }
 
-  mouseenter(i: number) {
-    console.log('mouseenter',this.isShowing)
-      this.isShowing = true;
+  mouseenter(i: string) {
+    this.isShowing = true;
     this.indexStatus = i;
   }
 
   mouseleave() {
-    console.log('mouseleave',this.isShowing)
-      this.isShowing = false;
-    this.indexStatus = -1;
+    this.isShowing = false;
+    this.indexStatus = '';
   }
 
   onPopup() {
@@ -64,11 +74,13 @@ export class CreateNoteComponent implements OnInit {
   note() {
     this.token = localStorage.getItem('token');
     if (this.createNote) {
-      this.noteService.note(this.createNote.value, this.token).subscribe((response: any) => {
+      this.createNote$ = crudHttpsCallWithToken('/notes/addNotes?access_token=' + this.token, this.createNote.value, 'post');
+      this.createNote$.subscribe((response: any) => {
           console.log('response', response);
-          const newNote: Note = Object.assign(new Note(), this.createNote.value);
+          const newNote: Note = Object.assign(new Note(), response.status.details);
           console.log('after conversion', newNote);
-          this.allNotes.push(this.createNote.value);
+          this.allNonPinedNote.push(response.status.details);
+          this.createNote.reset();
         }
       );
     }
@@ -76,12 +88,19 @@ export class CreateNoteComponent implements OnInit {
   }
 
   getAllNotes() {
-    this.notes$ = getHttpsCall('http://fundoonotes.incubation.bridgelabz.com/api/notes/getNotesList?access_token=' + localStorage.getItem('token'));
+    this.notes$ = getHttpsCall('/notes/getNotesList?access_token=' + this.token),shareReplay();
     this.notes$.subscribe(data => {
-      this.allNotes = Object.values(data);
-      console.log('all Notes Mat Card', this.allNotes);
+      this.notes$.subscribe(notes => {
+        this.allNonPinedNote = notes.data.data.filter(
+          note => note.isPined === false);
+        this.allPinedNote = notes.data.data.filter(
+          note => note.isPined === true);
+        console.log('all non pined Notes Mat Card', this.allNonPinedNote);
+        console.log('all pined Notes Mat Card', this.allPinedNote);
+      });
+      // console.log('all Notes Mat Card', this.allNonPinedNote);
+      // console.log('all Notes Mat Card', this.allPinedNote);
     });
-
   }
 
   grid(): boolean {
@@ -93,7 +112,41 @@ export class CreateNoteComponent implements OnInit {
     }
   }
 
-  indexget() {
+  pinNote(note: Note,i: number) {
+    if (this.allNonPinedNote.length > 0) {
+      this.allNonPinedNote[i].isPined = true;
+      const resp$ = crudHttpsCallWithToken('/notes/pinUnpinNotes?access_token=' + this.token, note, 'post');
+      resp$.subscribe(response => {
+        console.log('note pined response', response);
+      });
+    }
+    this.allPinedNote.push(note);
+    console.log('note unpined data', this.allNonPinedNote);
 
+    this.allNonPinedNote.splice(i, 1);
+    console.log('note pined data', this.allPinedNote);
+  }
+
+  unpinNote(note: Note, i: number) {
+    if (this.allPinedNote.length > 0) {
+      this.allPinedNote[i].isPined = false;
+      note.isPined=false;
+      const resp$ = crudHttpsCallWithToken('/notes/pinUnpinNotes?access_token=' + this.token, note, 'post');
+      resp$.subscribe(response => {
+        // this.allNonPinedNote.push(note);
+        // this.allPinedNote.splice(i, 1);
+        console.log('note unpined response', response);
+      });
+      this.allNonPinedNote.push(note);
+      console.log('note unpined response', this.allNonPinedNote);
+
+      this.allPinedNote.splice(i, 1);
+      console.log('note pined response', this.allPinedNote);
+
+    }
+  }
+
+  searchNode(event) {
+    this.noteService.changeEvent(event);
   }
 }

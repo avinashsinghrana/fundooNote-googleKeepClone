@@ -14,10 +14,6 @@ baseUrl=environment.baseUrl;
 }
 
   public POST(url: any, data: any, token): any {
-    return this.http.post(this.baseUrl + url, data, token);
-  }
-
-  GET(s: string) {
-    return this.http.get(this.baseUrl + s);
+    return this.http.post(url, data, token);
   }
 }

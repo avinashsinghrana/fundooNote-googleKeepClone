@@ -35,7 +35,7 @@
             <mat-icon matTooltip="list" (click)="view('list')" *ngIf="viewState == 'grid'">view_agenda</mat-icon>
           </button>
           <button class="matbutton">
-            <mat-icon matTooltip="grid" (click)="view('grid')" *ngIf="viewState == 'list'">grid_view</mat-icon>
+            <mat-icon  matTooltip="grid" (click)="view('grid')" *ngIf="viewState == 'list'">grid_view</mat-icon>
           </button>
         </li>
         <!--      <li><mat-icon class="material-icons-outlined">settings</mat-icon></li>-->
@@ -46,8 +46,23 @@
         <!--    <li><mat-icon class="material-icons-outlined">apps</mat-icon></li>-->
         <li>
           <button class="matbutton1">
-            <mat-icon matTooltip="account" class="material-icons-outlined" (click)="login()">account_circle</mat-icon>
+            <mat-icon *ngIf="!matmenuStatus" matTooltip="account" class="material-icons-outlined" (click)="login()">account_circle</mat-icon>
           </button>
+          <button class="matbutton1">
+            <mat-icon *ngIf="matmenuStatus" [mat-menu-trigger-for]="menu1" matTooltip="account" class="material-icons-outlined" (click)="login()">account_circle</mat-icon>
+          </button>
+          <mat-menu id="profile" #menu1="matMenu"  class="menu-button" fxLayout="row" fxLayoutAlign="end start">
+            <div>
+              <button mat-button (click)="imageSelectFile.click()"  >
+                Set Profile Pic</button>
+            </div>
+            <hr>
+            <div>
+              <button class="signout" mat-flat-button (click)="Logout()">Sign out</button>
+            </div>
+            <input fxHide class="image" type="file" (change)="fileUpload($event)" #imageSelectFile
+                   enctype="multipart/form-data/">
+          </mat-menu>
           <!--      <img src="loginImage">-->
         </li>
       </ul>
@@ -75,14 +90,20 @@
           <mat-icon class="material-icons-outlined orange600">notifications</mat-icon>
           <span class="full-width" *ngIf="isExpanded || isShowing">Reminders</span>
         </mat-list-item>
-        <div *ngFor="let lebel for lebelList">
-        <mat-list-item [ngStyle]="calculateStyles(lebel.lebelName)" (click)="currentSelection('reminders')">
-          <mat-icon class="material-icons-outlined orange600">label</mat-icon>
-          <span class="full-width" *ngIf="isExpanded || isShowing">{{lebel.lebelName}}</span>
-        </mat-list-item>
-        </div>
+
+<!--        <div *ngFor="let lebel for lebelList">-->
+<!--        <mat-list-item [ngStyle]="calculateStyles(lebel.lebelName)" (click)="currentSelection('reminders')">-->
+<!--          <mat-icon class="material-icons-outlined orange600">label</mat-icon>-->
+<!--          <span class="full-width" *ngIf="isExpanded || isShowing">avinash</span>-->
+<!--        </mat-list-item>-->
+<!--        </div>-->
         <mat-list-item  (click)="currentSelection('editLabels')"
                        >
+              <div fxLayout="row" fxLayoutAlign="start center" *ngFor="let data of labels">
+                <mat-icon matListIcon style="padding:10px 20px;">label_outline</mat-icon>
+                <a mat-list-item routerLink="reminder" disableRipple="true"
+                   style="border-bottom-right-radius: 20px; border-top-right-radius: 20px;">{{data.label}}</a>
+              </div>
           <mat-icon class="material-icons-outlined orange600">edit</mat-icon>
           <span class="full-width" *ngIf="isExpanded || isShowing">Edit labels</span>
         </mat-list-item>

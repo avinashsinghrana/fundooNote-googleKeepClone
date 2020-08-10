@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {Observable} from 'rxjs';
 import {Note} from '../../model/Note';
-import {NoteServiceService} from '../../Service/note-service.service';
+import {NoteServiceService} from '../utils/note-service.service';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {getHttpsCall} from '../utils';
+import {getHttpsCall} from '../utils/utils';
 
 @Component({
   selector: 'app-reminders',
@@ -73,10 +73,10 @@ export class RemindersComponent implements OnInit {
   }
 
   getAllNotes() {
-    this.notes$ = getHttpsCall('http://fundoonotes.incubation.bridgelabz.com/api/notes/getNotesList?access_token=' + localStorage.getItem('token'));
-    this.notes$.subscribe(data => {
-      this.allNotes = Object.values(data.reminder);
-      console.log('all Notes Mat Card', this.allNotes);
-    });
+    // this.notes$ = getHttpsCall('http://fundoonotes.incubation.bridgelabz.com/api/notes/getNotesList?access_token=' + localStorage.getItem('token'));
+    // this.notes$.subscribe(data => {
+    //   this.allNotes = Object.values(data.reminder);
+    //   console.log('all Notes Mat Card', this.allNotes);
+    // });
   }
 }

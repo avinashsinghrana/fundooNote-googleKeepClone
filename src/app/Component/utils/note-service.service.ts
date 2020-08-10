@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
 import {Subject} from 'rxjs';
-import {HttpService} from './httpService/http.service';
-import {HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Label} from '../../model/Label';
+import {HttpService} from '../../Service/httpService/http.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,11 +15,13 @@ export class NoteServiceService {
   currentNotes$ = this.noteSource.asObservable();
   private searchSource = new Subject<string>();
   currentSearch$ = this.searchSource.asObservable();
-  private lebelSource = new Subject<string[]>();
+  private lebelSource = new Subject<Label[]>();
   currentLebelList$ = this.loginSource.asObservable();
+  private labelSearchSource = new Subject<string>();
+  currentLabelTerm$ = this.labelSearchSource.asObservable();
 
 
-  constructor(private httpService: HttpService) {
+  constructor(private http: HttpClient) {
   }
 
   changeLoginStatus(message: any) {
@@ -29,22 +32,19 @@ export class NoteServiceService {
     this.noteSource.next(message);
   }
 
-  note(data: any, token: any) {
-    const formData: FormData = new FormData();
-    return this.httpService.POST('/notes/addNotes?access_token=' + token, data, {headers: new HttpHeaders().set('token', localStorage.getItem('token'))});
-  }
-
-  GetAllNotes(token: string) {
-    return this.httpService.GET('/notes/getNotesList?access_token='+ token);
-
-  }
-
   changeEvent(searchTerm: string) {
     this.searchSource.next(searchTerm);
   }
+  changeLabelEvent(searchTerm: string) {
+    this.labelSearchSource.next(searchTerm);
+  }
 
-  changeLebelList(message: string[]){
+  changeLebelList(message: Label[]){
     this.lebelSource.next(message);
+  }
+
+  profilePic(token: any, formData: FormData): any {
+    return this.http.post('http://fundoonotes.incubation.bridgelabz.com/api/user/uploadProfileImage?access_token='+token, formData, {headers: new HttpHeaders().set('token', localStorage.getItem('token'))});
   }
 }
 

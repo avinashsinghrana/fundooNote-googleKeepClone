@@ -2,10 +2,15 @@ import {Component, Inject, Input, OnInit, ViewChild} from '@angular/core';
 import {MatSidenav} from '@angular/material/sidenav';
 import {Router} from '@angular/router';
 import {FormGroup} from '@angular/forms';
-import {NoteServiceService} from '../../Service/note-service.service';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {NoteServiceService} from '../utils/note-service.service';
 import {MAT_DIALOG_DATA, MatDialogRef, MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {LebelDialogComponent} from '../lebel-dialog/lebel-dialog.component';
+import {LoginComponent} from '../login/login.component';
+import {Note} from '../../model/Note';
+import {getHttpsCall} from '../utils/utils';
+import {Label} from '../../model/Label';
 
 
 @Component({
@@ -29,29 +34,23 @@ export class DashBoardComponent implements OnInit {
   createNote: FormGroup;
   token: string;
   searchTerm: string;
-
+  matmenuStatus: boolean = false;
   sidenavshow: boolean = true;
-  lebelList: string[];
+  lebelList: Label[];
+  labels: any;
+  profilePic: string;
 
   mouseenter() {
     if (!this.isExpanded) {
       this.isShowing = true;
     }
-    // this.isShowing = true;
-    // this.isExpanded = true;
-    // this.sidenavshow = true;
   }
-
-
 
 
   mouseleave() {
     if (!this.isExpanded) {
       this.isShowing = false;
     }
-    // this.isShowing = false;
-    // this.isExpanded = false;
-    // this.sidenavshow = false;
   }
 
   constructor(public router: Router,
@@ -63,8 +62,23 @@ export class DashBoardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.token = localStorage.getItem('token');
     this.noteService.currentLebelList$.subscribe(response => {
       this.lebelList = response;
+      console.log('lebel list avinash', this.lebelList);
+    });
+    if(localStorage.getItem('email') !== null) {
+      this.matmenuStatus = true;
+    }
+    this.AllLabels();
+  }
+
+  AllLabels() {
+    const resp$ = getHttpsCall('/noteLabels/getNoteLabelList?access_token='+this.token);
+    resp$.subscribe((ress: any) => {
+      this.lebelList = ress.data.details;
+      console.log('api call for get notes', ress.data.details);
+      this.noteService.changeLebelList(this.lebelList);
     });
   }
 
@@ -76,16 +90,14 @@ export class DashBoardComponent implements OnInit {
   view(state: any) {
     this.viewState = state;
     localStorage.setItem('status', this.viewState);
-    console.log('state changed to  : ', state);
-    console.log('view state changed to  : ', this.viewState);
   }
 
   login() {
     if (localStorage.getItem('token') === null) {
-      // this.dialog.open(LoginComponent, {
-      //   width: 'inherit'
-      // });
-      this.router.navigate(['login']);
+      this.dialog.open(LoginComponent, {
+        width: '350px',
+      });
+      // this.router.navigate(['login']);
     } else {
       this.snack.open('Hi, ' + localStorage.getItem('fullName') + ', you are on dashboard! ', 'ok', {duration: 2000});
     }
@@ -109,13 +121,9 @@ export class DashBoardComponent implements OnInit {
         break;
       }
       case 'editLabels': {
-          const dialogRef = this.dialog.open(LebelDialogComponent, {
+          this.dialog.open(LebelDialogComponent, {
             width: '250px',
           });
-          // dialogRef.afterClosed().subscribe(result => {
-          //   console.log('The dialog was closed');
-          //   this.lebelName = result;
-          // });
         break;
       }
       case 'archive': {
@@ -142,5 +150,32 @@ export class DashBoardComponent implements OnInit {
   passMenuStatus() {
     this.isExpanded = !this.isExpanded;
     this.sidenavshow = !this.sidenavshow;
+  }
+
+  Logout() {
+    localStorage.clear();
+    location.reload();
+  }
+
+  fileUpload($event) {
+    this.uploadprofilePic($event);
+
+  }
+
+  private uploadprofilePic($event) {
+    this.profilePic = $event.target.files[0];
+    const formData = new FormData();
+    formData.append('file', this.profilePic);
+    this.noteService.profilePic(this.token, formData).subscribe(
+      data => {
+        console.log('------------------------------', data);
+        const response = data.imageUrl;
+        this.profilePic = response;
+        this.snack.open('Profile Pic Updated Successfully', 'OK',{duration:2000});
+        localStorage.setItem(localStorage.getItem('imageUrl'), this.profilePic);
+      },
+      err => {
+        this.snack.open('Profile pic uplodation failed!!', 'Ok', {duration: 2000});
+      });
   }
 }

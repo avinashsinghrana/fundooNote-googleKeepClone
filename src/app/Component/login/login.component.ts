@@ -4,6 +4,9 @@ import {LoginService} from '../../Service/loginService/login.service';
 import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {NgForm} from '@angular/forms';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {SignupComponent} from '../signup/signup.component';
+import {crudHttpsCallWithToken, getHttpsCall} from '../utils/utils';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +23,9 @@ export class LoginComponent implements OnInit {
   constructor(public formBuilder: FormBuilder,
               private loginService: LoginService,
               private router: Router,
-              private snackBar: MatSnackBar
+              private snackBar: MatSnackBar,
+              private dialog: MatDialog,
+              private dialogRef: MatDialogRef<LoginComponent>,
   ) {
   }
 
@@ -30,7 +35,7 @@ export class LoginComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]]
 
-    })
+    });
   }
 
   get f() {
@@ -39,20 +44,21 @@ export class LoginComponent implements OnInit {
 
   Login() {
     if (this.login.valid) {
-      this.loginService.login(this.login.value).subscribe((response: any) => {
-        console.log("response", response);
-        localStorage.setItem("token", response.id);
-        localStorage.setItem("fullName", response.firstName + " " + response.lastName);
-        localStorage.setItem("email", response.email);
-        localStorage.setItem("email", response.userId);
+      const res$ = crudHttpsCallWithToken('/user/login', this.login.value, 'post');
+      res$.subscribe((response : any) => {
+        console.log('response', response);
+        localStorage.setItem('token', response.id);
+        localStorage.setItem('fullName', response.firstName + ' ' + response.lastName);
+        localStorage.setItem('userId', response.userId);
+        localStorage.setItem('email', response.email);
+        this.dialogRef.close();
         this.snackBar.open(
-          "Login Successfully",
-          "undo",
+          'Login Successfully',
+          response.firstName,
           {duration: 2000}
         );
+        location.reload();
       });
-      this.router.navigate(['dash-board']);
     }
   }
-
 }

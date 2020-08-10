@@ -1,13 +1,13 @@
-<h1 style="font-family: Roboto, Helvetica Neue, sans-serif; font-size: 14px" mat-dialog-title>Edit labels </h1>
+<h1 style="font-family: Roboto, Helvetica Neue, sans-serif; font-size: 14px; color: #5f6368" mat-dialog-title>Edit labels </h1>
 <div mat-dialog-content>
   <mat-form-field>
     <mat-label>Create new lebel</mat-label>
     <input matInput [(ngModel)]="lebelName">
     <mat-icon matTooltip="Create lebel" style="cursor: pointer" (click)="onNoClick(lebelName)" matSuffix>done</mat-icon>
   </mat-form-field>
+
+
 </div>
 <div mat-dialog-actions>
-  <hr>
-
   <button mat-button style="margin-left: 156px" (click)="onCloseDialog(lebelName)" >Done</button>
 </div>

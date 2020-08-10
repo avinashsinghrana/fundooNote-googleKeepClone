@@ -1,5 +1,5 @@
-<div fxLayout="row" fxLayoutAlign="center center">
-  <mat-card class="container" fxFlex="30%" flex-wrap: wrap fxFlex.xs="100%">
+<div mat-dialog-content>
+  <mat-card class="container">
     <div fxLayout="column">
       <mat-card-title style="font-size: 30px; color: coral;">
       Fundoo
@@ -125,7 +125,7 @@
     </form>
     <mat-card-actions fxLayout="row" fxLayoutAlign="space-between center" style="margin-bottom: 5px;">
       <button mat-raised-button style="margin-right: 7px;" name="Register" id="rgstr" class="buttonCss" (click)="signUp()" >sign Up</button>
-      <button mat-raised-button class="buttonCss" id="login" name="Login"style="margin: 0 0;" routerLink='/login'>Login</button>
+      <button mat-raised-button class="buttonCss" id="login" name="Login"style="margin: 0 0;" routerLink="/login">Login</button>
     </mat-card-actions>
     </mat-card>
 </div>

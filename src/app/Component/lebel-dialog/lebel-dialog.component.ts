@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
-import {NoteServiceService} from '../../Service/note-service.service';
+import {NoteServiceService} from '../utils/note-service.service';
+import {Label} from '../../model/Label';
+import {crudHttpsCallWithToken, getHttpsCall} from '../utils/utils';
 
 @Component({
   selector: 'app-lebel-dialog',
@@ -9,29 +11,52 @@ import {NoteServiceService} from '../../Service/note-service.service';
 })
 export class LebelDialogComponent implements OnInit {
   lebelName: string;
-  private lebelList: string[] = [];
+  lebelList: Label[] = [];
+  userId: string;
+  token: string;
 
   constructor(private noteService: NoteServiceService,
     public dialogRef: MatDialogRef<LebelDialogComponent>
   ) { }
 
   ngOnInit(): void {
+    this.token = localStorage.getItem('token');
+    this.userId = localStorage.getItem('userId');
     this.noteService.changeLebelList(this.lebelList);
   }
 
-  onNoClick(lebel: string): void {
-    this.lebelList.push(lebel);
+  onNoClick(input: string): void {
+    let label = new Label();
+    label.label = input;
+    label.isDeleted = false;
+    label.userId = this.userId;
+    const res$ = crudHttpsCallWithToken('/noteLabels?access_token='+this.token, label, 'POST');
+    res$.subscribe((response: any) => {
+      label.id = response.id;
+      this.lebelList.push(label);
+      console.log('add lebel' , response);
+      console.log('current label', label);
+    });
     this.noteService.changeLebelList(this.lebelList);
-    console.log('current lebel data',lebel);
+    this.lebelName = '';
+    console.log('current lebel data', label);
     console.log('total edit lebel', this.lebelList);
   }
 
 
   onCloseDialog(lebelName: string) {
-    this.lebelList.push(lebelName);
+    let label = new Label();
+    label.label = lebelName;
+    label.isDeleted = false;
+    label.userId = this.userId;
     this.noteService.changeLebelList(this.lebelList);
-    console.log('before close the dialog box', lebelName);
-    console.log('total data before closing', this.lebelList);
+    const res$ = crudHttpsCallWithToken('/noteLabels?access_token='+this.token, label, 'POST');
+    res$.subscribe((response: any) => {
+      label.id = response.id;
+      this.lebelList.push(label);
+      console.log('add lebel' , response);
+    });
+    this.lebelName = '';
     this.dialogRef.close();
   }
 }

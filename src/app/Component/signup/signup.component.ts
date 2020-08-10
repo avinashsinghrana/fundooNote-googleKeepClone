@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {LoginComponent} from '../login/login.component';
 
 @Component({
   selector: 'app-signup',
@@ -23,6 +25,8 @@ export class SignupComponent implements OnInit {
 
   constructor(public formBuilder: FormBuilder,
     private SignupService: SignupService,
+    private dialog: MatDialog,
+    private dialogRef: MatDialogRef<SignupComponent>,
     private router: Router,
     private snackBar: MatSnackBar) { }
 
@@ -42,8 +46,15 @@ export class SignupComponent implements OnInit {
     if (this.registerForm.valid)
       this.SignupService.signup(this.registerForm.value).subscribe((response: any) => {
         console.log("response", response);
+        this.snackBar.open("Verify first to Login", 'OK',{duration:2000})
+      });
+    this.dialogRef.close();
+  }
 
-      }
-      )
+  login() {
+    this.dialogRef.close();
+    this.dialog.open(LoginComponent, {
+      width: '350px'
+    })
   }
 }
