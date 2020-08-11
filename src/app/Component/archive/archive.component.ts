@@ -13,8 +13,10 @@ export class ArchiveComponent implements OnInit {
   notes$: Observable<any>;
   allNotes: Note[] = [];
   searchTerm: string;
-  indexStatus: number;
-  mouseenter(i: number) {
+  indexStatus: string;
+  allNonPinedNote: Note[];
+  allArchivedNote: Note[] = [];
+  mouseenter(i: string) {
     console.log('mouseenter',this.isShowing)
     this.isShowing = true;
     this.indexStatus = i;
@@ -23,12 +25,20 @@ export class ArchiveComponent implements OnInit {
   mouseleave() {
     console.log('mouseleave',this.isShowing)
     this.isShowing = false;
-    this.indexStatus = -1;
+    this.indexStatus = '';
   }
 
   constructor(private noteService: NoteServiceService,) { }
 
   ngOnInit(): void {
+    // this.noteService.changeInArchive(this.allArchivedNote);
+    this.noteService.currentArchievedData$.subscribe(responses => {
+      responses.forEach(response => {
+        this.allArchivedNote.push(response);
+        console.log('individual response fo archieved Node', response);
+        console.log('array of archieved',  this.allArchivedNote);
+      });
+    });
     this.noteService.currentSearch$.subscribe(response => {
       this.searchTerm = response;
     });
@@ -43,4 +53,11 @@ export class ArchiveComponent implements OnInit {
   }
 
 
+  unpinNote(note: Note, i: number) {
+
+  }
+
+  pinNote(note: Note, i: number) {
+
+  }
 }

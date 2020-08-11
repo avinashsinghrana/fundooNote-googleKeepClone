@@ -21,9 +21,11 @@ export class CreateNoteComponent implements OnInit {
   private token: string;
   isExpanded = false;
   isShowing = false;
+  newNote: Note;
   searchTerm: string;
   allPinedNote: Note[] = [];
   allLebel: Label[] = [];
+  allArchivedNote: Note[] = [];
 
   public colorList = [
     {key: 'orange', value: '#fa761e', friendlyName: 'Orange'},
@@ -36,6 +38,7 @@ export class CreateNoteComponent implements OnInit {
     {key: 'cyancornflower', value: '#1089b1', friendlyName: 'Cyan Cornflower'},];
   indexStatus: string;
   labelSearchTerm: any;
+  pinStatusDuringCreate: boolean = false;
 
   constructor(private noteService: NoteServiceService,
               public formBuilder: FormBuilder,
@@ -53,7 +56,8 @@ export class CreateNoteComponent implements OnInit {
     });
     this.createNote = this.formBuilder.group({
       title: '',
-      description: ''
+      description: '',
+      isPined: false,
     });
   }
 
@@ -74,12 +78,21 @@ export class CreateNoteComponent implements OnInit {
   note() {
     this.token = localStorage.getItem('token');
     if (this.createNote) {
-      this.createNote$ = crudHttpsCallWithToken('/notes/addNotes?access_token=' + this.token, this.createNote.value, 'post');
+      const newNote_1 : Note = Object.assign(new Note(), this.createNote.value);
+      newNote_1.isPined = this.pinStatusDuringCreate;
+      this.createNote$ = crudHttpsCallWithToken('/notes/addNotes?access_token=' + this.token, newNote_1, 'post');
       this.createNote$.subscribe((response: any) => {
           console.log('response', response);
-          const newNote: Note = Object.assign(new Note(), response.status.details);
-          console.log('after conversion', newNote);
-          this.allNonPinedNote.push(response.status.details);
+          this.newNote = Object.assign(new Note(), response.status.details);
+          console.log('after conversion', this.newNote);
+          // Refactor need to maintain with data base
+          if(this.pinStatusDuringCreate  == false){
+            this.allNonPinedNote.push(response.status.details);
+          }else {
+            // response.status.details.isPined = true;
+            this.allPinedNote.push(response.status.details);
+          }
+          this.newNote = null;
           this.createNote.reset();
         }
       );
@@ -148,5 +161,27 @@ export class CreateNoteComponent implements OnInit {
 
   searchNode(event) {
     this.noteService.changeEvent(event);
+  }
+
+  unpinCreateNote() {
+    this.pinStatusDuringCreate = !this.pinStatusDuringCreate;
+  }
+
+  pinCreateNote() {
+    this.pinStatusDuringCreate = !this.pinStatusDuringCreate;
+  }
+
+  addToArchive(note: Note, i: number) {
+    if(this.allPinedNote[i] === null){
+      this.allArchivedNote.push(note);
+      this.noteService.changeInArchive(this.allArchivedNote);
+      console.log('archieved adding from pined');
+      this.allPinedNote.splice(i, 1);
+    }else{
+      this.allArchivedNote.push(note);
+      this.noteService.changeInArchive(this.allArchivedNote);
+      console.log('archieved adding from unpined');
+      this.allNonPinedNote.splice(i, 1);
+    }
   }
 }

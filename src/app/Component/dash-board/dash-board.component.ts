@@ -169,10 +169,10 @@ export class DashBoardComponent implements OnInit {
     this.noteService.profilePic(this.token, formData).subscribe(
       data => {
         console.log('------------------------------', data);
-        const response = data.imageUrl;
+        const response = data.status.imageUrl;
         this.profilePic = response;
         this.snack.open('Profile Pic Updated Successfully', 'OK',{duration:2000});
-        localStorage.setItem(localStorage.getItem('imageUrl'), this.profilePic);
+        localStorage.setItem('imageUrl', 'http://fundoonotes.incubation.bridgelabz.com/'+this.profilePic);
       },
       err => {
         this.snack.open('Profile pic uplodation failed!!', 'Ok', {duration: 2000});

@@ -3,6 +3,7 @@ import {Subject} from 'rxjs';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Label} from '../../model/Label';
 import {HttpService} from '../../Service/httpService/http.service';
+import {Note} from '../../model/Note';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,8 @@ export class NoteServiceService {
   currentLebelList$ = this.loginSource.asObservable();
   private labelSearchSource = new Subject<string>();
   currentLabelTerm$ = this.labelSearchSource.asObservable();
+  private archiveSorce = new Subject<Note[]>();
+  currentArchievedData$ = this.archiveSorce.asObservable();
 
 
   constructor(private http: HttpClient) {
@@ -45,6 +48,10 @@ export class NoteServiceService {
 
   profilePic(token: any, formData: FormData): any {
     return this.http.post('http://fundoonotes.incubation.bridgelabz.com/api/user/uploadProfileImage?access_token='+token, formData, {headers: new HttpHeaders().set('token', localStorage.getItem('token'))});
+  }
+
+  changeInArchive(archiveData: Note[]) {
+    this.archiveSorce.next(archiveData);
   }
 }
 

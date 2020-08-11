@@ -9,8 +9,16 @@
 
 
   <mat-card *ngIf="popup" class="matcard1" [formGroup]="createNote">
-    <div>
-      <input matInput type="text" formControlName="title" placeholder="Title" class="input2" style=" font-size: 1rem;"/>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <input  matInput type="text" formControlName="title" placeholder="Title" class="input2" style=" font-size: 1rem;"/>
+      <button *ngIf="pinStatusDuringCreate" mat-icon-button class="pinicon">
+        <mat-icon  matSuffix  matTooltip="unpin note"  (click)="unpinCreateNote()">push_pin
+        </mat-icon>
+      </button>
+      <button *ngIf="!pinStatusDuringCreate" mat-icon-button class="pinicon">
+          <mat-icon matSuffix matTooltip="pin note" class="material-icons-outlined" (click)="pinCreateNote()">push_pin
+          </mat-icon>
+        </button>
     </div>
 
     <div>
@@ -34,11 +42,11 @@
 </div>
 
 <!--new note creation -->
-<div *ngIf="allPinedNote.length > 0" style="margin-left: -60px;"><p *ngIf="allPinedNote.length > 0 && grid()== true" style="margin-left: 68px;margin-bottom: -21px ">Pined Notes</p>
+<div *ngIf="allPinedNote.length > 0" style="margin-left: -60px;"><p *ngIf="allPinedNote.length > 0 && grid()== true" style="color: #5f6368;margin-left: 68px;margin-bottom: -21px ">PINNED</p>
 
   <!--  pined notes -->
-        <div style="margin-left: 1px; margin-top: 1%;">
-          <div style="margin-top: 0px;overflow-y: hidden; margin-left: 50px;margin-bottom: 5%; width: 96%;" fxLayout="row wrap" fxLayoutGap="10px"
+        <div style="margin-left: -48px; margin-top: 1%;">
+          <div style="margin-top: 0px;overflow-y: hidden; margin-left: 111px;margin-bottom: 5%; width: 96%;" fxLayout="row wrap" fxLayoutGap="10px"
                fxLayoutAlign="start center" fxLayoutAlign.xs="center center" *ngIf="grid()== true">
             <div fxFlex='280px' fxFlex.xs='100' *ngFor="let note of allPinedNote | noteSort: searchTerm; let i = index">
               <mat-card (mouseenter)="mouseenter(i+'u')"
@@ -80,7 +88,8 @@
 
                     <li>
                       <button mat-icon-button class="iconButton">
-                        <mat-icon *ngIf="isShowing && indexStatus === i+'u'" matTooltip="archive" class="material-icons-outlined md-18">archive
+                        <mat-icon *ngIf="isShowing && indexStatus === i+'u'" matTooltip="archive" class="material-icons-outlined md-18"
+                                  (click)="addToArchive(note, i)" >archive
                         </mat-icon>
 
                       </button>
@@ -94,18 +103,38 @@
                     </li>
                     <li>
 
-                      <button mat-icon-button class="iconButton">
+                      <button [mat-menu-trigger-for]="afterMenu" mat-icon-button class="iconButton">
                         <mat-icon *ngIf="isShowing && indexStatus === i+'u'" matTooltip="more" class="material-icons-outlined md-18">more_vert</mat-icon>
 
                       </button>
+                      <mat-menu #afterMenu xPosition="after">
+                        <button mat-menu-item>Delete Note</button>
+                        <button  [mat-menu-trigger-for]="addLebelMenu" mat-menu-item>Add Lebel</button>
+                        <button mat-menu-item>Make A Copy</button>
+                      </mat-menu>
                     </li>
+                      <mat-menu #addLebelMenu="matMenu" xPosition="after">
+                        <h1 style="font-family: Roboto, Helvetica Neue, sans-serif; font-size: 14px; color: #5f6368" mat-dialog-title>Label Note</h1>
+                        <mat-form-field>
+                          <mat-label>Enter label name</mat-label>
+                          <input matInput (input)="searchNode($event)" [(ngModel)]="labelSearchTerm">
+                          <mat-icon matTooltip="Create lebel" style="cursor: pointer" matSuffix>search</mat-icon>
+                        </mat-form-field>
+                        <ul>
+                          <li *ngFor="let subtask of allLebel | labelSort: labelSearchTerm">
+                            <mat-checkbox [(ngModel)]="subtask.label">
+                              {{subtask.label}}
+                            </mat-checkbox>
+                          </li>
+                        </ul>
+                      </mat-menu>
                   </ul>
                 </div>
               </mat-card>
             </div>
           </div>
 
-          <p *ngIf="allPinedNote.length > 0  && grid()== false" style="margin-left: 156px;margin-top: 7px ; margin-bottom: -20px">Pined Notes</p>
+          <p *ngIf="allPinedNote.length > 0  && grid()== false" style="color: #5f6368;margin-left: 219px;margin-top: 7px ; margin-bottom: -20px">PINNED</p>
           <div style="margin-top: 20px; overflow-x: hidden;overflow-y: hidden; margin-left: 50px; width: 96%;"
                fxLayout="column wrap" fxLayoutGap="10px"
                fxLayoutAlign="start center" fxLayoutAlign.xs="center center" *ngIf="grid()== false">
@@ -154,7 +183,8 @@
 
                     <li>
                       <button mat-icon-button class="iconButton">
-                        <mat-icon *ngIf="isShowing && indexStatus === i+'u'" matTooltip="archive" class="material-icons-outlined md-18">archive
+                        <mat-icon *ngIf="isShowing && indexStatus === i+'u'" matTooltip="archive" class="material-icons-outlined md-18"
+                                  (click)="addToArchive(note, i)" >archive
                         </mat-icon>
 
                       </button>
@@ -168,11 +198,32 @@
                     </li>
                     <li>
 
-                      <button mat-icon-button class="iconButton">
-                        <mat-icon *ngIf="isShowing && indexStatus === i+'u'" matTooltip="more" class="material-icons-outlined md-18">more_vert</mat-icon>
+                      <button [mat-menu-trigger-for]="afterMenu" mat-icon-button class="iconButton">
+                        <mat-icon *ngIf="isShowing && indexStatus === i+'u'"  matTooltip="more" class="material-icons-outlined md-18">more_vert</mat-icon>
 
                       </button>
+
                     </li>
+                    <mat-menu #afterMenu="matMenu" xPosition="after">
+                      <button mat-menu-item>Delete Note</button>
+                      <button [mat-menu-trigger-for]="addLebelMenu" mat-menu-item>Add Lebel</button>
+                      <button mat-menu-item>Make A Copy</button>
+                    </mat-menu>
+
+                    <mat-menu #addLebelMenu="matMenu" xPosition="after">
+                      <h1 style="font-family: Roboto, Helvetica Neue, sans-serif; font-size: 14px; color: #5f6368" mat-dialog-title>Label Note</h1>
+                      <mat-form-field>
+                        <mat-label>Enter label name</mat-label>
+                        <input matInput (input)="searchNode($event)" [(ngModel)]="labelSearchTerm">
+                        <mat-icon matTooltip="Create lebel" style="cursor: pointer" matSuffix>search</mat-icon>
+                      </mat-form-field>
+                      <li *ngFor="let subtask of allLebel | labelSort: labelSearchTerm">
+                        <mat-checkbox [(ngModel)]="subtask.label">
+                          {{subtask.label}}
+                        </mat-checkbox>
+                      </li>
+                    </mat-menu>
+
                   </ul>
 
                 </div>
@@ -182,7 +233,7 @@
         </div>
 </div>
 <!--non pinned notes-->
-<div><p *ngIf="allPinedNote.length > 0 && grid()== true" style="margin-left: 68px;margin-bottom: -21px ">UnPined Notes</p>
+<div><p *ngIf="allPinedNote.length > 0 && grid()== true" style="color:#5f6368;margin-left: 68px;margin-bottom: -21px ">OTHERS</p>
         <div style="margin-left:1px; margin-top: 1%;">
           <div style="margin-top: 0px;overflow-y: hidden; margin-left: 50px;margin-bottom: 5%; width: 96%;"
                fxLayout="row wrap" fxLayoutGap="10px"
@@ -232,7 +283,7 @@
 
                     <li>
                       <button mat-icon-button class="iconButton">
-                        <mat-icon *ngIf="isShowing && indexStatus === i+'p'" matTooltip="archive"
+                        <mat-icon *ngIf="isShowing && indexStatus === i+'p'" matTooltip="archive" (click)="addToArchive(note, i)"
                                   class="material-icons-outlined md-18">archive
                         </mat-icon>
 
@@ -254,6 +305,7 @@
                                   class="material-icons-outlined md-18">more_vert
                         </mat-icon>
                       </button>
+
                     </li>
 <!--                    "-->
                     <mat-menu #afterMenu="matMenu" xPosition="after">
@@ -281,7 +333,7 @@
             </div>
           </div>
 
-          <p *ngIf="allPinedNote.length > 0 && grid()== false" style="margin-left: 163px;margin-bottom: -8px ">UnPined Notes</p>
+          <p *ngIf="allPinedNote.length > 0 && grid()== false" style="color: #5f6368;margin-left: 140px;margin-bottom: -8px ">OTHERS</p>
           <div style="margin-top: 13px; overflow-x: hidden;overflow-y: hidden; margin-left: 50px; width: 96%;"
                fxLayout="column wrap" fxLayoutGap="10px"
                fxLayoutAlign="start center" fxLayoutAlign.xs="center center" *ngIf="grid()== false">
@@ -334,7 +386,7 @@
 
                     <li>
                       <button mat-icon-button class="iconButton">
-                        <mat-icon *ngIf="isShowing && indexStatus === i+'p'" matTooltip="archive"
+                        <mat-icon *ngIf="isShowing && indexStatus === i+'p'" matTooltip="archive" (click)="addToArchive(note, i)"
                                   class="material-icons-outlined md-18">archive
                         </mat-icon>
 
