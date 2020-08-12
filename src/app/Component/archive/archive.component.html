@@ -19,7 +19,7 @@
                style=" margin-top:-12px; font-family: Roboto, Helvetica Neue, sans-serif;font-size: medium;color: #202124;opacity: 96%">
             {{note.title}}
             <button  *ngIf="isShowing && indexStatus === i+'p' && note.isPined"  mat-icon-button class="pinicon">
-              <mat-icon matSuffix matTooltip="unpin note"  (click)="unpinNote(note, i)">push_pin
+              <mat-icon matSuffix matTooltip="unpin note">push_pin
               </mat-icon>
             </button>
             <button  *ngIf="isShowing && indexStatus === i+'p' && !note.isPined"  mat-icon-button class="pinicon">
@@ -54,9 +54,9 @@
             </li>
 
             <li>
-              <button mat-icon-button class="iconButton">
-                <mat-icon *ngIf="isShowing && indexStatus === i+'p'" matTooltip="archive"
-                          class="material-icons-outlined md-18">archive
+              <button mat-icon-button class="iconButton" (click)="unarchieve(note, i)">
+                <mat-icon *ngIf="isShowing && indexStatus === i+'p'" matTooltip="Unarchive"
+                          class="material-icons-outlined md-18" >archive
                 </mat-icon>
 
               </button>

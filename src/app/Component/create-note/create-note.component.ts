@@ -6,7 +6,8 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 import {Note} from '../../model/Note';
 import {map, shareReplay} from 'rxjs/operators';
 import {Label} from '../../model/Label';
-// import {PinUpinObject} from '../../model/IconData';
+import {PinUpinObject} from '../../model/PinUnpinModel';
+import {ArchievedObject} from '../../model/ArchievedModel';
 
 @Component({
   selector: 'app-create-note',
@@ -28,7 +29,6 @@ export class CreateNoteComponent implements OnInit {
   allPinedNote: Note[] = [];
   allLebel: Label[] = [];
   allArchivedNote: Note[] = [];
-
 
 
   public colorList = [
@@ -82,7 +82,7 @@ export class CreateNoteComponent implements OnInit {
   note() {
     this.token = localStorage.getItem('token');
     if (this.createNote) {
-      const newNote_1 : Note = Object.assign(new Note(), this.createNote.value);
+      const newNote_1: Note = Object.assign(new Note(), this.createNote.value);
       newNote_1.isPined = this.pinStatusDuringCreate;
       this.createNote$ = crudHttpsCallWithToken('/notes/addNotes?access_token=' + this.token, newNote_1, 'post');
       this.createNote$.subscribe((response: any) => {
@@ -90,9 +90,9 @@ export class CreateNoteComponent implements OnInit {
           this.newNote = Object.assign(new Note(), response.status.details);
           console.log('after conversion', this.newNote);
           // Refactor need to maintain with data base
-          if(this.pinStatusDuringCreate  == false){
+          if (this.pinStatusDuringCreate == false) {
             this.allNonPinedNote.push(response.status.details);
-          }else {
+          } else {
             // response.status.details.isPined = true;
             this.allPinedNote.push(response.status.details);
           }
@@ -105,13 +105,17 @@ export class CreateNoteComponent implements OnInit {
   }
 
   getAllNotes() {
-    this.notes$ = getHttpsCall('/notes/getNotesList?access_token=' + this.token),shareReplay();
+    this.notes$ = getHttpsCall('/notes/getNotesList?access_token=' + this.token), shareReplay();
     this.notes$.subscribe(data => {
       this.notes$.subscribe(notes => {
-        this.allNonPinedNote = notes.data.data.filter(
-          note => note.isPined === false);
-        this.allPinedNote = notes.data.data.filter(
-          note => note.isPined === true);
+        this.allNonPinedNote = notes.data.data
+          .filter(note => !note.isPined)
+          .filter(n => !n.isArchived)
+          .filter(v => !v.isDeleted);
+        this.allPinedNote = notes.data.data
+          .filter(note => note.isPined)
+          .filter(n => !n.isArchived)
+          .filter(v => !v.isDeleted);
         console.log('all non pined Notes Mat Card', this.allNonPinedNote);
         console.log('all pined Notes Mat Card', this.allPinedNote);
       });
@@ -127,47 +131,31 @@ export class CreateNoteComponent implements OnInit {
     }
   }
 
-  pinNote(note: Note,i: number) {
+  pinNote(note: Note, i: number) {
     if (this.allNonPinedNote.length > 0) {
       note.isPined = true;
-
-      // let for_pinned: PinUpinObject;
-      // for_pinned.noteIdList.push(note.id);
-      // for_pinned.isPined = true;
-      //
-      const resp$ = crudHttpsCallWithToken('/notes/pinUnpinNotes?access_token=' + this.token, note, 'post');
+      const for_pinned: PinUpinObject = new PinUpinObject();
+      for_pinned.noteIdList = [note.id];
+      for_pinned.isPined = true;
+      const resp$ = crudHttpsCallWithToken('/notes/pinUnpinNotes?access_token=' + this.token, for_pinned, 'post');
       resp$.subscribe(response => {
-
         this.allPinedNote.push(note);
-        console.log('note unpined data', this.allNonPinedNote);
-
         this.allNonPinedNote.splice(i, 1);
-        console.log('note pined data', this.allPinedNote);
-
-        console.log('note pined response', response);
       });
     }
   }
 
   unpinNote(note: Note, i: number) {
     if (this.allPinedNote.length > 0) {
-      this.allPinedNote[i].isPined = false;
-      note.isPined=false;
-      // let for_pinned: PinUpinObject;
-      // for_pinned.noteIdList.push(note.id);
-      // for_pinned.isPined = false;
-      // const resp$ = crudHttpsCallWithToken('/notes/pinUnpinNotes?access_token=' + this.token, for_pinned, 'post');
-      // resp$.subscribe(response => {
-      //   this.allNonPinedNote.push(note);
-      //   this.allPinedNote.splice(i, 1);
-      //   console.log('note unpined response', response);
-      // });
-      this.allNonPinedNote.push(note);
-      console.log('note unpined response', this.allNonPinedNote);
-
-      this.allPinedNote.splice(i, 1);
-      console.log('note pined response', this.allPinedNote);
-
+      note.isPined = false;
+      const for_pinned: PinUpinObject = new PinUpinObject();
+      for_pinned.noteIdList = [note.id];
+      for_pinned.isPined = false;
+      const resp$ = crudHttpsCallWithToken('/notes/pinUnpinNotes?access_token=' + this.token, for_pinned, 'post');
+      resp$.subscribe(response => {
+        this.allNonPinedNote.push(note);
+        this.allPinedNote.splice(i, 1);
+      });
     }
   }
 
@@ -184,20 +172,23 @@ export class CreateNoteComponent implements OnInit {
   }
 
   addToArchive(note: Note, i: number) {
-    // let for_pinned: PinUpinObject;
-    // for_pinned.noteIdList.push(note.id);
-    // for_pinned.isArchived = true;
-    if(this.allPinedNote[i] === null){
-      this.allArchivedNote.push(note);
-      // this.noteService.changeInArchive(this.allArchivedNote);
-      // const res$ =
-      console.log('archieved adding from pined');
-      this.allPinedNote.splice(i, 1);
-    }else{
-      this.allArchivedNote.push(note);
-      // this.noteService.changeInArchive(this.allArchivedNote);
-      console.log('archieved adding from unpined');
-      this.allNonPinedNote.splice(i, 1);
+    const for_archieve: ArchievedObject = new ArchievedObject();
+    for_archieve.noteIdList = [note.id];
+    for_archieve.isArchived = true;
+
+    if (this.allPinedNote[i].id === note.id) {
+      const resp$ = crudHttpsCallWithToken('/notes/archiveNotes?access_token=' + this.token, for_archieve, 'post');
+      resp$.subscribe(response => {
+        this.allPinedNote.splice(i, 1);
+        console.log('note pined archieved response', response);
+      });
+    } else {
+      const resp$ = crudHttpsCallWithToken('/notes/archiveNotes?access_token=' + this.token, for_archieve, 'post');
+      resp$.subscribe(response => {
+        this.allNonPinedNote.splice(i, 1);
+        console.log('note unpined archieved response', response);
+
+      });
     }
   }
 }

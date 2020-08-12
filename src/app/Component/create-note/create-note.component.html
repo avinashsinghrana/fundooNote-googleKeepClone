@@ -42,10 +42,11 @@
 </div>
 
 <!--new note creation -->
-<div *ngIf="allPinedNote.length > 0" style="margin-left: -60px;"><p *ngIf="allPinedNote.length > 0 && grid()== true" style="color: #5f6368;margin-left: 68px;margin-bottom: -21px ">PINNED</p>
+<div *ngIf="allPinedNote.length > 0" style="margin-left: -60px;">
+  <p *ngIf="allPinedNote.length > 0 && grid()== true" style="color: #5f6368;margin-left: 116px;margin-bottom: -17px;margin-top: 13px">PINNED</p>
 
   <!--  pined notes -->
-        <div style="margin-left: -48px; margin-top: 1%;">
+        <div style="margin-left: 1px; margin-top: 1%;">
           <div style="margin-top: 0px;overflow-y: hidden; margin-left: 111px;margin-bottom: 5%; width: 96%;" fxLayout="row wrap" fxLayoutGap="10px"
                fxLayoutAlign="start center" fxLayoutAlign.xs="center center" *ngIf="grid()== true">
             <div fxFlex='280px' fxFlex.xs='100' *ngFor="let note of allPinedNote | noteSort: searchTerm; let i = index">
@@ -134,7 +135,7 @@
             </div>
           </div>
 
-          <p *ngIf="allPinedNote.length > 0  && grid()== false" style="color: #5f6368;margin-left: 219px;margin-top: 7px ; margin-bottom: -20px">PINNED</p>
+          <p *ngIf="allPinedNote.length > 0  && grid()== false" style="color: #5f6368;margin-left: 201px;margin-top: 7px ; margin-bottom: -20px">PINNED</p>
           <div style="margin-top: 20px; overflow-x: hidden;overflow-y: hidden; margin-left: 50px; width: 96%;"
                fxLayout="column wrap" fxLayoutGap="10px"
                fxLayoutAlign="start center" fxLayoutAlign.xs="center center" *ngIf="grid()== false">
@@ -233,7 +234,7 @@
         </div>
 </div>
 <!--non pinned notes-->
-<div><p *ngIf="allPinedNote.length > 0 && grid()== true" style="color:#5f6368;margin-left: 68px;margin-bottom: -21px ">OTHERS</p>
+<div><p *ngIf="allPinedNote.length > 0 && grid()== true" style="color:#5f6368;margin-left: 57px;margin-bottom: -18px;">OTHERS</p>
         <div style="margin-left:1px; margin-top: 1%;">
           <div style="margin-top: 0px;overflow-y: hidden; margin-left: 50px;margin-bottom: 5%; width: 96%;"
                fxLayout="row wrap" fxLayoutGap="10px"
