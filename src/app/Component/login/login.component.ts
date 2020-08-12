@@ -51,6 +51,7 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('fullName', response.firstName + ' ' + response.lastName);
         localStorage.setItem('userId', response.userId);
         localStorage.setItem('email', response.email);
+        localStorage.setItem('imageUrl', 'http://fundoonotes.incubation.bridgelabz.com/'+response.imageUrl);
         this.dialogRef.close();
         this.snackBar.open(
           'Login Successfully',

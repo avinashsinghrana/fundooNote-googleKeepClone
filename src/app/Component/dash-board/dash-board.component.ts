@@ -2,13 +2,11 @@ import {Component, Inject, Input, OnInit, ViewChild} from '@angular/core';
 import {MatSidenav} from '@angular/material/sidenav';
 import {Router} from '@angular/router';
 import {FormGroup} from '@angular/forms';
-import {NgxSpinnerService} from 'ngx-spinner';
 import {NoteServiceService} from '../utils/note-service.service';
 import {MAT_DIALOG_DATA, MatDialogRef, MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {LebelDialogComponent} from '../lebel-dialog/lebel-dialog.component';
 import {LoginComponent} from '../login/login.component';
-import {Note} from '../../model/Note';
 import {getHttpsCall} from '../utils/utils';
 import {Label} from '../../model/Label';
 
@@ -39,6 +37,9 @@ export class DashBoardComponent implements OnInit {
   lebelList: Label[];
   labels: any;
   profilePic: string;
+  imageUrl: string;
+  username: string;
+  usermail: string;
 
   mouseenter() {
     if (!this.isExpanded) {
@@ -62,6 +63,9 @@ export class DashBoardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.imageUrl = localStorage.getItem('imageUrl');
+    this.username = localStorage.getItem('fullName');
+    this.usermail = localStorage.getItem('email');
     this.token = localStorage.getItem('token');
     this.noteService.currentLebelList$.subscribe(response => {
       this.lebelList = response;
@@ -97,7 +101,6 @@ export class DashBoardComponent implements OnInit {
       this.dialog.open(LoginComponent, {
         width: '350px',
       });
-      // this.router.navigate(['login']);
     } else {
       this.snack.open('Hi, ' + localStorage.getItem('fullName') + ', you are on dashboard! ', 'ok', {duration: 2000});
     }
@@ -169,13 +172,13 @@ export class DashBoardComponent implements OnInit {
     this.noteService.profilePic(this.token, formData).subscribe(
       data => {
         console.log('------------------------------', data);
-        const response = data.status.imageUrl;
-        this.profilePic = response;
+        this.profilePic = data.status.imageUrl;
         this.snack.open('Profile Pic Updated Successfully', 'OK',{duration:2000});
         localStorage.setItem('imageUrl', 'http://fundoonotes.incubation.bridgelabz.com/'+this.profilePic);
+        this.imageUrl = 'http://fundoonotes.incubation.bridgelabz.com/'+this.profilePic;
       },
       err => {
-        this.snack.open('Profile pic uplodation failed!!', 'Ok', {duration: 2000});
+        this.snack.open('Updation Failed! Image Format Error.', 'Ok', {duration: 2000});
       });
   }
 }

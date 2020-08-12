@@ -6,12 +6,14 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 import {Note} from '../../model/Note';
 import {map, shareReplay} from 'rxjs/operators';
 import {Label} from '../../model/Label';
+// import {PinUpinObject} from '../../model/IconData';
 
 @Component({
   selector: 'app-create-note',
   templateUrl: './create-note.component.html',
   styleUrls: ['./create-note.component.scss']
 })
+
 export class CreateNoteComponent implements OnInit {
   notes$: Observable<any>;
   createNote$: Observable<any>;
@@ -26,6 +28,8 @@ export class CreateNoteComponent implements OnInit {
   allPinedNote: Note[] = [];
   allLebel: Label[] = [];
   allArchivedNote: Note[] = [];
+
+
 
   public colorList = [
     {key: 'orange', value: '#fa761e', friendlyName: 'Orange'},
@@ -111,8 +115,6 @@ export class CreateNoteComponent implements OnInit {
         console.log('all non pined Notes Mat Card', this.allNonPinedNote);
         console.log('all pined Notes Mat Card', this.allPinedNote);
       });
-      // console.log('all Notes Mat Card', this.allNonPinedNote);
-      // console.log('all Notes Mat Card', this.allPinedNote);
     });
   }
 
@@ -127,29 +129,39 @@ export class CreateNoteComponent implements OnInit {
 
   pinNote(note: Note,i: number) {
     if (this.allNonPinedNote.length > 0) {
-      this.allNonPinedNote[i].isPined = true;
+      note.isPined = true;
+
+      // let for_pinned: PinUpinObject;
+      // for_pinned.noteIdList.push(note.id);
+      // for_pinned.isPined = true;
+      //
       const resp$ = crudHttpsCallWithToken('/notes/pinUnpinNotes?access_token=' + this.token, note, 'post');
       resp$.subscribe(response => {
+
+        this.allPinedNote.push(note);
+        console.log('note unpined data', this.allNonPinedNote);
+
+        this.allNonPinedNote.splice(i, 1);
+        console.log('note pined data', this.allPinedNote);
+
         console.log('note pined response', response);
       });
     }
-    this.allPinedNote.push(note);
-    console.log('note unpined data', this.allNonPinedNote);
-
-    this.allNonPinedNote.splice(i, 1);
-    console.log('note pined data', this.allPinedNote);
   }
 
   unpinNote(note: Note, i: number) {
     if (this.allPinedNote.length > 0) {
       this.allPinedNote[i].isPined = false;
       note.isPined=false;
-      const resp$ = crudHttpsCallWithToken('/notes/pinUnpinNotes?access_token=' + this.token, note, 'post');
-      resp$.subscribe(response => {
-        // this.allNonPinedNote.push(note);
-        // this.allPinedNote.splice(i, 1);
-        console.log('note unpined response', response);
-      });
+      // let for_pinned: PinUpinObject;
+      // for_pinned.noteIdList.push(note.id);
+      // for_pinned.isPined = false;
+      // const resp$ = crudHttpsCallWithToken('/notes/pinUnpinNotes?access_token=' + this.token, for_pinned, 'post');
+      // resp$.subscribe(response => {
+      //   this.allNonPinedNote.push(note);
+      //   this.allPinedNote.splice(i, 1);
+      //   console.log('note unpined response', response);
+      // });
       this.allNonPinedNote.push(note);
       console.log('note unpined response', this.allNonPinedNote);
 
@@ -172,14 +184,18 @@ export class CreateNoteComponent implements OnInit {
   }
 
   addToArchive(note: Note, i: number) {
+    // let for_pinned: PinUpinObject;
+    // for_pinned.noteIdList.push(note.id);
+    // for_pinned.isArchived = true;
     if(this.allPinedNote[i] === null){
       this.allArchivedNote.push(note);
-      this.noteService.changeInArchive(this.allArchivedNote);
+      // this.noteService.changeInArchive(this.allArchivedNote);
+      // const res$ =
       console.log('archieved adding from pined');
       this.allPinedNote.splice(i, 1);
     }else{
       this.allArchivedNote.push(note);
-      this.noteService.changeInArchive(this.allArchivedNote);
+      // this.noteService.changeInArchive(this.allArchivedNote);
       console.log('archieved adding from unpined');
       this.allNonPinedNote.splice(i, 1);
     }

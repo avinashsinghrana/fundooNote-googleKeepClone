@@ -23,7 +23,7 @@
       <mat-icon id="close">close</mat-icon>
     </mat-card>
 
-    <div fxFlex fxLayout fxLayoutAlign="flex-end">
+    <div fxFlex style="margin-top:-8px" fxLayoutAlign="flex-end">
       <ul flexLayout="row" fxLayoutGap="15px" class="menu-icons">
         <li>
           <button class="matbutton">
@@ -42,30 +42,60 @@
 
       </ul>
 
-      <ul flexLayout="row" fxLayoutGap="15px" class="menu-icons2">
+      <ul class="menu-icons2">
         <!--    <li><mat-icon class="material-icons-outlined">apps</mat-icon></li>-->
         <li>
-          <button class="matbutton1">
+          <button class="matbutton10">
             <mat-icon *ngIf="!matmenuStatus" matTooltip="account" class="material-icons-outlined" (click)="login()">account_circle</mat-icon>
           </button>
-          <button class="matbutton1">
-            <mat-icon *ngIf="matmenuStatus" [mat-menu-trigger-for]="menu1" matTooltip="account" class="material-icons-outlined" (click)="login()">account_circle</mat-icon>
-          </button>
-          <mat-menu id="profile" #menu1="matMenu"  class="menu-button" fxLayout="row" fxLayoutAlign="end start">
-            <div>
-              <button mat-button (click)="imageSelectFile.click()"  >
-                Set Profile Pic</button>
-            </div>
-            <hr>
-            <div>
-              <button class="signout" mat-flat-button (click)="Logout()">Sign out</button>
-            </div>
-            <input fxHide class="image" type="file" (change)="fileUpload($event)" #imageSelectFile
-                   enctype="multipart/form-data/">
-          </mat-menu>
-          <!--      <img src="loginImage">-->
+          <button *ngIf="matmenuStatus" mat-mini-fab class="imageSelect"
+                      [ngStyle]="{'background-image':'url(' +imageUrl+ ')','background-size':'cover','width':'37px','height':'37px'}"
+                      [matMenuTriggerFor]="menu1" (click)="login()"></button>
         </li>
       </ul>
+          <mat-menu id="profile" #menu1="matMenu" fxLayout="row" fxLayoutAlign="center center">
+
+            <div style="margin-top: 19px" fxLayout="row" fxLayoutAlign="center center" >
+              <button [ngStyle]="{'background-image':'url(' +imageUrl+ ')',positionAlign: 'center', 'background-size':'cover','width':'85px','height':'85px', marginBottom:'10px','margin-left':'6px','box-shadow': 'none'}"
+                      mat-mini-fab>
+                <mat-icon (click)="imageSelectFile.click()"
+                          style="border-radius: 47%;height: 25px; width: 27px;
+                          background-color: white;border-width: 1px;margin-top: 50px;
+                          margin-left: 57px;border-style: groove;border-color: gray;"
+                          class="material-icons-outlined md-25" matSuffix>photo_camera</mat-icon>
+              </button>
+            </div>
+            <div style="margin-top: 10px; background-color: lightgrey; height: 47px;margin-bottom: 7px">
+              <div fxLayoutAlign="center center" class="mat-subheading-1" style="font-weight: bold;">{{username.toUpperCase()}}</div>
+              <div fxLayoutAlign="center center" class="mailer">{{usermail}}</div>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="space-between center" class="accountMenu" style="overflow-x: hidden;overflow-y: hidden">
+              <div style="margin-left: 6%;">
+                <button mat-button style="border-width: thin;
+                              color: #5f6368;
+                              border-radius: 20px;
+                              border-color: gray;
+                              background-color: white;
+                              border-style: groove;"
+                        (click)="imageSelectFile.click()"  >
+                  Update Profile</button>
+              </div>
+              <div style="margin-right: 6%">
+                <button mat-button style="border-width: thin;
+                              margin-right: 6%;
+                              color: #5f6368;
+                              border-radius: 20px;
+                              border-color: gray;
+                              background-color: white;
+                              border-style: groove;"
+                        (click)="Logout()">Sign out</button>
+              </div>
+              <input fxHide class="image" type="file" (change)="fileUpload($event)" #imageSelectFile
+                     enctype="multipart/form-data/">
+
+            </div>
+          </mat-menu>
+          <!--      <img src="loginImage">-->
     </div>
   </mat-toolbar>
   <hr>
