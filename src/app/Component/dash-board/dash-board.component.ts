@@ -63,6 +63,7 @@ export class DashBoardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    localStorage.setItem('status', this.viewState);
     this.imageUrl = localStorage.getItem('imageUrl');
     this.username = localStorage.getItem('fullName');
     this.usermail = localStorage.getItem('email');

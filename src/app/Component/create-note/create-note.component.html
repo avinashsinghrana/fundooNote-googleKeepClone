@@ -88,16 +88,16 @@
                     </li>
 
                     <li>
-                      <button mat-icon-button class="iconButton">
+                      <button mat-icon-button class="iconButton" (click)="addToArchive(note, i)">
                         <mat-icon *ngIf="isShowing && indexStatus === i+'u'" matTooltip="archive" class="material-icons-outlined md-18"
-                                  (click)="addToArchive(note, i)" >archive
+                                   >archive
                         </mat-icon>
 
                       </button>
                     </li>
                     <li>
 
-                      <button mat-icon-button class="iconButton">
+                      <button mat-icon-button class="iconButton" (click)="trash(note, i)">
                         <mat-icon *ngIf="isShowing && indexStatus === i+'u'" matTooltip="delete" class="material-icons-outlined md-18">delete</mat-icon>
 
                       </button>
@@ -183,16 +183,15 @@
                     </li>
 
                     <li>
-                      <button mat-icon-button class="iconButton">
-                        <mat-icon *ngIf="isShowing && indexStatus === i+'u'" matTooltip="archive" class="material-icons-outlined md-18"
-                                  (click)="addToArchive(note, i)" >archive
+                      <button mat-icon-button class="iconButton" (click)="addToArchive(note, i)">
+                        <mat-icon *ngIf="isShowing && indexStatus === i+'u'" matTooltip="archive" class="material-icons-outlined md-18">archive
                         </mat-icon>
 
                       </button>
                     </li>
                     <li>
 
-                      <button mat-icon-button class="iconButton">
+                      <button mat-icon-button class="iconButton" (click)="trash(note, i)">
                         <mat-icon *ngIf="isShowing && indexStatus === i+'u'" matTooltip="delete" class="material-icons-outlined md-18">delete</mat-icon>
 
                       </button>
@@ -283,8 +282,8 @@
                     </li>
 
                     <li>
-                      <button mat-icon-button class="iconButton">
-                        <mat-icon *ngIf="isShowing && indexStatus === i+'p'" matTooltip="archive" (click)="addToArchive(note, i)"
+                      <button mat-icon-button class="iconButton" (click)="addToArchive(note, i)">
+                        <mat-icon *ngIf="isShowing && indexStatus === i+'p'" matTooltip="archive"
                                   class="material-icons-outlined md-18">archive
                         </mat-icon>
 
@@ -292,7 +291,7 @@
                     </li>
                     <li>
 
-                      <button mat-icon-button class="iconButton">
+                      <button mat-icon-button class="iconButton" (click)="trash(note, i)">
                         <mat-icon *ngIf="isShowing && indexStatus === i+'p'" matTooltip="delete"
                                   class="material-icons-outlined md-18">delete
                         </mat-icon>
@@ -386,8 +385,8 @@
                     </li>
 
                     <li>
-                      <button mat-icon-button class="iconButton">
-                        <mat-icon *ngIf="isShowing && indexStatus === i+'p'" matTooltip="archive" (click)="addToArchive(note, i)"
+                      <button mat-icon-button class="iconButton" (click)="addToArchive(note, i)">
+                        <mat-icon *ngIf="isShowing && indexStatus === i+'p'" matTooltip="archive"
                                   class="material-icons-outlined md-18">archive
                         </mat-icon>
 
@@ -395,7 +394,7 @@
                     </li>
                     <li>
 
-                      <button mat-icon-button class="iconButton">
+                      <button mat-icon-button class="iconButton" (click)="trash(note, i)">
                         <mat-icon *ngIf="isShowing && indexStatus === i+'p'" matTooltip="delete"
                                   class="material-icons-outlined md-18">delete
                         </mat-icon>

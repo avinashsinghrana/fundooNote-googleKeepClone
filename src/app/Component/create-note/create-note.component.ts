@@ -8,6 +8,7 @@ import {map, shareReplay} from 'rxjs/operators';
 import {Label} from '../../model/Label';
 import {PinUpinObject} from '../../model/PinUnpinModel';
 import {ArchievedObject} from '../../model/ArchievedModel';
+import {TrashModel} from '../../model/TrashModel';
 
 @Component({
   selector: 'app-create-note',
@@ -176,7 +177,7 @@ export class CreateNoteComponent implements OnInit {
     for_archieve.noteIdList = [note.id];
     for_archieve.isArchived = true;
 
-    if (this.allPinedNote[i].id === note.id) {
+    if ( this.allPinedNote.length > 0 && this.allPinedNote.indexOf(note) > -1) {
       const resp$ = crudHttpsCallWithToken('/notes/archiveNotes?access_token=' + this.token, for_archieve, 'post');
       resp$.subscribe(response => {
         this.allPinedNote.splice(i, 1);
@@ -187,6 +188,26 @@ export class CreateNoteComponent implements OnInit {
       resp$.subscribe(response => {
         this.allNonPinedNote.splice(i, 1);
         console.log('note unpined archieved response', response);
+
+      });
+    }
+  }
+
+  trash(note: Note, i: number) {
+    const for_delete: TrashModel = new TrashModel();
+    for_delete.noteIdList = [note.id];
+    for_delete.isDeleted = true;
+    if ( this.allNonPinedNote.length > 0 && this.allPinedNote.indexOf(note) > -1) {
+      const resp$ = crudHttpsCallWithToken('/notes/trashNotes?access_token=' + this.token, for_delete, 'post');
+      resp$.subscribe(response => {
+        this.allPinedNote.splice(i, 1);
+        console.log('note pined delete response', response);
+      });
+    } else {
+      const resp$ = crudHttpsCallWithToken('/notes/trashNotes?access_token=' + this.token, for_delete, 'post');
+      resp$.subscribe(response => {
+        this.allNonPinedNote.splice(i, 1);
+        console.log('note unpined delete response', response);
 
       });
     }

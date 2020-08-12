@@ -6,6 +6,7 @@ import {crudHttpsCallWithToken, getHttpsCall} from '../utils/utils';
 import {shareReplay} from 'rxjs/operators';
 import {ArchievedObject} from '../../model/ArchievedModel';
 import {PinUpinObject} from '../../model/PinUnpinModel';
+import {TrashModel} from '../../model/TrashModel';
 
 @Component({
   selector: 'app-archive',
@@ -38,6 +39,9 @@ export class ArchiveComponent implements OnInit {
   ngOnInit(): void {
     this.token = localStorage.getItem('token');
     this.getAllNotes();
+    this.noteService.currentSearch$.subscribe(response => {
+      this.searchTerm = response;
+    });
   }
 
   grid(): boolean {
@@ -59,12 +63,13 @@ export class ArchiveComponent implements OnInit {
   }
 
   pinNote(note: Note, i: number) {
+    this.unarchieve(note, i);
     const for_pinned: PinUpinObject = new PinUpinObject();
     for_pinned.noteIdList = [note.id];
     for_pinned.isPined = true;
     const resp$ = crudHttpsCallWithToken('/notes/pinUnpinNotes?access_token=' + this.token, for_pinned, 'post');
-    resp$.subscribe(response => {
-      this.unarchieve(note, i);
+    resp$.subscribe(res => {
+
     });
   }
 
@@ -76,6 +81,17 @@ export class ArchiveComponent implements OnInit {
     resp$.subscribe(response => {
       this.allArchivedNote.splice(i, 1);
       console.log('note unarchievd response', response);
+    });
+  }
+
+  trash(note: Note, i: number) {
+    const for_delete: TrashModel = new TrashModel();
+    for_delete.noteIdList = [note.id];
+    for_delete.isDeleted = true;
+    const resp$ = crudHttpsCallWithToken('/notes/trashNotes?access_token=' + this.token, for_delete, 'post');
+    resp$.subscribe(response => {
+      this.allArchivedNote.splice(i, 1);
+      console.log('note unpined delete response', response);
     });
   }
 }
