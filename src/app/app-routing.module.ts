@@ -10,6 +10,10 @@ import { DeleteNoteComponent } from './Component/delete-note/delete-note.compone
 import { RemindersComponent } from './Component/reminders/reminders.component';
 import { IconCollectorComponent } from './Component/icon-collector/icon-collector.component';
 import {CreateNoteComponent} from './Component/create-note/create-note.component';
+import {ShowLabelNoteComponent} from './Component/show-label-note/show-label-note.component';
+import {Note} from './model/Note';
+import * as path from 'path';
+import {EditNodeComponent} from './Component/edit-node/edit-node.component';
 
 
 const routes: Routes = [
@@ -24,13 +28,18 @@ const routes: Routes = [
      { path: 'r', redirectTo: 'reminders', pathMatch: 'full' },
      { path: 'd', redirectTo: 'delete-note', pathMatch: 'full' },
      { path: 'a', redirectTo: 'archive', pathMatch: 'full' },
-     { path: 'create-node', component: CreateNoteComponent },
+     { path: 'l', redirectTo: 'label_Panel', pathMatch: 'full' },
+     { path: 'create-node', component: CreateNoteComponent},
+      // children: [
+      //   {path: 'u',redirectTo: 'un', component: EditNodeComponent, pathMatch: 'full'},
+      // ],
      { path: 'reminders' , component: RemindersComponent},
      { path: 'delete-note' , component: DeleteNoteComponent},
      { path: 'archive' , component: ArchiveComponent},
+     { path: 'label_Panel' , component: ShowLabelNoteComponent},
    ],
  },
-
+  {path: 'edit', component: EditNodeComponent, data: Note},
 
 { path: 'icon-collector', component: IconCollectorComponent}
 ];

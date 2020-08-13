@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Subject} from 'rxjs';
+import {BehaviorSubject, Subject} from 'rxjs';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Label} from '../../model/Label';
 import {HttpService} from '../../Service/httpService/http.service';
@@ -14,14 +14,16 @@ export class NoteServiceService {
   currentLoginStatus$ = this.loginSource.asObservable();
   private noteSource = new Subject<any>();
   currentNotes$ = this.noteSource.asObservable();
-  private searchSource = new Subject<string>();
+  public searchSource = new Subject<string>();
   currentSearch$ = this.searchSource.asObservable();
-  private lebelSource = new Subject<Label[]>();
-  currentLebelList$ = this.loginSource.asObservable();
+  public lebelSource = new BehaviorSubject<Label[]>([]);
+  currentLebel$ = this.loginSource.asObservable();
   private labelSearchSource = new Subject<string>();
   currentLabelTerm$ = this.labelSearchSource.asObservable();
   private archiveSorce = new Subject<Note[]>();
   currentArchievedData$ = this.archiveSorce.asObservable();
+  private labelNameSource = new Subject<string>();
+  currentRequestLabelName$ = this.labelNameSource.asObservable();
 
 
   constructor(private http: HttpClient) {
@@ -52,6 +54,10 @@ export class NoteServiceService {
 
   changeInArchive(archiveData: Note[]) {
     this.archiveSorce.next(archiveData);
+  }
+
+  changeLabelRequest(labelName: string){
+    this.labelNameSource.next(labelName);
   }
 }
 

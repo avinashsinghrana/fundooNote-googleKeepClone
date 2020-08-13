@@ -22,6 +22,8 @@ import { NoteSortPipe } from './Component/utils/note-sort.pipe';
 import {LebelDialogComponent} from './Component/lebel-dialog/lebel-dialog.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {LabelSortPipe} from './Component/utils/label-sort.pipe';
+import { ShowLabelNoteComponent } from './Component/show-label-note/show-label-note.component';
+import { EditNodeComponent } from './Component/edit-node/edit-node.component';
 
 
 
@@ -41,6 +43,8 @@ import {LabelSortPipe} from './Component/utils/label-sort.pipe';
     NoteSortPipe,
     LabelSortPipe,
     LebelDialogComponent,
+    ShowLabelNoteComponent,
+    EditNodeComponent,
 
 
   ],

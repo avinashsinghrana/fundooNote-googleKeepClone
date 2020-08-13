@@ -1,0 +1,58 @@
+.matcard1 {
+  margin-right: 40%;
+  margin-top: 42px;
+  min-width: 360px;
+  width: 596px;
+  padding: 7px;
+  height: 101%;
+}
+.input2 {
+  padding: 1px;
+  border: 2px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: bold;
+  opacity: 80%;
+  outline-color: white;
+  margin-bottom: 9px;
+  width: 596px;
+  height: 27px;
+}
+.pinicon{
+  background-color: transparent!important;
+  background-repeat: no-repeat;
+  border: none;
+  cursor:pointer;
+  overflow: hidden;
+  outline:none;
+  font-size: 0.8em;
+  padding: 0px;
+}
+
+.input {
+  margin-top: 0px;
+  border: 2px;
+  min-height: 66px;
+  outline-color: white;
+  margin-bottom: -28px;
+  width: 586px;
+  height: fit-content;
+  color: #202124;
+  direction: ltr;
+  resize: vertical;
+  font-size: medium;
+  font-family: 'Roboto', arial, sans-serif;
+  min-width: 360px;
+  overflow-x: hidden;
+  overflow-y: auto;
+
+}
+.material-icons.md-18 { font-size: 18px; }
+.iconButton{
+  background-color: transparent!important;
+  background-repeat: no-repeat;
+  border: none;
+  cursor:pointer;
+  overflow: hidden;
+  outline:none;
+  font-size: 0.8em;
+}

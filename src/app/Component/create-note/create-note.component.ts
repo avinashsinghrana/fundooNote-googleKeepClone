@@ -9,6 +9,10 @@ import {Label} from '../../model/Label';
 import {PinUpinObject} from '../../model/PinUnpinModel';
 import {ArchievedObject} from '../../model/ArchievedModel';
 import {TrashModel} from '../../model/TrashModel';
+import {MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition} from '@angular/material/snack-bar';
+import {MatDialog} from '@angular/material/dialog';
+import {LebelDialogComponent} from '../lebel-dialog/lebel-dialog.component';
+import {EditNodeComponent} from '../edit-node/edit-node.component';
 
 @Component({
   selector: 'app-create-note',
@@ -16,7 +20,9 @@ import {TrashModel} from '../../model/TrashModel';
   styleUrls: ['./create-note.component.scss']
 })
 
-export class CreateNoteComponent implements OnInit {
+export class CreateNoteComponent implements OnInit{
+  horizontalPosition: MatSnackBarHorizontalPosition = 'start';
+  verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   notes$: Observable<any>;
   createNote$: Observable<any>;
   allNonPinedNote: Note[] = [];
@@ -26,6 +32,7 @@ export class CreateNoteComponent implements OnInit {
   isExpanded = false;
   isShowing = false;
   newNote: Note;
+  icon_variable_binding: string = 'plus_';
   searchTerm: string;
   allPinedNote: Note[] = [];
   allLebel: Label[] = [];
@@ -44,19 +51,23 @@ export class CreateNoteComponent implements OnInit {
   indexStatus: string;
   labelSearchTerm: any;
   pinStatusDuringCreate: boolean = false;
+  currentNode_to_update: Note;
 
   constructor(private noteService: NoteServiceService,
               public formBuilder: FormBuilder,
+              public snack: MatSnackBar,
+              public dialog: MatDialog,
   ) {
   }
 
   ngOnInit(): void {
     this.token = localStorage.getItem('token');
     this.getAllNotes();
+    this.getAllLabels();
     this.noteService.currentSearch$.subscribe(response => {
       this.searchTerm = response;
     });
-    this.noteService.currentLebelList$.subscribe(response => {
+    this.noteService.currentLebel$.subscribe((response: Label[]) => {
       this.allLebel = response;
     });
     this.createNote = this.formBuilder.group({
@@ -94,11 +105,15 @@ export class CreateNoteComponent implements OnInit {
           if (this.pinStatusDuringCreate == false) {
             this.allNonPinedNote.push(response.status.details);
           } else {
-            // response.status.details.isPined = true;
             this.allPinedNote.push(response.status.details);
           }
-          this.newNote = null;
-          this.createNote.reset();
+        this.snack.open('Note Created Sucessfully', 'ok', {
+          duration: 1500,
+          horizontalPosition: this.horizontalPosition,
+          verticalPosition: this.verticalPosition,
+        });
+        this.newNote = null;
+        this.createNote.reset();
         }
       );
     }
@@ -106,7 +121,7 @@ export class CreateNoteComponent implements OnInit {
   }
 
   getAllNotes() {
-    this.notes$ = getHttpsCall('/notes/getNotesList?access_token=' + this.token), shareReplay();
+    this.notes$ = getHttpsCall('/notes/getNotesList?access_token=' + this.token, 'get'), shareReplay();
     this.notes$.subscribe(data => {
       this.notes$.subscribe(notes => {
         this.allNonPinedNote = notes.data.data
@@ -117,9 +132,14 @@ export class CreateNoteComponent implements OnInit {
           .filter(note => note.isPined)
           .filter(n => !n.isArchived)
           .filter(v => !v.isDeleted);
-        console.log('all non pined Notes Mat Card', this.allNonPinedNote);
-        console.log('all pined Notes Mat Card', this.allPinedNote);
       });
+    });
+  }
+  getAllLabels() {
+    const resp$ = getHttpsCall('/noteLabels/getNoteLabelList?access_token='+this.token, 'get');
+    resp$.subscribe((ress: any) => {
+      this.allLebel = ress.data.details;
+      console.log('api call for get notes', this.allLebel);
     });
   }
 
@@ -142,6 +162,11 @@ export class CreateNoteComponent implements OnInit {
       resp$.subscribe(response => {
         this.allPinedNote.push(note);
         this.allNonPinedNote.splice(i, 1);
+        this.snack.open('Note Pinned Sucessfully', 'ok', {
+          duration: 1500,
+          horizontalPosition: this.horizontalPosition,
+          verticalPosition: this.verticalPosition,
+        });
       });
     }
   }
@@ -156,6 +181,11 @@ export class CreateNoteComponent implements OnInit {
       resp$.subscribe(response => {
         this.allNonPinedNote.push(note);
         this.allPinedNote.splice(i, 1);
+        this.snack.open('Note UnPinned Sucessfully', 'ok', {
+          duration: 1500,
+          horizontalPosition: this.horizontalPosition,
+          verticalPosition: this.verticalPosition,
+        });
       });
     }
   }
@@ -181,16 +211,18 @@ export class CreateNoteComponent implements OnInit {
       const resp$ = crudHttpsCallWithToken('/notes/archiveNotes?access_token=' + this.token, for_archieve, 'post');
       resp$.subscribe(response => {
         this.allPinedNote.splice(i, 1);
-        console.log('note pined archieved response', response);
       });
     } else {
       const resp$ = crudHttpsCallWithToken('/notes/archiveNotes?access_token=' + this.token, for_archieve, 'post');
       resp$.subscribe(response => {
         this.allNonPinedNote.splice(i, 1);
-        console.log('note unpined archieved response', response);
-
       });
     }
+    this.snack.open('Note added sucessfully to archive', 'ok', {
+      duration: 1500,
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+    });
   }
 
   trash(note: Note, i: number) {
@@ -201,15 +233,53 @@ export class CreateNoteComponent implements OnInit {
       const resp$ = crudHttpsCallWithToken('/notes/trashNotes?access_token=' + this.token, for_delete, 'post');
       resp$.subscribe(response => {
         this.allPinedNote.splice(i, 1);
-        console.log('note pined delete response', response);
       });
     } else {
       const resp$ = crudHttpsCallWithToken('/notes/trashNotes?access_token=' + this.token, for_delete, 'post');
       resp$.subscribe(response => {
         this.allNonPinedNote.splice(i, 1);
-        console.log('note unpined delete response', response);
-
       });
     }
+    this.snack.open('Note added successfully to Trash', 'ok', {
+      duration: 1500,
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+    });
+  }
+
+  editNodeDialogBox(note: Note) {
+    this.dialog.open(EditNodeComponent, {
+      width: '516px',
+      height: 'fit-content',
+      data: note,
+    });
+  }
+
+  add_lebel_to_note(labelTag: Label, note: Note, i: number) {
+    const resp$ = getHttpsCall('/notes/'+note.id+'/addLabelToNotes/'+labelTag.id+'/add?access_token='+this.token, 'post');
+    resp$.subscribe((ress: any) => {
+      if(note.isPined === true){
+        this.allPinedNote[i].noteLabels.push(labelTag);
+      }
+      else{
+        this.allNonPinedNote[i].noteLabels.push(labelTag);
+      }
+
+      console.log('add label to note', ress);
+    });
+  }
+
+  delete_label_from_note(labelTag: Label, note: Note, i: number, nl: number) {
+    const resp$ = getHttpsCall('/notes/'+note.id+'/addLabelToNotes/'+labelTag.id+'/remove?access_token='+this.token, 'post');
+    resp$.subscribe((ress: any) => {
+      if(note.isPined === true){
+        this.allPinedNote[i].noteLabels.splice(nl, 1);
+      }
+      else {
+        this.allNonPinedNote[i].noteLabels.splice(nl, 1);
+      }
+
+      console.log('add label to note', ress);
+    });
   }
 }

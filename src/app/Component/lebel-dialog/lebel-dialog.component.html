@@ -2,12 +2,28 @@
 <div mat-dialog-content>
   <mat-form-field>
     <mat-label>Create new lebel</mat-label>
-    <input matInput [(ngModel)]="lebelName">
-    <mat-icon matTooltip="Create lebel" style="cursor: pointer" (click)="onNoClick(lebelName)" matSuffix>done</mat-icon>
+    <input matInput [(ngModel)]="labelName">
+    <mat-icon matTooltip="Create lebel" style="cursor: pointer" class="md-18" (click)="onNoClick()" matSuffix>done</mat-icon>
   </mat-form-field>
-
-
+  <p *ngIf="note_label_creation_status === 404" style="color: red; font-family: Roboto, Helvetica Neue, sans-serif;font-style: italic; font-size: 12px">Label already exists</p>
+  <div *ngFor="let label of lebelList; let i = index">
+      <mat-list fxLayout="row" fxLayoutAlign="space-between center"
+        (mouseenter)="mouseenter(i)"
+                (mouseleave)="mousemove()"
+      >
+            <div fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon *ngIf="isShowing && status_of_current_label  === i" matTooltip="delete" (click)="deleteOnClick(label, i)" style="color: #5f6368;cursor: pointer;" class="md-18" matPrefix>delete</mat-icon>
+                <mat-icon *ngIf="status_of_current_label !== i" matTooltip="delete" style="color: #5f6368;cursor: pointer;" class="md-18" matPrefix>label</mat-icon>
+                <p  style="color: #5f6368;margin-left: 20px; margin-top: 2px" *ngIf="editCall !== i">{{label.label}}</p>
+                <input matInput style="color: #5f6368; margin-left: 24px;margin-top: -10px;" *ngIf="editCall === i" [(ngModel)]="label.label">
+            </div>
+            <div>
+                <mat-icon *ngIf="editCall !== i" matTooltip="Rename label" class="md-18" style="cursor: pointer;color: #5f6368" (click)="editOnClick(label, i)" matSuffix>edit</mat-icon>
+                <mat-icon *ngIf="editCall === i" matTooltip="ok" style="cursor: pointer ;color: #5f6368;font-weight: bold" class="md-18" (click)="onUpdate(label, i)" matSuffix>done</mat-icon>
+          </div>
+      </mat-list>
+    </div>
 </div>
 <div mat-dialog-actions>
-  <button mat-button style="margin-left: 156px" (click)="onCloseDialog(lebelName)" >Done</button>
+  <button mat-button style="margin-left: 156px" (click)="onCloseDialog()" >Done</button>
 </div>

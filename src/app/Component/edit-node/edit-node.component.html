@@ -1,0 +1,145 @@
+<h1 style="font-family: Roboto, Helvetica Neue, sans-serif;margin-top: -17px; font-size: 14px; color: #5f6368" mat-dialog-title>Update Note</h1>
+<div mat-dialog-content fxLayout="column">
+  <mat-form-field>
+    <input style="margin-top: -22px" matInput [(ngModel)]="title">
+  </mat-form-field>
+  <mat-form-field>
+    <textarea style="margin-top: -17px" matInput [(ngModel)]="description"></textarea>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions fxLayout="row" fxLayoutAlign="space-between center" style="overflow-x: hidden; overflow-y: hidden">
+  <div>
+      <ul style="list-style-type:none;
+margin-left: -52px;
+margin-bottom: 0px;
+margin-top: -19px;" fxLayout="row">
+        <li>
+
+          <button mat-icon-button class="iconButton">
+            <mat-icon matTooltip="reminder" class="material-icons-outlined md-18">notifications
+            </mat-icon>
+
+          </button>
+        </li>
+
+        <li>
+          <button mat-icon-button class="iconButton">
+            <mat-icon matTooltip="color" class="material-icons-outlined md-18">palette</mat-icon>
+          </button>
+        </li>
+
+        <li>
+          <button mat-icon-button class="iconButton" >
+            <mat-icon matTooltip="archive" class="material-icons-outlined md-18"
+            >archive
+            </mat-icon>
+
+          </button>
+        </li>
+        <li>
+
+          <button mat-icon-button class="iconButton" >
+            <mat-icon matTooltip="delete" class="material-icons-outlined md-18">delete</mat-icon>
+
+          </button>
+        </li>
+        <li>
+
+          <button [mat-menu-trigger-for]="afterMenu" mat-icon-button class="iconButton">
+            <mat-icon matTooltip="more" class="material-icons-outlined md-18">more_vert</mat-icon>
+
+          </button>
+          <mat-menu #afterMenu xPosition="after">
+            <button mat-menu-item>Delete Note</button>
+            <button mat-menu-item>Add Lebel</button>
+            <button mat-menu-item>Make A Copy</button>
+          </mat-menu>
+        </li>
+      </ul>
+    </div>
+  <div>
+    <button matTooltip="close" style="margin-top: -28px;
+margin-bottom: 9px;
+" mat-button color="primary" (click)="note()">close</button>
+
+  </div>
+</div>
+
+
+
+
+<!--<div mat-dialog-content class="matcard1" [formGroup]="updateNote">-->
+<!--  <mat-form-field>-->
+<!--  <div fxLayout="row" fxLayoutAlign="space-between center">-->
+<!--    <input  matInput type="text" formControlName="title" [(ngModel)]="for_update_note.title" class="input2" style=" font-size: 1rem;"/>-->
+<!--    <button *ngIf="pinStatusDuringCreate" mat-icon-button class="pinicon">-->
+<!--      <mat-icon  matSuffix  matTooltip="unpin note"  (click)="unpinCreateNote()">push_pin-->
+<!--      </mat-icon>-->
+<!--    </button>-->
+<!--    <button *ngIf="!pinStatusDuringCreate" mat-icon-button class="pinicon">-->
+<!--      <mat-icon matSuffix matTooltip="pin note" class="material-icons-outlined" (click)="pinCreateNote()">push_pin-->
+<!--      </mat-icon>-->
+<!--    </button>-->
+<!--  </div>-->
+
+<!--  <div>-->
+<!--      <textarea type="text" formControlName="description" placeholder="Take a note..." class="input"-->
+<!--                style="margin-top:2%; color: #202124; direction: ltr;font-family: 'Roboto',arial,sans-serif;font-size: .875rem;overflow-y: hidden"></textarea>-->
+<!--  </div>-->
+<!--    </mat-form-field>-->
+<!--  <mat-action-row>-->
+<!--    <div  class="iconCollector" style="margin-left: -29px;margin-bottom: -15px;" fxLayout="row">-->
+<!--      <div fxLayout="row" fxLayoutAlign="start" fxLayoutGap="5px" style="margin-left: -16px;">-->
+<!--        <div style="padding-left: 0px;padding-right: 0px;margin-left: -50px;margin-bottom: -28px">-->
+<!--          <ul style="list-style-type:none" fxLayout="row">-->
+<!--            <li>-->
+
+<!--              <button mat-icon-button class="iconButton">-->
+<!--                <mat-icon matTooltip="reminder" class="material-icons-outlined md-18">notifications-->
+<!--                </mat-icon>-->
+
+<!--              </button>-->
+<!--            </li>-->
+
+<!--            <li>-->
+<!--              <button mat-icon-button class="iconButton">-->
+<!--                <mat-icon matTooltip="color" class="material-icons-outlined md-18">palette</mat-icon>-->
+<!--              </button>-->
+<!--            </li>-->
+
+<!--            <li>-->
+<!--              <button mat-icon-button class="iconButton" >-->
+<!--                <mat-icon matTooltip="archive" class="material-icons-outlined md-18"-->
+<!--                >archive-->
+<!--                </mat-icon>-->
+
+<!--              </button>-->
+<!--            </li>-->
+<!--            <li>-->
+
+<!--              <button mat-icon-button class="iconButton" >-->
+<!--                <mat-icon matTooltip="delete" class="material-icons-outlined md-18">delete</mat-icon>-->
+
+<!--              </button>-->
+<!--            </li>-->
+<!--            <li>-->
+
+<!--              <button [mat-menu-trigger-for]="afterMenu" mat-icon-button class="iconButton">-->
+<!--                <mat-icon matTooltip="more" class="material-icons-outlined md-18">more_vert</mat-icon>-->
+
+<!--              </button>-->
+<!--              <mat-menu #afterMenu xPosition="after">-->
+<!--                <button mat-menu-item>Delete Note</button>-->
+<!--                <button mat-menu-item>Add Lebel</button>-->
+<!--                <button mat-menu-item>Make A Copy</button>-->
+<!--              </mat-menu>-->
+<!--            </li>-->
+<!--          </ul>-->
+
+<!--      </div>-->
+<!--      <button matTooltip="close" mat-button style="margin-left: 324px;margin-top: 13px;" color="primary" (click)="note()">close</button>-->
+
+<!--    </div>-->
+<!--</div>-->
+<!--  </mat-action-row>-->
+<!--</div>-->

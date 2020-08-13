@@ -5,6 +5,7 @@ import {Note} from '../../model/Note';
 import {crudHttpsCallWithToken, getHttpsCall} from '../utils/utils';
 import {ArchievedObject} from '../../model/ArchievedModel';
 import {TrashModel} from '../../model/TrashModel';
+import {MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-delete-note',
@@ -13,6 +14,8 @@ import {TrashModel} from '../../model/TrashModel';
 })
 export class DeleteNoteComponent implements OnInit {
   isShowing = false;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'start';
+  verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   notes$: Observable<any>;
   searchTerm: string;
   indexStatus: string;
@@ -30,7 +33,8 @@ export class DeleteNoteComponent implements OnInit {
     this.indexStatus = '';
   }
 
-  constructor(private noteService: NoteServiceService,) { }
+  constructor(private noteService: NoteServiceService,
+              private  snack: MatSnackBar,) { }
 
   ngOnInit(): void {
     this.token = localStorage.getItem('token');
@@ -39,6 +43,7 @@ export class DeleteNoteComponent implements OnInit {
       this.searchTerm = response;
     });
   }
+
   grid(): boolean {
     const gridStatus = localStorage.getItem('status');
     if (gridStatus === 'grid') {
@@ -55,7 +60,11 @@ export class DeleteNoteComponent implements OnInit {
     const resp$ = crudHttpsCallWithToken('/notes/deleteForeverNotes?access_token=' + this.token, for_forever_Delete, 'post');
     resp$.subscribe(response => {
       this.allTrashNote.splice(i, 1);
-      console.log('note unpined delete response', response);
+      this.snack.open('Note Deleted permanetly', 'ok', {
+        duration: 1500,
+        horizontalPosition: this.horizontalPosition,
+        verticalPosition: this.verticalPosition,
+      });
     });
   }
 
@@ -66,12 +75,16 @@ export class DeleteNoteComponent implements OnInit {
     const resp$ = crudHttpsCallWithToken('/notes/trashNotes?access_token=' + this.token, for_restore, 'post');
     resp$.subscribe(response => {
       this.allTrashNote.splice(i, 1);
-      console.log('note unpined delete response', response);
+      this.snack.open('Note restored successfully', 'ok', {
+        duration: 1500,
+        horizontalPosition: this.horizontalPosition,
+        verticalPosition: this.verticalPosition,
+      });
     });
   }
 
   getAllTrashNotes() {
-    this.notes$ = getHttpsCall('/notes/getTrashNotesList?access_token=' + this.token);
+    this.notes$ = getHttpsCall('/notes/getTrashNotesList?access_token=' + this.token, 'get');
     this.notes$.subscribe(response => {
       console.log('archieved api response', response);
       this.allTrashNote = response.data.data;

@@ -1,3 +1,5 @@
+import {Label} from './Label';
+
 export class Note {
 
   color: ""
@@ -12,7 +14,7 @@ export class Note {
   linkUrl: ""
   modifiedDate: "2020-08-06T05:54:58.869Z"
   noteCheckLists: []
-  noteLabels: []
+  noteLabels: Label[]
   questionAndAnswerNotes: []
   reminder: []
   title: string;

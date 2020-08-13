@@ -1,11 +1,11 @@
 import {Observable} from 'rxjs';
 
-export function getHttpsCall(url: string){
+export function getHttpsCall(url: string, methodType: string){
   let baseUrl: string = 'http://fundoonotes.incubation.bridgelabz.com/api';
   url = baseUrl + url;
   return new Observable(observer => {
         fetch(url,{
-          method: 'GET',
+          method: methodType.toUpperCase(),
           headers:{
             'Content-Type': 'application/json'
           }

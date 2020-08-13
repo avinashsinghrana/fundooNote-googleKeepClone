@@ -1,14 +1,15 @@
-import {Component, Inject, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Inject, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
 import {MatSidenav} from '@angular/material/sidenav';
 import {Router} from '@angular/router';
 import {FormGroup} from '@angular/forms';
 import {NoteServiceService} from '../utils/note-service.service';
 import {MAT_DIALOG_DATA, MatDialogRef, MatDialog} from '@angular/material/dialog';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition} from '@angular/material/snack-bar';
 import {LebelDialogComponent} from '../lebel-dialog/lebel-dialog.component';
 import {LoginComponent} from '../login/login.component';
 import {getHttpsCall} from '../utils/utils';
 import {Label} from '../../model/Label';
+import {input} from 'jspm/lib/project';
 
 
 @Component({
@@ -16,14 +17,16 @@ import {Label} from '../../model/Label';
   templateUrl: './dash-board.component.html',
   styleUrls: ['./dash-board.component.scss']
 })
-export class DashBoardComponent implements OnInit {
+export class DashBoardComponent implements OnInit, OnChanges {
   title = 'refreshPage';
   step = 0;
   loginStatus = false;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'start';
+  verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   img: string = null;
   // lebelList: string[] = [];
   viewState = 'list';
-  currentSelect: string;
+  currentSelect: string = 'Notes';
   @ViewChild('sidenav') sidenav: MatSidenav;
   @ViewChild('sidenav1') sidenav1: MatSidenav;
   isExpanded = true;
@@ -32,9 +35,10 @@ export class DashBoardComponent implements OnInit {
   createNote: FormGroup;
   token: string;
   searchTerm: string;
-  matmenuStatus: boolean = false;
+  matmenuStatus: boolean;
   sidenavshow: boolean = true;
-  lebelList: Label[];
+  @Input() lebelList: Label[] = [];
+  @Inject(MAT_DIALOG_DATA) public data: Label;
   labels: any;
   profilePic: string;
   imageUrl: string;
@@ -63,27 +67,38 @@ export class DashBoardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
     localStorage.setItem('status', this.viewState);
     this.imageUrl = localStorage.getItem('imageUrl');
     this.username = localStorage.getItem('fullName');
     this.usermail = localStorage.getItem('email');
     this.token = localStorage.getItem('token');
-    this.noteService.currentLebelList$.subscribe(response => {
+    this.getAllLabels();
+    this.noteService.currentLebel$.subscribe((response) => {
       this.lebelList = response;
-      console.log('lebel list avinash', this.lebelList);
+      console.log('lebel list in dashboard', this.lebelList);
+      console.log('lebel list response', response);
     });
     if(localStorage.getItem('email') !== null) {
       this.matmenuStatus = true;
+    }else {
+      this.matmenuStatus = false;
     }
-    this.AllLabels();
   }
 
-  AllLabels() {
-    const resp$ = getHttpsCall('/noteLabels/getNoteLabelList?access_token='+this.token);
+  ngOnChanges(changes: SimpleChanges): void{
+    // this.noteService.currentLebel$.subscribe((response) => {
+    //   this.lebelList = response;
+    //   console.log('lebel list in dashboard', this.lebelList);
+    //   console.log('lebel list response', response);
+    // });
+  }
+
+  getAllLabels() {
+    const resp$ = getHttpsCall('/noteLabels/getNoteLabelList?access_token='+this.token, 'get');
     resp$.subscribe((ress: any) => {
       this.lebelList = ress.data.details;
-      console.log('api call for get notes', ress.data.details);
-      this.noteService.changeLebelList(this.lebelList);
+      console.log('api call for get notes', this.lebelList);
     });
   }
 
@@ -101,9 +116,15 @@ export class DashBoardComponent implements OnInit {
     if (localStorage.getItem('token') === null) {
       this.dialog.open(LoginComponent, {
         width: '350px',
+        height: 'fit-content',
       });
     } else {
-      this.snack.open('Hi, ' + localStorage.getItem('fullName') + ', you are on dashboard! ', 'ok', {duration: 2000});
+      // this.snack.open('Hi, ' + localStorage.getItem('fullName') + ', you are on dashboard! ', 'ok', {duration: 2000});
+      this.snack.open('Hi, ' + localStorage.getItem('fullName') + ', you are on dashboard! ', 'ok', {
+        duration: 1500,
+        horizontalPosition: this.horizontalPosition,
+        verticalPosition: this.verticalPosition,
+      });
     }
   }
 
@@ -113,7 +134,7 @@ export class DashBoardComponent implements OnInit {
 
   currentSelection(selection: string) {
     if('editLabels' != selection) {
-      this.currentSelect = selection;
+      this.currentSelect = selection[0].toUpperCase() + selection.slice(1);
     }
     switch (selection) {
       case 'notes': {
@@ -127,6 +148,8 @@ export class DashBoardComponent implements OnInit {
       case 'editLabels': {
           this.dialog.open(LebelDialogComponent, {
             width: '250px',
+            height: 'fit-content',
+            data: Label
           });
         break;
       }
@@ -138,16 +161,24 @@ export class DashBoardComponent implements OnInit {
         this.router.navigate(['/dash-board/d']);
         break;
       }
+      // case 'label': {
+      //   this.router.navigate(['/dash-board/l']);
+      //   break;
+      // }
       default: {
-        this.router.navigate(['/dash-board']);
+        this.router.navigate(['/dash-board/l']);
         break;
       }
     }
   }
 
   calculateStyles(input: any) {
-    if (this.currentSelect == input) {
-      return {'background-color': '#feefc3'};
+    const matcher = input[0].toUpperCase() + input.slice(1);
+    if (this.currentSelect == matcher) {
+      return {'background-color': '#feefc3',
+        'border-top-right-radius': '38px',
+      'border-bottom-right-radius': '38px',
+              };
     }
   }
 
@@ -157,6 +188,7 @@ export class DashBoardComponent implements OnInit {
   }
 
   Logout() {
+    this.matmenuStatus = false;
     localStorage.clear();
     location.reload();
   }
@@ -174,12 +206,20 @@ export class DashBoardComponent implements OnInit {
       data => {
         console.log('------------------------------', data);
         this.profilePic = data.status.imageUrl;
-        this.snack.open('Profile Pic Updated Successfully', 'OK',{duration:2000});
         localStorage.setItem('imageUrl', 'http://fundoonotes.incubation.bridgelabz.com/'+this.profilePic);
         this.imageUrl = 'http://fundoonotes.incubation.bridgelabz.com/'+this.profilePic;
+        this.snack.open('Profile Pic Updated Successfully', 'OK', {
+          duration: 1500,
+          horizontalPosition: this.horizontalPosition,
+          verticalPosition: this.verticalPosition,
+        });
       },
       err => {
-        this.snack.open('Updation Failed! Image Format Error.', 'Ok', {duration: 2000});
+        this.snack.open('Updation Failed! Image Format Error.', 'OK', {
+          duration: 1500,
+          horizontalPosition: this.horizontalPosition,
+          verticalPosition: this.verticalPosition,
+        });
       });
   }
 }

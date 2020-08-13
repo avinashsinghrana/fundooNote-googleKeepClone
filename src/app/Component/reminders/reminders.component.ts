@@ -4,6 +4,7 @@ import {Note} from '../../model/Note';
 import {NoteServiceService} from '../utils/note-service.service';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {getHttpsCall} from '../utils/utils';
+import {MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-reminders',
@@ -14,6 +15,8 @@ export class RemindersComponent implements OnInit {
   isShowing = false;
   notes$: Observable<any>;
   allNotes: Note[] = [];
+  horizontalPosition: MatSnackBarHorizontalPosition = 'start';
+  verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   searchTerm: string;
   createNote: FormGroup;
   indexStatus: number;
@@ -31,7 +34,8 @@ export class RemindersComponent implements OnInit {
     this.indexStatus = -1;
   }
   constructor(private noteService: NoteServiceService,
-              private formBuilder: FormBuilder,) { }
+              private formBuilder: FormBuilder,
+              private snack: MatSnackBar,) { }
 
   ngOnInit(): void {
     console.log('reminder page');
@@ -65,6 +69,11 @@ export class RemindersComponent implements OnInit {
     //     }
     //   );
     // }
+    this.snack.open('Note created successfully', 'ok', {
+      duration: 1500,
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+    });
     this.popup = false;
   }
 

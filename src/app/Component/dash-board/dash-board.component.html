@@ -1,26 +1,23 @@
 <div class="container">
   <mat-toolbar class="toolbar">
-    <button class="menu" mat-icon-button (click)="passMenuStatus()">
+ <button class="menu" mat-icon-button (click)="passMenuStatus()">
       <mat-icon>menu</mat-icon>
     </button>
-    <img *ngIf="currentSelect == 'notes'" src="https://www.gstatic.com/images/branding/product/1x/keep_48dp.png" style="width: 32px; height: 32px; padding-left: 0px;padding-top: 5px; padding-right: 4px ; line-height: normal;
-    position: relative; padding-bottom: 2px;
-    "/>
-    <img *ngIf="currentSelect == null" src="https://www.gstatic.com/images/branding/product/1x/keep_48dp.png" style="width: 32px; height: 32px; padding-left: 0px;padding-top: 5px; padding-right: 4px ; line-height: normal;
-    position: relative; padding-bottom: 2px;
-    "/>
-    <div *ngIf="currentSelect == 'notes'" class="example-app-name">FundooNote</div>
-    <div *ngIf="currentSelect == null " class="example-app-name">FundooNote</div>
-    <div *ngIf="currentSelect == 'reminders'" class="example-app-name">Reminders</div>
-    <div *ngIf="currentSelect == 'archive'" class="example-app-name">Archive</div>
-    <div *ngIf="currentSelect == 'trash'" class="example-app-name">Trash</div>
+    <div *ngIf="currentSelect === 'Notes' || currentSelect === null" style="margin-top: 3px" fxLayoutAlign="start centre" fxLayout="row" fxLayoutGap="7px">
+        <img src="https://www.gstatic.com/images/branding/product/1x/keep_48dp.png" style="width: 32px; height: 32px; padding-left: 0px;padding-top: 5px; padding-right: 4px ; line-height: normal;
+        position: relative; padding-bottom: 2px;
+        "/>
+        <div class="example-app-name1">FundooNote</div>
+    </div>
+      <div *ngIf="currentSelect !== null && currentSelect !== 'Notes'" class="example-app-name">{{currentSelect}}</div>
     <mat-card class="search">
-      <mat-icon>search</mat-icon>
+      <mat-icon matPrefix>search</mat-icon>
       <input
         (input)="onKey($event)"
         [(ngModel)]="searchTerm"
         matInput type="text" placeholder="Search" class="searchBar">
-      <mat-icon id="close">close</mat-icon>
+<!--      <mat-icon id="close">close</mat-icon>-->
+      <mat-icon matSuffix>close</mat-icon>
     </mat-card>
 
     <div fxFlex style="margin-top:-8px" fxLayoutAlign="flex-end">
@@ -38,66 +35,65 @@
             <mat-icon  matTooltip="grid" (click)="view('grid')" *ngIf="viewState == 'list'">grid_view</mat-icon>
           </button>
         </li>
-        <!--      <li><mat-icon class="material-icons-outlined">settings</mat-icon></li>-->
-
       </ul>
 
       <ul class="menu-icons2">
         <!--    <li><mat-icon class="material-icons-outlined">apps</mat-icon></li>-->
         <li>
-          <button class="matbutton10">
-            <mat-icon *ngIf="!matmenuStatus" matTooltip="account" class="material-icons-outlined" (click)="login()">account_circle</mat-icon>
+          <button *ngIf="!matmenuStatus" class="matbutton10">
+            <mat-icon  matTooltip="account" class="material-icons-outlined" (click)="login()">account_circle</mat-icon>
           </button>
           <button *ngIf="matmenuStatus" mat-mini-fab class="imageSelect"
                       [ngStyle]="{'background-image':'url(' +imageUrl+ ')','background-size':'cover','width':'37px','height':'37px'}"
                       [matMenuTriggerFor]="menu1" (click)="login()"></button>
         </li>
-      </ul>
-          <mat-menu id="profile" #menu1="matMenu" fxLayout="row" fxLayoutAlign="center center">
+        <mat-menu id="profile" #menu1="matMenu" fxLayout="row" fxLayoutAlign="center center">
 
-            <div style="margin-top: 19px" fxLayout="row" fxLayoutAlign="center center" >
-              <button [ngStyle]="{'background-image':'url(' +imageUrl+ ')',positionAlign: 'center', 'background-size':'cover','width':'85px','height':'85px', marginBottom:'10px','margin-left':'6px','box-shadow': 'none'}"
-                      mat-mini-fab>
-                <mat-icon (click)="imageSelectFile.click()"
-                          style="border-radius: 47%;height: 25px; width: 27px;
+          <div style="margin-top: 19px" fxLayout="row" fxLayoutAlign="center center" >
+            <button [ngStyle]="{'background-image':'url(' +imageUrl+ ')',positionAlign: 'center', 'background-size':'cover','width':'85px','height':'85px', marginBottom:'10px','margin-left':'6px','box-shadow': 'none'}"
+                    mat-mini-fab>
+              <mat-icon (click)="imageSelectFile.click()"
+                        style="border-radius: 47%;height: 25px; width: 27px;
                           background-color: white;border-width: 1px;margin-top: 50px;
                           margin-left: 57px;border-style: groove;border-color: gray;"
-                          class="material-icons-outlined md-25" matSuffix>photo_camera</mat-icon>
-              </button>
-            </div>
-            <div style="margin-top: 10px; background-color: lightgrey; height: 47px;margin-bottom: 7px">
-              <div fxLayoutAlign="center center" class="mat-subheading-1" style="font-weight: bold;">{{username.toUpperCase()}}</div>
-              <div fxLayoutAlign="center center" class="mailer">{{usermail}}</div>
-            </div>
-            <div fxLayout="row" fxLayoutAlign="space-between center" class="accountMenu" style="overflow-x: hidden;overflow-y: hidden">
-              <div style="margin-left: 6%;">
-                <button mat-button style="border-width: thin;
+                        class="material-icons-outlined md-25" matSuffix>photo_camera</mat-icon>
+            </button>
+          </div>
+          <div style="margin-top: 10px; background-color: lightgrey; height: 47px;margin-bottom: 7px">
+            <div fxLayoutAlign="center center" class="mat-subheading-1" style="font-weight: bold;">{{username.toUpperCase()}}</div>
+            <div fxLayoutAlign="center center" class="mailer">{{usermail}}</div>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="space-between center" class="accountMenu" style="overflow-x: hidden;overflow-y: hidden">
+            <div style="margin-left: 6%;">
+              <button mat-button style="border-width: thin;
                               color: #5f6368;
                               border-radius: 20px;
                               border-color: gray;
                               background-color: white;
                               border-style: groove;"
-                        (click)="imageSelectFile.click()"  >
-                  Update Profile</button>
-              </div>
-              <div style="margin-right: 6%">
-                <button mat-button style="border-width: thin;
+                      (click)="imageSelectFile.click()"  >
+                Update Profile</button>
+            </div>
+            <div style="margin-right: 6%">
+              <button mat-button style="border-width: thin;
                               margin-right: 6%;
                               color: #5f6368;
                               border-radius: 20px;
                               border-color: gray;
                               background-color: white;
                               border-style: groove;"
-                        (click)="Logout()">Sign out</button>
-              </div>
-              <input fxHide class="image" type="file" (change)="fileUpload($event)" #imageSelectFile
-                     enctype="multipart/form-data/">
-
+                      (click)="Logout()">Sign out</button>
             </div>
-          </mat-menu>
+            <input fxHide class="image" type="file" (change)="fileUpload($event)" #imageSelectFile
+                   enctype="multipart/form-data/">
+
+          </div>
+        </mat-menu>
+      </ul>
           <!--      <img src="loginImage">-->
     </div>
   </mat-toolbar>
+
   <hr>
 <!--  *ngIf="sidenavshow && !isExpanded"-->
   <mat-sidenav-container class="example-container">
@@ -109,44 +105,44 @@
       (mouseenter)="mouseenter()"
       (mouseleave)="mouseleave()"
           >
-            <mat-nav-list class="navside">
+            <mat-nav-list class="navside" >
               <mat-list-item [ngStyle]="calculateStyles('notes')" (click)="currentSelection('notes')"
                              >
-                <mat-icon class="material-icons-outlined orange600">emoji_objects</mat-icon>
+                <mat-icon class="material-icons-outlined naviconcss orange600">emoji_objects</mat-icon>
                 <span class="full-width" *ngIf="isExpanded || isShowing">Notes</span>
               </mat-list-item>
               <!--remaindrer-->
         <mat-list-item [ngStyle]="calculateStyles('reminders')" (click)="currentSelection('reminders')">
-          <mat-icon class="material-icons-outlined orange600">notifications</mat-icon>
+          <mat-icon class="material-icons-outlined naviconcss orange600">notifications</mat-icon>
           <span class="full-width" *ngIf="isExpanded || isShowing">Reminders</span>
         </mat-list-item>
 
-<!--        <div *ngFor="let lebel for lebelList">-->
-<!--        <mat-list-item [ngStyle]="calculateStyles(lebel.lebelName)" (click)="currentSelection('reminders')">-->
-<!--          <mat-icon class="material-icons-outlined orange600">label</mat-icon>-->
-<!--          <span class="full-width" *ngIf="isExpanded || isShowing">avinash</span>-->
-<!--        </mat-list-item>-->
-<!--        </div>-->
+        <div *ngFor="let label of lebelList; let i = index">
+        <mat-list-item [ngStyle]="calculateStyles(label.label)" (click)="currentSelection(label.label)">
+          <mat-icon class="material-icons-outlined naviconcss orange600">label</mat-icon>
+          <span class="full-width" *ngIf="isExpanded || isShowing">{{label.label}}</span>
+        </mat-list-item>
+        </div>
         <mat-list-item  (click)="currentSelection('editLabels')"
                        >
-              <div fxLayout="row" fxLayoutAlign="start center" *ngFor="let data of labels">
-                <mat-icon matListIcon style="padding:10px 20px;">label_outline</mat-icon>
-                <a mat-list-item routerLink="reminder" disableRipple="true"
-                   style="border-bottom-right-radius: 20px; border-top-right-radius: 20px;">{{data.label}}</a>
-              </div>
-          <mat-icon class="material-icons-outlined orange600">edit</mat-icon>
+<!--              <div fxLayout="row" fxLayoutAlign="start center" *ngFor="let data of labels">-->
+<!--                <mat-icon matListIcon style="padding:10px 20px;">label_outline</mat-icon>-->
+<!--                <a mat-list-item routerLink="reminder" disableRipple="true"-->
+<!--                   style="border-bottom-right-radius: 20px; border-top-right-radius: 20px;">{{data.label}}</a>-->
+<!--              </div>-->
+          <mat-icon class="material-icons-outlined naviconcss orange600">edit</mat-icon>
           <span class="full-width" *ngIf="isExpanded || isShowing">Edit labels</span>
         </mat-list-item>
 
         <mat-list-item [ngStyle]="calculateStyles('archive')" (click)="currentSelection('archive')"
                        >
-          <mat-icon class="material-icons-outlined orange600">archive</mat-icon>
+          <mat-icon class="material-icons-outlined naviconcss orange600">archive</mat-icon>
           <span class="full-width" *ngIf="isExpanded || isShowing">Archive</span>
         </mat-list-item>
 
         <mat-list-item [ngStyle]="calculateStyles('trash')" (click)="currentSelection('trash')"
                       >
-          <mat-icon class="material-icons-outlined orange600">delete</mat-icon>
+          <mat-icon class="material-icons-outlined naviconcss orange600">delete</mat-icon>
           <span class="full-width" *ngIf="isExpanded || isShowing">Trash</span>
         </mat-list-item>
       </mat-nav-list>
