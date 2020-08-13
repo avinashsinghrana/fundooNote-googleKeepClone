@@ -3,7 +3,7 @@
  <button class="menu" mat-icon-button (click)="passMenuStatus()">
       <mat-icon>menu</mat-icon>
     </button>
-    <div *ngIf="currentSelect === 'Notes' || currentSelect === null" style="margin-top: 3px" fxLayoutAlign="start centre" fxLayout="row" fxLayoutGap="7px">
+    <div *ngIf="currentSelect === 'Notes' || currentSelect === undefined" style="margin-top: 3px" fxLayoutAlign="start centre" fxLayout="row" fxLayoutGap="7px">
         <img src="https://www.gstatic.com/images/branding/product/1x/keep_48dp.png" style="width: 32px; height: 32px; padding-left: 0px;padding-top: 5px; padding-right: 4px ; line-height: normal;
         position: relative; padding-bottom: 2px;
         "/>
@@ -186,6 +186,7 @@
 <!--    </mat-sidenav>-->
 
     <mat-sidenav-content class="example-sidenav-content">
+
       <div style="margin-top: 10px;margin-left: 82px;overflow-x: hidden;overflow-y: hidden">
         <router-outlet></router-outlet>
       </div>

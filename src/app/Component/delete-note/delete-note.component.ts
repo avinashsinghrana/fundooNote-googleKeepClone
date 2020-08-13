@@ -86,7 +86,6 @@ export class DeleteNoteComponent implements OnInit {
   getAllTrashNotes() {
     this.notes$ = getHttpsCall('/notes/getTrashNotesList?access_token=' + this.token, 'get');
     this.notes$.subscribe(response => {
-      console.log('archieved api response', response);
       this.allTrashNote = response.data.data;
     });
   }

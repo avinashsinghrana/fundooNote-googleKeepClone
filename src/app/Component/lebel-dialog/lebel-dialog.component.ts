@@ -40,7 +40,6 @@ export class LebelDialogComponent implements OnInit {
     const resp$ = getHttpsCall('/noteLabels/getNoteLabelList?access_token=' + this.token, 'get');
     resp$.subscribe((ress: any) => {
       this.lebelList = ress.data.details;
-      console.log('api call for get notes', this.lebelList);
     });
   }
 
@@ -130,9 +129,9 @@ export class LebelDialogComponent implements OnInit {
     this.status_of_current_label = -1;
   }
   onUpdate(label: Label, i: number) {
-    console.log('update data ',  label);
     const res$ = crudHttpsCallWithToken('/noteLabels/' + label.id + '/updateNoteLabel?access_token=' + this.token, label,'post');
     res$.subscribe((response: any) => {
+      this.noteService.changeLebelList(this.lebelList);
       this.snack.open('Label updated successfully', 'ok', {
         duration: 1500,
         horizontalPosition: this.horizontalPosition,

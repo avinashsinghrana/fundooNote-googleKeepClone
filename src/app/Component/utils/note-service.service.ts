@@ -14,10 +14,10 @@ export class NoteServiceService {
   currentLoginStatus$ = this.loginSource.asObservable();
   private noteSource = new Subject<any>();
   currentNotes$ = this.noteSource.asObservable();
-  public searchSource = new Subject<string>();
+  private searchSource = new Subject<string>();
   currentSearch$ = this.searchSource.asObservable();
-  public lebelSource = new BehaviorSubject<Label[]>([]);
-  currentLebel$ = this.loginSource.asObservable();
+  private lebelSource = new BehaviorSubject<Label[]>([]);
+  currentLebel$ = this.lebelSource.asObservable();
   private labelSearchSource = new Subject<string>();
   currentLabelTerm$ = this.labelSearchSource.asObservable();
   private archiveSorce = new Subject<Note[]>();

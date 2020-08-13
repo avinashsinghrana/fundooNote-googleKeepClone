@@ -16,6 +16,7 @@ import * as path from 'path';
 import {EditNodeComponent} from './Component/edit-node/edit-node.component';
 
 
+let labelName;
 const routes: Routes = [
   { path: '', component: SignupComponent },
   {path: 'signup', component: SignupComponent},
@@ -30,9 +31,6 @@ const routes: Routes = [
      { path: 'a', redirectTo: 'archive', pathMatch: 'full' },
      { path: 'l', redirectTo: 'label_Panel', pathMatch: 'full' },
      { path: 'create-node', component: CreateNoteComponent},
-      // children: [
-      //   {path: 'u',redirectTo: 'un', component: EditNodeComponent, pathMatch: 'full'},
-      // ],
      { path: 'reminders' , component: RemindersComponent},
      { path: 'delete-note' , component: DeleteNoteComponent},
      { path: 'archive' , component: ArchiveComponent},

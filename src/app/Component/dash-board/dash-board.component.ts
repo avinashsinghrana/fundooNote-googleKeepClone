@@ -20,13 +20,13 @@ import {input} from 'jspm/lib/project';
 export class DashBoardComponent implements OnInit, OnChanges {
   title = 'refreshPage';
   step = 0;
+  nav_select_name: string;
   loginStatus = false;
   horizontalPosition: MatSnackBarHorizontalPosition = 'start';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   img: string = null;
-  // lebelList: string[] = [];
   viewState = 'list';
-  currentSelect: string = 'Notes';
+  currentSelect: string;
   @ViewChild('sidenav') sidenav: MatSidenav;
   @ViewChild('sidenav1') sidenav1: MatSidenav;
   isExpanded = true;
@@ -62,7 +62,6 @@ export class DashBoardComponent implements OnInit, OnChanges {
               public noteService: NoteServiceService,
               public dialog: MatDialog,
               public snack: MatSnackBar,
-
   ) {
   }
 
@@ -75,18 +74,17 @@ export class DashBoardComponent implements OnInit, OnChanges {
     this.token = localStorage.getItem('token');
     this.getAllLabels();
     this.noteService.currentLebel$.subscribe((response) => {
-      this.lebelList = response;
-      console.log('lebel list in dashboard', this.lebelList);
-      console.log('lebel list response', response);
+      console.log('edit label response on dashboard', response);
+      this.getAllLabels();
     });
-    if(localStorage.getItem('email') !== null) {
+    if (localStorage.getItem('email') !== null) {
       this.matmenuStatus = true;
-    }else {
+    } else {
       this.matmenuStatus = false;
     }
   }
 
-  ngOnChanges(changes: SimpleChanges): void{
+  ngOnChanges(changes: SimpleChanges): void {
     // this.noteService.currentLebel$.subscribe((response) => {
     //   this.lebelList = response;
     //   console.log('lebel list in dashboard', this.lebelList);
@@ -95,10 +93,9 @@ export class DashBoardComponent implements OnInit, OnChanges {
   }
 
   getAllLabels() {
-    const resp$ = getHttpsCall('/noteLabels/getNoteLabelList?access_token='+this.token, 'get');
+    const resp$ = getHttpsCall('/noteLabels/getNoteLabelList?access_token=' + this.token, 'get');
     resp$.subscribe((ress: any) => {
       this.lebelList = ress.data.details;
-      console.log('api call for get notes', this.lebelList);
     });
   }
 
@@ -133,7 +130,12 @@ export class DashBoardComponent implements OnInit, OnChanges {
   }
 
   currentSelection(selection: string) {
-    if('editLabels' != selection) {
+    this.nav_select_name = selection;
+    if(selection !== 'editLabels'){
+      this.noteService.changeLabelRequest(selection);
+      localStorage.setItem('navselect', selection);
+    }
+    if ('editLabels' != selection) {
       this.currentSelect = selection[0].toUpperCase() + selection.slice(1);
     }
     switch (selection) {
@@ -146,11 +148,11 @@ export class DashBoardComponent implements OnInit, OnChanges {
         break;
       }
       case 'editLabels': {
-          this.dialog.open(LebelDialogComponent, {
-            width: '250px',
-            height: 'fit-content',
-            data: Label
-          });
+        this.dialog.open(LebelDialogComponent, {
+          width: '250px',
+          height: 'fit-content',
+          data: Label
+        });
         break;
       }
       case 'archive': {
@@ -161,10 +163,6 @@ export class DashBoardComponent implements OnInit, OnChanges {
         this.router.navigate(['/dash-board/d']);
         break;
       }
-      // case 'label': {
-      //   this.router.navigate(['/dash-board/l']);
-      //   break;
-      // }
       default: {
         this.router.navigate(['/dash-board/l']);
         break;
@@ -175,10 +173,11 @@ export class DashBoardComponent implements OnInit, OnChanges {
   calculateStyles(input: any) {
     const matcher = input[0].toUpperCase() + input.slice(1);
     if (this.currentSelect == matcher) {
-      return {'background-color': '#feefc3',
+      return {
+        'background-color': '#feefc3',
         'border-top-right-radius': '38px',
-      'border-bottom-right-radius': '38px',
-              };
+        'border-bottom-right-radius': '38px',
+      };
     }
   }
 
@@ -206,8 +205,8 @@ export class DashBoardComponent implements OnInit, OnChanges {
       data => {
         console.log('------------------------------', data);
         this.profilePic = data.status.imageUrl;
-        localStorage.setItem('imageUrl', 'http://fundoonotes.incubation.bridgelabz.com/'+this.profilePic);
-        this.imageUrl = 'http://fundoonotes.incubation.bridgelabz.com/'+this.profilePic;
+        localStorage.setItem('imageUrl', 'http://fundoonotes.incubation.bridgelabz.com/' + this.profilePic);
+        this.imageUrl = 'http://fundoonotes.incubation.bridgelabz.com/' + this.profilePic;
         this.snack.open('Profile Pic Updated Successfully', 'OK', {
           duration: 1500,
           horizontalPosition: this.horizontalPosition,

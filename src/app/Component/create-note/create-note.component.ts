@@ -37,17 +37,27 @@ export class CreateNoteComponent implements OnInit{
   allPinedNote: Note[] = [];
   allLebel: Label[] = [];
   allArchivedNote: Note[] = [];
-
-
-  public colorList = [
-    {key: 'orange', value: '#fa761e', friendlyName: 'Orange'},
-    {key: 'male', value: '#4488ff', friendlyName: 'Male Color'},
-    {key: 'female', value: '#ff44aa', friendlyName: 'Female Color'},
-    {key: 'gargoylegas', value: '#fde84e', friendlyName: 'Gargoyle Gas'},
-    {key: 'androidgreen', value: '#9ac53e', friendlyName: 'Android Green'},
-    {key: 'carribeangreen', value: '#05d59e', friendlyName: 'Carribean Green'},
-    {key: 'bluejeans', value: '#5bbfea', friendlyName: 'Blue Jeans'},
-    {key: 'cyancornflower', value: '#1089b1', friendlyName: 'Cyan Cornflower'},];
+  colorCodes =
+    [
+      [
+        { name: "white", hexcode: "#ffffff" },
+        { name: "lightGreen", hexcode: "#f28b82" },
+        { name: "purple", hexcode: "#f7bc04" },
+        { name: "red", hexcode: "#faf474" },
+      ],
+      [
+        { name: "Teal", hexcode: "#cbff90" },
+        { name: "pink", hexcode: "#a7ffeb" },
+        { name: "orange", hexcode: "#cbf0f8" },
+        { name: "blue", hexcode: "#adcbfa" },
+      ],
+      [
+        { name: "brown", hexcode: "#d7aefb" },
+        { name: "yellow", hexcode: "#fdcfe8" },
+        { name: "darkBlue", hexcode: "#cbb294" },
+        { name: "gray", hexcode: "#e8eaed" }
+      ]
+    ];
   indexStatus: string;
   labelSearchTerm: any;
   pinStatusDuringCreate: boolean = false;
@@ -98,10 +108,7 @@ export class CreateNoteComponent implements OnInit{
       newNote_1.isPined = this.pinStatusDuringCreate;
       this.createNote$ = crudHttpsCallWithToken('/notes/addNotes?access_token=' + this.token, newNote_1, 'post');
       this.createNote$.subscribe((response: any) => {
-          console.log('response', response);
           this.newNote = Object.assign(new Note(), response.status.details);
-          console.log('after conversion', this.newNote);
-          // Refactor need to maintain with data base
           if (this.pinStatusDuringCreate == false) {
             this.allNonPinedNote.push(response.status.details);
           } else {
@@ -139,7 +146,6 @@ export class CreateNoteComponent implements OnInit{
     const resp$ = getHttpsCall('/noteLabels/getNoteLabelList?access_token='+this.token, 'get');
     resp$.subscribe((ress: any) => {
       this.allLebel = ress.data.details;
-      console.log('api call for get notes', this.allLebel);
     });
   }
 
@@ -188,10 +194,6 @@ export class CreateNoteComponent implements OnInit{
         });
       });
     }
-  }
-
-  searchNode(event) {
-    this.noteService.changeEvent(event);
   }
 
   unpinCreateNote() {
@@ -259,13 +261,29 @@ export class CreateNoteComponent implements OnInit{
     const resp$ = getHttpsCall('/notes/'+note.id+'/addLabelToNotes/'+labelTag.id+'/add?access_token='+this.token, 'post');
     resp$.subscribe((ress: any) => {
       if(note.isPined === true){
-        this.allPinedNote[i].noteLabels.push(labelTag);
+        if(!this.allPinedNote[i].noteLabels.includes(labelTag)){
+          this.allPinedNote[i].noteLabels.push(labelTag);
+        }
+        else{
+          this.snack.open("Label Already Assigned",'OK',{
+            duration: 1500,
+            horizontalPosition: this.horizontalPosition,
+            verticalPosition: this.verticalPosition,
+          });
+        }
       }
       else{
-        this.allNonPinedNote[i].noteLabels.push(labelTag);
+        if(!this.allNonPinedNote[i].noteLabels.includes(labelTag)) {
+          this.allNonPinedNote[i].noteLabels.push(labelTag);
+        }
+        else {
+          this.snack.open("Label Already Assigned",'OK',{
+            duration: 1500,
+            horizontalPosition: this.horizontalPosition,
+            verticalPosition: this.verticalPosition,
+          });
+        }
       }
-
-      console.log('add label to note', ress);
     });
   }
 
@@ -278,8 +296,6 @@ export class CreateNoteComponent implements OnInit{
       else {
         this.allNonPinedNote[i].noteLabels.splice(nl, 1);
       }
-
-      console.log('add label to note', ress);
     });
   }
 }

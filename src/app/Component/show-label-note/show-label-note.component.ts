@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Label} from '../../model/Label';
 import {Note} from '../../model/Note';
 import {crudHttpsCallWithToken, getHttpsCall} from '../utils/utils';
@@ -9,6 +9,8 @@ import {Observable} from 'rxjs';
 import {NoteServiceService} from '../utils/note-service.service';
 import {shareReplay} from 'rxjs/operators';
 import {MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition} from '@angular/material/snack-bar';
+import {EditNodeComponent} from '../edit-node/edit-node.component';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-show-label-note',
@@ -16,7 +18,6 @@ import {MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition}
   styleUrls: ['./show-label-note.component.scss']
 })
 export class ShowLabelNoteComponent implements OnInit {
-  allRequestedNote: Note[] = [];
   isShowing: boolean;
   horizontalPosition: MatSnackBarHorizontalPosition = 'start';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
@@ -26,21 +27,34 @@ export class ShowLabelNoteComponent implements OnInit {
   allNonPinedNote: Note[] = [];
   private notes$: Observable<any>;
   token: string;
-  labelSearchTerm: any;
-  pinStatusDuringCreate: boolean = false;
   labelName: string = '';
+  nav_select_item: string;
   allLebel: Label[];
+  labelList: Label[] = [];
+
   constructor(private noteService: NoteServiceService,
-              private snack: MatSnackBar,) { }
+              private snack: MatSnackBar,
+              private dialog: MatDialog,) {
+  }
 
   ngOnInit(): void {
     this.token = localStorage.getItem('token');
-    // this.getAllNotes();
     this.noteService.currentSearch$.subscribe(response => {
       this.searchTerm = response;
     });
     this.noteService.currentRequestLabelName$.subscribe(response => {
-      this.labelName = response;
+      this.getAllNotes(response);
+      this.nav_select_item = response;
+    });
+    this.getAllLabels();
+    // this.labelList = this.noteService.lebelSource.getValue();
+  }
+
+  getAllLabels() {
+    const resp$ = getHttpsCall('/noteLabels/getNoteLabelList?access_token=' + this.token, 'get');
+    resp$.subscribe((ress: any) => {
+      this.allLebel = ress.data.details;
+      console.log('api call for get notes', this.allLebel);
     });
   }
 
@@ -63,22 +77,16 @@ export class ShowLabelNoteComponent implements OnInit {
     this.indexStatus = '';
   }
 
-  getAllNotes() {
-    // this.notes$ = getHttpsCall('/notes/getNotesList?access_token=' + this.token, 'get'), shareReplay();
-    // this.notes$.subscribe(data => {
-    //   this.notes$.subscribe(notes => {
-    //     this.allNonPinedNote = notes.data.data
-    //       .filter(note => !note.isPined)
-    //       .filter(n => !n.isArchived)
-    //       .filter(v => !v.isDeleted);
-    //     this.allPinedNote = notes.data.data
-    //       .filter(note => note.isPined)
-    //       .filter(n => !n.isArchived)
-    //       .filter(v => !v.isDeleted);
-    //     console.log('all non pined Notes Mat Card', this.allNonPinedNote);
-    //     console.log('all pined Notes Mat Card', this.allPinedNote);
-    //   });
-    // });
+  getAllNotes(respose: string) {
+    this.notes$ = getHttpsCall('/notes/getNotesListByLabel/' + respose + '?access_token=' + this.token, 'post');
+    this.notes$.subscribe(notes => {
+      this.allNonPinedNote = notes.data.data
+        .filter(note_i => !note_i.isPined);
+      this.allPinedNote = notes.data.data
+        .filter(note_i => note_i.isPined);
+      console.log('all non pined Notes Mat Card', this.allNonPinedNote);
+      console.log('all pined Notes Mat Card', this.allPinedNote);
+    });
   }
 
   pinNote(note: Note, i: number) {
@@ -118,24 +126,13 @@ export class ShowLabelNoteComponent implements OnInit {
       });
     }
   }
-  searchNode(event) {
-    this.noteService.changeEvent(event);
-  }
-
-  unpinCreateNote() {
-    this.pinStatusDuringCreate = !this.pinStatusDuringCreate;
-  }
-
-  pinCreateNote() {
-    this.pinStatusDuringCreate = !this.pinStatusDuringCreate;
-  }
 
   addToArchive(note: Note, i: number) {
     const for_archieve: ArchievedObject = new ArchievedObject();
     for_archieve.noteIdList = [note.id];
     for_archieve.isArchived = true;
 
-    if ( this.allPinedNote.length > 0 && this.allPinedNote.indexOf(note) > -1) {
+    if (this.allPinedNote.length > 0 && this.allPinedNote.indexOf(note) > -1) {
       const resp$ = crudHttpsCallWithToken('/notes/archiveNotes?access_token=' + this.token, for_archieve, 'post');
       resp$.subscribe(response => {
         this.allPinedNote.splice(i, 1);
@@ -159,7 +156,7 @@ export class ShowLabelNoteComponent implements OnInit {
     const for_delete: TrashModel = new TrashModel();
     for_delete.noteIdList = [note.id];
     for_delete.isDeleted = true;
-    if ( this.allNonPinedNote.length > 0 && this.allPinedNote.indexOf(note) > -1) {
+    if (this.allNonPinedNote.length > 0 && this.allPinedNote.indexOf(note) > -1) {
       const resp$ = crudHttpsCallWithToken('/notes/trashNotes?access_token=' + this.token, for_delete, 'post');
       resp$.subscribe(response => {
         this.allPinedNote.splice(i, 1);
@@ -177,6 +174,59 @@ export class ShowLabelNoteComponent implements OnInit {
       duration: 1500,
       horizontalPosition: this.horizontalPosition,
       verticalPosition: this.verticalPosition,
+    });
+  }
+
+  add_lebel_to_note(labelTag: Label, note: Note, i: number) {
+    const resp$ = getHttpsCall('/notes/'+note.id+'/addLabelToNotes/'+labelTag.id+'/add?access_token='+this.token, 'post');
+    resp$.subscribe((ress: any) => {
+      if(note.isPined === true){
+        if(!this.allPinedNote[i].noteLabels.includes(labelTag)){
+          this.allPinedNote[i].noteLabels.push(labelTag);
+        }
+        else{
+          this.snack.open("Label Already Assigned",'OK',{
+            duration: 1500,
+            horizontalPosition: this.horizontalPosition,
+            verticalPosition: this.verticalPosition,
+          });
+        }
+      }
+      else{
+        if(!this.allNonPinedNote[i].noteLabels.includes(labelTag)) {
+          this.allNonPinedNote[i].noteLabels.push(labelTag);
+        }
+        else {
+          this.snack.open("Label Already Assigned",'OK',{
+            duration: 1500,
+            horizontalPosition: this.horizontalPosition,
+            verticalPosition: this.verticalPosition,
+          });
+        }
+      }
+    });
+  }
+
+  delete_label_from_note(labelTag: Label, note: Note, i: number, nl: number) {
+    const ress$ = getHttpsCall('/notes/' + note.id + '/addLabelToNotes/' + labelTag.id + '/remove?access_token=' + this.token, 'post');
+    ress$.subscribe(ress =>{
+      if (note.isPined === true) {
+        if (labelTag.label == this.nav_select_item) {
+          this.allPinedNote.splice(i, 1);
+        }else { this.allPinedNote[i].noteLabels.splice(nl, 1); }
+      } else {
+        if (labelTag.label === this.nav_select_item) {
+          this.allNonPinedNote.splice(i, 1);
+        }else { this.allNonPinedNote[i].noteLabels.splice(nl, 1); }
+      }
+    });
+  }
+
+  editNodeDialogBox(note: Note) {
+    this.dialog.open(EditNodeComponent, {
+      width: '516px',
+      height: 'fit-content',
+      data: note,
     });
   }
 }
