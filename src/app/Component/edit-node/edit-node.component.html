@@ -1,62 +1,75 @@
 <h1 style="font-family: Roboto, Helvetica Neue, sans-serif;margin-top: -17px; font-size: 14px; color: #5f6368" mat-dialog-title>Update Note</h1>
 <div mat-dialog-content fxLayout="column">
   <mat-form-field>
-    <input style="margin-top: -22px" matInput [(ngModel)]="title">
+    <mat-label>Title</mat-label>
+    <input style="margin-top: -22px" matInput [(ngModel)]="data.title">
   </mat-form-field>
   <mat-form-field>
-    <textarea style="margin-top: -17px" matInput [(ngModel)]="description"></textarea>
+    <mat-label>Description</mat-label>
+    <textarea style="margin-top: -5px" matInput [(ngModel)]="data.description"></textarea>
   </mat-form-field>
 </div>
 <div mat-dialog-actions fxLayout="row" fxLayoutAlign="space-between center" style="overflow-x: hidden; overflow-y: hidden">
   <div>
-      <ul style="list-style-type:none;
+    <ul style="list-style-type:none;
 margin-left: -52px;
 margin-bottom: 0px;
 margin-top: -19px;" fxLayout="row">
-        <li>
+      <li>
 
-          <button mat-icon-button class="iconButton">
-            <mat-icon matTooltip="reminder" class="material-icons-outlined md-18">notifications
-            </mat-icon>
+        <button mat-icon-button class="iconButton">
+          <mat-icon matTooltip="reminder" class="material-icons-outlined md-18">notifications
+          </mat-icon>
 
-          </button>
-        </li>
+        </button>
+      </li>
 
-        <li>
-          <button mat-icon-button class="iconButton">
-            <mat-icon matTooltip="color" class="material-icons-outlined md-18">palette</mat-icon>
-          </button>
-        </li>
+      <li>
+        <button mat-icon-button class="iconButton" (click)="chooseColor(color)">
+          <mat-icon matTooltip="color" class="material-icons-outlined md-18">palette</mat-icon>
+        </button>
+      </li>
 
-        <li>
-          <button mat-icon-button class="iconButton" >
-            <mat-icon matTooltip="archive" class="material-icons-outlined md-18"
-            >archive
-            </mat-icon>
+      <li>
+        <button mat-icon-button class="iconButton" (click)="addToArchive()">
+          <mat-icon matTooltip="archive" class="material-icons-outlined md-18"
+          >archive
+          </mat-icon>
 
-          </button>
-        </li>
-        <li>
+        </button>
+      </li>
+      <li>
 
-          <button mat-icon-button class="iconButton" >
-            <mat-icon matTooltip="delete" class="material-icons-outlined md-18">delete</mat-icon>
+        <button mat-icon-button class="iconButton" (click)="trash()">
+          <mat-icon matTooltip="delete" class="material-icons-outlined md-18">delete</mat-icon>
 
-          </button>
-        </li>
-        <li>
+        </button>
+      </li>
+      <li>
 
-          <button [mat-menu-trigger-for]="afterMenu" mat-icon-button class="iconButton">
-            <mat-icon matTooltip="more" class="material-icons-outlined md-18">more_vert</mat-icon>
+        <button [mat-menu-trigger-for]="afterMenu" mat-icon-button class="iconButton">
+          <mat-icon matTooltip="more" class="material-icons-outlined md-18">more_vert</mat-icon>
 
-          </button>
-          <mat-menu #afterMenu xPosition="after">
-            <button mat-menu-item>Delete Note</button>
-            <button mat-menu-item>Add Lebel</button>
-            <button mat-menu-item>Make A Copy</button>
-          </mat-menu>
-        </li>
-      </ul>
-    </div>
+        </button>
+        <mat-menu #afterMenu xPosition="after">
+          <button mat-menu-item>Delete Note</button>
+          <button [mat-menu-trigger-for]="addLebelMenu" mat-menu-item>Add Lebel</button>
+          <button mat-menu-item>Make A Copy</button>
+        </mat-menu>
+      </li>
+      <mat-menu #addLebelMenu="matMenu" xPosition="after">
+        <div style="list-style: none" *ngFor="let subtask of allLebel; let j = index">
+          <p
+            style="color: #5f6368;
+                          cursor: pointer;font-family: Roboto, Helvetica Neue, sans-serif;
+                          font-size: 14px;
+                          padding-top: 6px;
+                          margin-left: 20px;" (click)="add_lebel_to_note(subtask)"
+          >{{subtask.label}}</p>
+        </div>
+      </mat-menu>
+    </ul>
+  </div>
   <div>
     <button matTooltip="close" style="margin-top: -28px;
 margin-bottom: 9px;

@@ -10,9 +10,11 @@ import {PinUpinObject} from '../../model/PinUnpinModel';
 import {ArchievedObject} from '../../model/ArchievedModel';
 import {TrashModel} from '../../model/TrashModel';
 import {MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition} from '@angular/material/snack-bar';
-import {MatDialog} from '@angular/material/dialog';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {LebelDialogComponent} from '../lebel-dialog/lebel-dialog.component';
 import {EditNodeComponent} from '../edit-node/edit-node.component';
+import {UpadteNote} from '../../model/UpadteNote';
+import {ColorDTO} from '../../model/ColorDTO';
 
 @Component({
   selector: 'app-create-note',
@@ -37,6 +39,7 @@ export class CreateNoteComponent implements OnInit{
   allPinedNote: Note[] = [];
   allLebel: Label[] = [];
   allArchivedNote: Note[] = [];
+
   colorCodes =
     [
       [
@@ -101,6 +104,20 @@ export class CreateNoteComponent implements OnInit{
     this.popup = true;
   }
 
+  updateNote(data: Note) {
+    const updateNoteDTO: UpadteNote = new UpadteNote();
+    updateNoteDTO.noteId = data.id;
+    updateNoteDTO.title = data.title;
+    updateNoteDTO.description = data.description;
+    const resp$ = crudHttpsCallWithToken('/notes/updateNotes?access_token=' + this.token, updateNoteDTO, 'post');
+    resp$.subscribe(response => {
+      this.snack.open('Note Updated successfully', 'ok', {
+        duration: 1500,
+        horizontalPosition: this.horizontalPosition,
+        verticalPosition: this.verticalPosition,
+      });
+    });
+  }
   note() {
     this.token = localStorage.getItem('token');
     if (this.createNote) {
@@ -250,18 +267,26 @@ export class CreateNoteComponent implements OnInit{
   }
 
   editNodeDialogBox(note: Note) {
-    this.dialog.open(EditNodeComponent, {
+    this.noteService.passNoteToEditNote(note);
+    const dialogRef = this.dialog.open(EditNodeComponent, {
       width: '516px',
       height: 'fit-content',
       data: note,
     });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.updateNote(note);
+    });
   }
 
   add_lebel_to_note(labelTag: Label, note: Note, i: number) {
-    const resp$ = getHttpsCall('/notes/'+note.id+'/addLabelToNotes/'+labelTag.id+'/add?access_token='+this.token, 'post');
-    resp$.subscribe((ress: any) => {
-      if(note.isPined === true){
-        if(!this.allPinedNote[i].noteLabels.includes(labelTag)){
+      const labeList : Label[] = note.noteLabels;
+      if(!labeList.includes(labelTag)){
+        const res$ = getHttpsCall('/notes/'+note.id+'/addLabelToNotes/'+labelTag.id+'/add?access_token='+this.token, 'post');
+        res$.subscribe(console.log);
+      }
+      if(note.isPined){
+        if(this.allPinedNote[i].noteLabels.indexOf(labelTag) === -1){
           this.allPinedNote[i].noteLabels.push(labelTag);
         }
         else{
@@ -273,7 +298,7 @@ export class CreateNoteComponent implements OnInit{
         }
       }
       else{
-        if(!this.allNonPinedNote[i].noteLabels.includes(labelTag)) {
+        if(this.allNonPinedNote[i].noteLabels.indexOf(labelTag) === -1) {
           this.allNonPinedNote[i].noteLabels.push(labelTag);
         }
         else {
@@ -284,7 +309,6 @@ export class CreateNoteComponent implements OnInit{
           });
         }
       }
-    });
   }
 
   delete_label_from_note(labelTag: Label, note: Note, i: number, nl: number) {
@@ -297,5 +321,21 @@ export class CreateNoteComponent implements OnInit{
         this.allNonPinedNote[i].noteLabels.splice(nl, 1);
       }
     });
+  }
+
+  changeColor(colorName: string, note: Note, i: number) {
+    const colorDto: ColorDTO = new ColorDTO();
+    colorDto.noteIdList = [note.id];
+    colorDto.color = colorName;
+    const resp$ = crudHttpsCallWithToken("/notes/changesColorNotes?access_token="+this.token, colorDto,"post")
+      resp$.subscribe(
+      (response: any) => {
+        if(note.isPined && this.allPinedNote.includes(note)){
+          this.allPinedNote[i].color = colorName;
+        }else {
+          this.allNonPinedNote[i].color = colorName;
+        }
+        console.log("color is successfully applied", response);
+      })
   }
 }

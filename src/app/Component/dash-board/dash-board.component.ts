@@ -63,6 +63,7 @@ export class DashBoardComponent implements OnInit, OnChanges {
               public dialog: MatDialog,
               public snack: MatSnackBar,
   ) {
+    this.getAllLabels();
   }
 
   ngOnInit(): void {
@@ -116,7 +117,6 @@ export class DashBoardComponent implements OnInit, OnChanges {
         height: 'fit-content',
       });
     } else {
-      // this.snack.open('Hi, ' + localStorage.getItem('fullName') + ', you are on dashboard! ', 'ok', {duration: 2000});
       this.snack.open('Hi, ' + localStorage.getItem('fullName') + ', you are on dashboard! ', 'ok', {
         duration: 1500,
         horizontalPosition: this.horizontalPosition,
@@ -148,10 +148,14 @@ export class DashBoardComponent implements OnInit, OnChanges {
         break;
       }
       case 'editLabels': {
-        this.dialog.open(LebelDialogComponent, {
+        const dialogRef = this.dialog.open(LebelDialogComponent, {
           width: '250px',
           height: 'fit-content',
           data: Label
+        });
+        dialogRef.afterClosed().subscribe(result => {
+          console.log('The dialog was closed');
+          this.getAllLabels();
         });
         break;
       }

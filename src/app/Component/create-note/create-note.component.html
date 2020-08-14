@@ -61,7 +61,7 @@
          fxLayout="row wrap" fxLayoutGap="10px"
          fxLayoutAlign="start center" fxLayoutAlign.xs="center center" *ngIf="grid()== true">
       <div fxFlex='280px' fxFlex.xs='100' *ngFor="let note of allPinedNote | noteSort: searchTerm; let i = index">
-        <mat-card (mouseenter)="mouseenter(i+'u')"
+        <mat-card [ngStyle]="{'background-color':note.color}" (mouseenter)="mouseenter(i+'u')"
                   (mouseleave)="mouseleave()" class="gridmat" style="margin-top: 8px" fxFlex="100%">
           <!--        <mat-icon *ngIf="isShowing && indexStatus === i" class="check" matTooltip="Select note">check_circle</mat-icon>-->
           <mat-card-content>
@@ -130,14 +130,36 @@
               </li>
 
               <li>
-                <button mat-icon-button class="iconButton">
+                <button mat-icon-button class="iconButton" [matMenuTriggerFor]="colorMenu" [ngStyle]="{'background-color':note.color}">
                   <mat-icon *ngIf="isShowing && indexStatus === i+'u'" matTooltip="color"
                             class="material-icons-outlined md-18">palette
                   </mat-icon>
                 </button>
               </li>
+              <div>
+              <mat-menu #colorMenu="matMenu" fxFlex="80" [overlapTrigger]="false">
 
-              <li>
+                <div style="opacity: 80%;">
+                  <div *ngFor="let color of colorCodes" style="margin-left: 2px;margin-right:2px;margin-top: 2px;margin-bottom: 2px" fxLayout="row wrap" fxLayoutGap="5px">
+                    <div *ngFor="let colorItem of color" style="margin-left: 2px; margin-right: 2px" fxLayout="column wrap" fxLayoutGap="2px">
+
+                      <button *ngIf="colorItem.name !== 'white'" matbutton [ngStyle]="{ 'background-color': colorItem.name,'box-shadow': 'none' }"
+                              (click)="changeColor(colorItem.hexcode, note, i)" matTooltip="{{ colorItem.name }}" mat-mini-fab
+                              class="color">
+                      </button>
+                      <button *ngIf="colorItem.name === 'white'" matbutton [ngStyle]="{ 'background-color': colorItem.name,'box-shadow': 'none' }"
+                              (click)="changeColor(colorItem.hexcode,note, i)" matTooltip="{{ colorItem.name }}" mat-mini-fab
+                              class="whitecolor">
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+              </mat-menu>
+          </div>
+
+
+          <li>
                 <button mat-icon-button class="iconButton" (click)="addToArchive(note, i)">
                   <mat-icon *ngIf="isShowing && indexStatus === i+'u'" matTooltip="archive"
                             class="material-icons-outlined md-18"
@@ -192,7 +214,7 @@
          fxLayout="column wrap" fxLayoutGap="10px"
          fxLayoutAlign="start center" fxLayoutAlign.xs="center center" *ngIf="grid()== false">
       <div fxFlex.xs='100' *ngFor="let note of allPinedNote | noteSort: searchTerm; let i = index">
-        <mat-card (mouseenter)="mouseenter(i+'u')"
+        <mat-card [ngStyle]="{'background-color':note.color}" (mouseenter)="mouseenter(i+'u')"
                   (mouseleave)="mouseleave()" class="listmat1" style="margin-bottom: 10px; margin-top: 10px;"
                   fxFlex="100%">
           <mat-card-content>
@@ -263,12 +285,34 @@
               </li>
 
               <li>
-                <button mat-icon-button class="iconButton">
+                <button mat-icon-button class="iconButton" [matMenuTriggerFor]="colorMenu" [ngStyle]="{'background-color':note.color}">
                   <mat-icon *ngIf="isShowing && indexStatus === i+'u'" matTooltip="color"
                             class="material-icons-outlined md-18">palette
                   </mat-icon>
                 </button>
               </li>
+              <div>
+                <mat-menu #colorMenu="matMenu" fxFlex="80" [overlapTrigger]="false">
+
+                  <div style="opacity: 80%;">
+                    <div *ngFor="let color of colorCodes" style="margin-left: 2px;margin-right:2px;margin-top: 2px;margin-bottom: 2px" fxLayout="row wrap" fxLayoutGap="5px">
+                      <div *ngFor="let colorItem of color" style="margin-left: 2px; margin-right: 2px" fxLayout="column wrap" fxLayoutGap="2px">
+
+                        <button *ngIf="colorItem.name !== 'white'" matbutton [ngStyle]="{ 'background-color': colorItem.name,'box-shadow': 'none' }"
+                                (click)="changeColor(colorItem.hexcode, note, i)" matTooltip="{{ colorItem.name }}" mat-mini-fab
+                                class="color">
+                        </button>
+                        <button *ngIf="colorItem.name === 'white'" matbutton [ngStyle]="{ 'background-color': colorItem.name,'box-shadow': 'none' }"
+                                (click)="changeColor(colorItem.hexcode,note, i)" matTooltip="{{ colorItem.name }}" mat-mini-fab
+                                class="whitecolor">
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                </mat-menu>
+              </div>
+
 
               <li>
                 <button mat-icon-button class="iconButton" (click)="addToArchive(note, i)">
@@ -322,7 +366,7 @@ margin-left: 20px;" (click)="add_lebel_to_note(subtask,note,i)">{{subtask.label}
          fxLayout="row wrap" fxLayoutGap="10px"
          fxLayoutAlign="start center" fxLayoutAlign.xs="center center" *ngIf="grid()== true">
       <div fxFlex='280px' fxFlex.xs='100' *ngFor="let note of allNonPinedNote | noteSort: searchTerm; let i = index">
-        <mat-card (mouseenter)="mouseenter(i+'p')"
+        <mat-card [ngStyle]="{'background-color':note.color}" (mouseenter)="mouseenter(i+'p')"
                   (mouseleave)="mouseleave()" class="gridmat" fxFlex="100%">
           <!--<mat-icon *ngIf="isShowing && indexStatus === i" class="check" matTooltip="Select note">check_circle</mat-icon>-->
           <mat-card-content>
@@ -392,12 +436,33 @@ margin-left: 20px;" (click)="add_lebel_to_note(subtask,note,i)">{{subtask.label}
               </li>
 
               <li>
-                <button mat-icon-button class="iconButton">
+                <button mat-icon-button class="iconButton" [matMenuTriggerFor]="colorMenu" [ngStyle]="{'background-color':note.color}">
                   <mat-icon *ngIf="isShowing && indexStatus === i+'p'" matTooltip="color"
                             class="material-icons-outlined md-18">palette
                   </mat-icon>
                 </button>
               </li>
+              <div>
+                <mat-menu #colorMenu="matMenu" fxFlex="80" [overlapTrigger]="false">
+
+                  <div style="opacity: 80%;">
+                    <div *ngFor="let color of colorCodes" style="margin-left: 2px;margin-right:2px;margin-top: 2px;margin-bottom: 2px" fxLayout="row wrap" fxLayoutGap="5px">
+                      <div *ngFor="let colorItem of color" style="margin-left: 2px; margin-right: 2px" fxLayout="column wrap" fxLayoutGap="2px">
+
+                        <button *ngIf="colorItem.name !== 'white'" matbutton [ngStyle]="{ 'background-color': colorItem.name,'box-shadow': 'none' }"
+                                (click)="changeColor(colorItem.hexcode, note, i)" matTooltip="{{ colorItem.name }}" mat-mini-fab
+                                class="color">
+                        </button>
+                        <button *ngIf="colorItem.name === 'white'" matbutton [ngStyle]="{ 'background-color': colorItem.name,'box-shadow': 'none' }"
+                                (click)="changeColor(colorItem.hexcode,note, i)" matTooltip="{{ colorItem.name }}" mat-mini-fab
+                                class="whitecolor">
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                </mat-menu>
+              </div>
 
               <li>
                 <button mat-icon-button class="iconButton" (click)="addToArchive(note, i)">
@@ -446,7 +511,7 @@ margin-left: 20px;" (click)="add_lebel_to_note(subtask,note,i)">{{subtask.label}
          fxLayout="column wrap" fxLayoutGap="10px"
          fxLayoutAlign="start center" fxLayoutAlign.xs="center center" *ngIf="grid()== false">
       <div fxFlex.xs='100' *ngFor="let note of allNonPinedNote | noteSort: searchTerm; let i = index">
-        <mat-card (mouseenter)="mouseenter(i+'p')"
+        <mat-card [ngStyle]="{'background-color':note.color}" (mouseenter)="mouseenter(i+'p')"
                   (mouseleave)="mouseleave()" class="listmat" style="margin-top: 8px; margin-bottom: 8px" fxFlex="100%">
           <mat-card-content>
             <div fxLayout="row" fxLayoutAlign="space-between center"
@@ -516,12 +581,33 @@ margin-left: 20px;" (click)="add_lebel_to_note(subtask,note,i)">{{subtask.label}
               </li>
 
               <li>
-                <button mat-icon-button class="iconButton">
+                <button mat-icon-button class="iconButton" [matMenuTriggerFor]="colorMenu" [ngStyle]="{'background-color':note.color}">
                   <mat-icon *ngIf="isShowing && indexStatus === i+'p'" matTooltip="color"
                             class="material-icons-outlined md-18">palette
                   </mat-icon>
                 </button>
               </li>
+              <div>
+                <mat-menu #colorMenu="matMenu" fxFlex="80" [overlapTrigger]="false">
+
+                  <div style="opacity: 80%;">
+                    <div *ngFor="let color of colorCodes" style="margin-left: 2px;margin-right:2px;margin-top: 2px;margin-bottom: 2px" fxLayout="row wrap" fxLayoutGap="5px">
+                      <div *ngFor="let colorItem of color" style="margin-left: 2px; margin-right: 2px" fxLayout="column wrap" fxLayoutGap="2px">
+
+                        <button *ngIf="colorItem.name !== 'white'" matbutton [ngStyle]="{ 'background-color': colorItem.name,'box-shadow': 'none' }"
+                                (click)="changeColor(colorItem.hexcode, note, i)" matTooltip="{{ colorItem.name }}" mat-mini-fab
+                                class="color">
+                        </button>
+                        <button *ngIf="colorItem.name === 'white'" matbutton [ngStyle]="{ 'background-color': colorItem.name,'box-shadow': 'none' }"
+                                (click)="changeColor(colorItem.hexcode,note, i)" matTooltip="{{ colorItem.name }}" mat-mini-fab
+                                class="whitecolor">
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                </mat-menu>
+              </div>
 
               <li>
                 <button mat-icon-button class="iconButton" (click)="addToArchive(note, i)">

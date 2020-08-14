@@ -12,7 +12,7 @@ export class NoteServiceService {
 
   private loginSource = new Subject<any>();
   currentLoginStatus$ = this.loginSource.asObservable();
-  private noteSource = new Subject<any>();
+  private noteSource = new Subject<Note>();
   currentNotes$ = this.noteSource.asObservable();
   private searchSource = new Subject<string>();
   currentSearch$ = this.searchSource.asObservable();
@@ -24,6 +24,8 @@ export class NoteServiceService {
   currentArchievedData$ = this.archiveSorce.asObservable();
   private labelNameSource = new Subject<string>();
   currentRequestLabelName$ = this.labelNameSource.asObservable();
+  private updateSource = new Subject();
+  currentUpdateNote$ = this.updateSource.asObservable();
 
 
   constructor(private http: HttpClient) {
@@ -31,10 +33,6 @@ export class NoteServiceService {
 
   changeLoginStatus(message: any) {
     this.loginSource.next(message);
-  }
-
-  changeNotes(message: any){
-    this.noteSource.next(message);
   }
 
   changeEvent(searchTerm: string) {
@@ -58,6 +56,14 @@ export class NoteServiceService {
 
   changeLabelRequest(labelName: string){
     this.labelNameSource.next(labelName);
+  }
+
+  passNoteToEditNote(note: Note) {
+    this.noteSource.next(note);
+  }
+
+  updateNoteFromEditNote(updated_note: Note) {
+    this.updateSource.next(updated_note);
   }
 }
 

@@ -5,6 +5,7 @@ import {Label} from '../../model/Label';
 import {crudHttpsCallWithToken, getHttpsCall} from '../utils/utils';
 import {fakeAsync} from '@angular/core/testing';
 import {MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition} from '@angular/material/snack-bar';
+import {DashBoardComponent} from '../dash-board/dash-board.component';
 
 @Component({
   selector: 'app-lebel-dialog',
@@ -109,6 +110,7 @@ export class LebelDialogComponent implements OnInit {
   deleteOnClick(label: Label, i: number) {
     const res$ = getHttpsCall('/noteLabels/' + label.id + '/deleteNoteLabel?access_token=' + this.token, 'delete');
     res$.subscribe((response: any) => {
+      this.noteService.changeLebelList(this.lebelList);
       this.lebelList.splice(i, 1);
       this.snack.open('Label deleted successfully', 'ok', {
         duration: 1500,
@@ -128,6 +130,7 @@ export class LebelDialogComponent implements OnInit {
     this.isShowing = false;
     this.status_of_current_label = -1;
   }
+
   onUpdate(label: Label, i: number) {
     const res$ = crudHttpsCallWithToken('/noteLabels/' + label.id + '/updateNoteLabel?access_token=' + this.token, label,'post');
     res$.subscribe((response: any) => {
