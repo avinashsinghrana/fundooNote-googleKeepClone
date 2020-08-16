@@ -47,7 +47,6 @@ export class ShowLabelNoteComponent implements OnInit {
       this.nav_select_item = response;
     });
     this.getAllLabels();
-    // this.labelList = this.noteService.lebelSource.getValue();
   }
 
   getAllLabels() {

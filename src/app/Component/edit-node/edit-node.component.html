@@ -1,7 +1,10 @@
-<h1 style="font-family: Roboto, Helvetica Neue, sans-serif;margin-top: -17px; font-size: 14px; color: #5f6368" mat-dialog-title>Update Note</h1>
-<div mat-dialog-content fxLayout="column">
-  <mat-form-field>
-    <mat-label>Title</mat-label>
+<div [ngStyle]="{'background-color':data.color}">
+  <div [ngStyle]="{'background-color':data.color}" style="margin-left: -24px; margin-right: -24px;overflow-x: hidden; overflow-y: hidden;margin-top: -24px">
+  <h1 style="margin-bottom: 0px;;margin-left: 22px; font-family: Roboto, Helvetica Neue, sans-serif; font-size: 14px; color: #5f6368" mat-dialog-title>Update Note</h1>
+  </div>
+<div [ngStyle]="{'background-color':data.color}" mat-dialog-content fxLayout="column">
+  <mat-form-field [ngStyle]="{'background-color':data.color}">
+    <mat-label [ngStyle]="{'background-color':data.color}">Title</mat-label>
     <input style="margin-top: -22px" matInput [(ngModel)]="data.title">
   </mat-form-field>
   <mat-form-field>
@@ -9,15 +12,15 @@
     <textarea style="margin-top: -5px" matInput [(ngModel)]="data.description"></textarea>
   </mat-form-field>
 </div>
-<div mat-dialog-actions fxLayout="row" fxLayoutAlign="space-between center" style="overflow-x: hidden; overflow-y: hidden">
-  <div>
-    <ul style="list-style-type:none;
+<div [ngStyle]="{'background-color':data.color}" mat-dialog-actions fxLayout="row" fxLayoutAlign="space-between center" style="overflow-x: hidden; overflow-y: hidden;margin-left: -24px;margin-right: -24px;">
+  <div [ngStyle]="{'background-color':data.color}">
+    <ul [ngStyle]="{'background-color':data.color}" style="list-style-type:none;
 margin-left: -52px;
 margin-bottom: 0px;
 margin-top: -19px;" fxLayout="row">
       <li>
 
-        <button mat-icon-button class="iconButton">
+        <button mat-icon-button style="margin-left: 22px" class="iconButton">
           <mat-icon matTooltip="reminder" class="material-icons-outlined md-18">notifications
           </mat-icon>
 
@@ -70,15 +73,14 @@ margin-top: -19px;" fxLayout="row">
       </mat-menu>
     </ul>
   </div>
-  <div>
+  <div [ngStyle]="{'background-color':data.color}">
     <button matTooltip="close" style="margin-top: -28px;
 margin-bottom: 9px;
 " mat-button color="primary" (click)="note()">close</button>
 
   </div>
 </div>
-
-
+</div>
 
 
 <!--<div mat-dialog-content class="matcard1" [formGroup]="updateNote">-->

@@ -144,11 +144,11 @@
                     <div *ngFor="let colorItem of color" style="margin-left: 2px; margin-right: 2px" fxLayout="column wrap" fxLayoutGap="2px">
 
                       <button *ngIf="colorItem.name !== 'white'" matbutton [ngStyle]="{ 'background-color': colorItem.name,'box-shadow': 'none' }"
-                              (click)="changeColor(colorItem.hexcode, note, i)" matTooltip="{{ colorItem.name }}" mat-mini-fab
+                              (click)="changeColor(colorItem.name, note, i)" matTooltip="{{ colorItem.name }}" mat-mini-fab
                               class="color">
                       </button>
                       <button *ngIf="colorItem.name === 'white'" matbutton [ngStyle]="{ 'background-color': colorItem.name,'box-shadow': 'none' }"
-                              (click)="changeColor(colorItem.hexcode,note, i)" matTooltip="{{ colorItem.name }}" mat-mini-fab
+                              (click)="changeColor(colorItem.name,note, i)" matTooltip="{{ colorItem.name }}" mat-mini-fab
                               class="whitecolor">
                       </button>
                     </div>
@@ -188,7 +188,7 @@
                 <mat-menu #afterMenu xPosition="after">
                   <button mat-menu-item>Delete Note</button>
                   <button [mat-menu-trigger-for]="addLebelMenu" mat-menu-item>Add Lebel</button>
-                  <button mat-menu-item>Make A Copy</button>
+                  <button mat-menu-item (click)="makeAcopy(note)">Make A Copy</button>
                 </mat-menu>
               </li>
               <mat-menu #addLebelMenu="matMenu" xPosition="after">
@@ -299,11 +299,11 @@
                       <div *ngFor="let colorItem of color" style="margin-left: 2px; margin-right: 2px" fxLayout="column wrap" fxLayoutGap="2px">
 
                         <button *ngIf="colorItem.name !== 'white'" matbutton [ngStyle]="{ 'background-color': colorItem.name,'box-shadow': 'none' }"
-                                (click)="changeColor(colorItem.hexcode, note, i)" matTooltip="{{ colorItem.name }}" mat-mini-fab
+                                (click)="changeColor(colorItem.name, note, i)" matTooltip="{{ colorItem.name }}" mat-mini-fab
                                 class="color">
                         </button>
                         <button *ngIf="colorItem.name === 'white'" matbutton [ngStyle]="{ 'background-color': colorItem.name,'box-shadow': 'none' }"
-                                (click)="changeColor(colorItem.hexcode,note, i)" matTooltip="{{ colorItem.name }}" mat-mini-fab
+                                (click)="changeColor(colorItem.name,note, i)" matTooltip="{{ colorItem.name }}" mat-mini-fab
                                 class="whitecolor">
                         </button>
                       </div>
@@ -343,7 +343,7 @@
               <mat-menu #afterMenu="matMenu" xPosition="after">
                 <button mat-menu-item>Delete Note</button>
                 <button [mat-menu-trigger-for]="addLebelMenu" mat-menu-item>Add Lebel</button>
-                <button mat-menu-item>Make A Copy</button>
+                <button mat-menu-item (click)="makeAcopy(note)">Make A Copy</button>
               </mat-menu>
               <mat-menu #addLebelMenu="matMenu" xPosition="after">
                 <div style="list-style: none" *ngFor="let subtask of allLebel">
@@ -450,11 +450,11 @@ margin-left: 20px;" (click)="add_lebel_to_note(subtask,note,i)">{{subtask.label}
                       <div *ngFor="let colorItem of color" style="margin-left: 2px; margin-right: 2px" fxLayout="column wrap" fxLayoutGap="2px">
 
                         <button *ngIf="colorItem.name !== 'white'" matbutton [ngStyle]="{ 'background-color': colorItem.name,'box-shadow': 'none' }"
-                                (click)="changeColor(colorItem.hexcode, note, i)" matTooltip="{{ colorItem.name }}" mat-mini-fab
+                                (click)="changeColor(colorItem.name, note, i)" matTooltip="{{ colorItem.name }}" mat-mini-fab
                                 class="color">
                         </button>
                         <button *ngIf="colorItem.name === 'white'" matbutton [ngStyle]="{ 'background-color': colorItem.name,'box-shadow': 'none' }"
-                                (click)="changeColor(colorItem.hexcode,note, i)" matTooltip="{{ colorItem.name }}" mat-mini-fab
+                                (click)="changeColor(colorItem.name,note, i)" matTooltip="{{ colorItem.name }}" mat-mini-fab
                                 class="whitecolor">
                         </button>
                       </div>
@@ -490,7 +490,7 @@ margin-left: 20px;" (click)="add_lebel_to_note(subtask,note,i)">{{subtask.label}
               <mat-menu #afterMenu="matMenu" xPosition="after">
                 <button mat-menu-item>Delete Note</button>
                 <button [mat-menu-trigger-for]="addLebelMenu" mat-menu-item>Add Lebel</button>
-                <button mat-menu-item>Make A Copy</button>
+                <button mat-menu-item (click)="makeAcopy(note)">Make A Copy</button>
               </mat-menu>
 
               <mat-menu #addLebelMenu="matMenu" xPosition="after">
@@ -595,11 +595,11 @@ margin-left: 20px;" (click)="add_lebel_to_note(subtask,note,i)">{{subtask.label}
                       <div *ngFor="let colorItem of color" style="margin-left: 2px; margin-right: 2px" fxLayout="column wrap" fxLayoutGap="2px">
 
                         <button *ngIf="colorItem.name !== 'white'" matbutton [ngStyle]="{ 'background-color': colorItem.name,'box-shadow': 'none' }"
-                                (click)="changeColor(colorItem.hexcode, note, i)" matTooltip="{{ colorItem.name }}" mat-mini-fab
+                                (click)="changeColor(colorItem.name , note, i)" matTooltip="{{ colorItem.name }}" mat-mini-fab
                                 class="color">
                         </button>
                         <button *ngIf="colorItem.name === 'white'" matbutton [ngStyle]="{ 'background-color': colorItem.name,'box-shadow': 'none' }"
-                                (click)="changeColor(colorItem.hexcode,note, i)" matTooltip="{{ colorItem.name }}" mat-mini-fab
+                                (click)="changeColor(colorItem.name ,note, i)" matTooltip="{{ colorItem.name }}" mat-mini-fab
                                 class="whitecolor">
                         </button>
                       </div>
@@ -637,7 +637,7 @@ margin-left: 20px;" (click)="add_lebel_to_note(subtask,note,i)">{{subtask.label}
               <mat-menu #afterMenu xPosition="after">
                 <button mat-menu-item>Delete Note</button>
                 <button [mat-menu-trigger-for]="addLebelMenu" mat-menu-item>Add Lebel</button>
-                <button mat-menu-item>Make A Copy</button>
+                <button mat-menu-item (click)="makeAcopy(note)">Make A Copy</button>
               </mat-menu>
 
               <mat-menu #addLebelMenu="matMenu" xPosition="after">

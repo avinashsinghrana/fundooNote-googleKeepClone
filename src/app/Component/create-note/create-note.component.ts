@@ -22,7 +22,7 @@ import {ColorDTO} from '../../model/ColorDTO';
   styleUrls: ['./create-note.component.scss']
 })
 
-export class CreateNoteComponent implements OnInit{
+export class CreateNoteComponent implements OnInit {
   horizontalPosition: MatSnackBarHorizontalPosition = 'start';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   notes$: Observable<any>;
@@ -43,22 +43,22 @@ export class CreateNoteComponent implements OnInit{
   colorCodes =
     [
       [
-        { name: "white", hexcode: "#ffffff" },
-        { name: "lightGreen", hexcode: "#f28b82" },
-        { name: "purple", hexcode: "#f7bc04" },
-        { name: "red", hexcode: "#faf474" },
+        {name: 'white', hexcode: '#ffffff'},
+        {name: 'lightGreen', hexcode: '#f28b82'},
+        {name: 'purple', hexcode: '#f7bc04'},
+        {name: 'red', hexcode: '#faf474'},
       ],
       [
-        { name: "Teal", hexcode: "#cbff90" },
-        { name: "pink", hexcode: "#a7ffeb" },
-        { name: "orange", hexcode: "#cbf0f8" },
-        { name: "blue", hexcode: "#adcbfa" },
+        {name: 'Teal', hexcode: '#cbff90'},
+        {name: 'pink', hexcode: '#a7ffeb'},
+        {name: 'orange', hexcode: '#cbf0f8'},
+        {name: 'blue', hexcode: '#adcbfa'},
       ],
       [
-        { name: "brown", hexcode: "#d7aefb" },
-        { name: "yellow", hexcode: "#fdcfe8" },
-        { name: "darkBlue", hexcode: "#cbb294" },
-        { name: "gray", hexcode: "#e8eaed" }
+        {name: 'brown', hexcode: '#d7aefb'},
+        {name: 'yellow', hexcode: '#fdcfe8'},
+        {name: 'darkBlue', hexcode: '#cbb294'},
+        {name: 'gray', hexcode: '#e8eaed'}
       ]
     ];
   indexStatus: string;
@@ -118,6 +118,7 @@ export class CreateNoteComponent implements OnInit{
       });
     });
   }
+
   note() {
     this.token = localStorage.getItem('token');
     if (this.createNote) {
@@ -131,13 +132,13 @@ export class CreateNoteComponent implements OnInit{
           } else {
             this.allPinedNote.push(response.status.details);
           }
-        this.snack.open('Note Created Sucessfully', 'ok', {
-          duration: 1500,
-          horizontalPosition: this.horizontalPosition,
-          verticalPosition: this.verticalPosition,
-        });
-        this.newNote = null;
-        this.createNote.reset();
+          this.snack.open('Note Created Sucessfully', 'ok', {
+            duration: 1500,
+            horizontalPosition: this.horizontalPosition,
+            verticalPosition: this.verticalPosition,
+          });
+          this.newNote = null;
+          this.createNote.reset();
         }
       );
     }
@@ -145,22 +146,21 @@ export class CreateNoteComponent implements OnInit{
   }
 
   getAllNotes() {
-    this.notes$ = getHttpsCall('/notes/getNotesList?access_token=' + this.token, 'get'), shareReplay();
-    this.notes$.subscribe(data => {
-      this.notes$.subscribe(notes => {
-        this.allNonPinedNote = notes.data.data
-          .filter(note => !note.isPined)
-          .filter(n => !n.isArchived)
-          .filter(v => !v.isDeleted);
-        this.allPinedNote = notes.data.data
-          .filter(note => note.isPined)
-          .filter(n => !n.isArchived)
-          .filter(v => !v.isDeleted);
-      });
+    this.notes$ = getHttpsCall('/notes/getNotesList?access_token=' + this.token, 'get');
+    this.notes$.subscribe(notes => {
+      this.allNonPinedNote = notes.data.data
+        .filter(note => !note.isPined)
+        .filter(n => !n.isArchived)
+        .filter(v => !v.isDeleted);
+      this.allPinedNote = notes.data.data
+        .filter(note => note.isPined)
+        .filter(n => !n.isArchived)
+        .filter(v => !v.isDeleted);
     });
   }
+
   getAllLabels() {
-    const resp$ = getHttpsCall('/noteLabels/getNoteLabelList?access_token='+this.token, 'get');
+    const resp$ = getHttpsCall('/noteLabels/getNoteLabelList?access_token=' + this.token, 'get');
     resp$.subscribe((ress: any) => {
       this.allLebel = ress.data.details;
     });
@@ -226,7 +226,7 @@ export class CreateNoteComponent implements OnInit{
     for_archieve.noteIdList = [note.id];
     for_archieve.isArchived = true;
 
-    if ( this.allPinedNote.length > 0 && this.allPinedNote.indexOf(note) > -1) {
+    if (this.allPinedNote.length > 0 && this.allPinedNote.indexOf(note) > -1) {
       const resp$ = crudHttpsCallWithToken('/notes/archiveNotes?access_token=' + this.token, for_archieve, 'post');
       resp$.subscribe(response => {
         this.allPinedNote.splice(i, 1);
@@ -248,7 +248,7 @@ export class CreateNoteComponent implements OnInit{
     const for_delete: TrashModel = new TrashModel();
     for_delete.noteIdList = [note.id];
     for_delete.isDeleted = true;
-    if ( this.allNonPinedNote.length > 0 && this.allPinedNote.indexOf(note) > -1) {
+    if (this.allNonPinedNote.length > 0 && this.allPinedNote.indexOf(note) > -1) {
       const resp$ = crudHttpsCallWithToken('/notes/trashNotes?access_token=' + this.token, for_delete, 'post');
       resp$.subscribe(response => {
         this.allPinedNote.splice(i, 1);
@@ -280,44 +280,40 @@ export class CreateNoteComponent implements OnInit{
   }
 
   add_lebel_to_note(labelTag: Label, note: Note, i: number) {
-      const labeList : Label[] = note.noteLabels;
-      if(!labeList.includes(labelTag)){
-        const res$ = getHttpsCall('/notes/'+note.id+'/addLabelToNotes/'+labelTag.id+'/add?access_token='+this.token, 'post');
-        res$.subscribe(console.log);
+    const labeList: Label[] = note.noteLabels;
+    if (!labeList.includes(labelTag)) {
+      const res$ = getHttpsCall('/notes/' + note.id + '/addLabelToNotes/' + labelTag.id + '/add?access_token=' + this.token, 'post');
+      res$.subscribe(console.log);
+    }
+    if (note.isPined) {
+      if (this.allPinedNote[i].noteLabels.indexOf(labelTag) === -1) {
+        this.allPinedNote[i].noteLabels.push(labelTag);
+      } else {
+        this.snack.open('Label Already Assigned', 'OK', {
+          duration: 1500,
+          horizontalPosition: this.horizontalPosition,
+          verticalPosition: this.verticalPosition,
+        });
       }
-      if(note.isPined){
-        if(this.allPinedNote[i].noteLabels.indexOf(labelTag) === -1){
-          this.allPinedNote[i].noteLabels.push(labelTag);
-        }
-        else{
-          this.snack.open("Label Already Assigned",'OK',{
-            duration: 1500,
-            horizontalPosition: this.horizontalPosition,
-            verticalPosition: this.verticalPosition,
-          });
-        }
+    } else {
+      if (this.allNonPinedNote[i].noteLabels.indexOf(labelTag) === -1) {
+        this.allNonPinedNote[i].noteLabels.push(labelTag);
+      } else {
+        this.snack.open('Label Already Assigned', 'OK', {
+          duration: 1500,
+          horizontalPosition: this.horizontalPosition,
+          verticalPosition: this.verticalPosition,
+        });
       }
-      else{
-        if(this.allNonPinedNote[i].noteLabels.indexOf(labelTag) === -1) {
-          this.allNonPinedNote[i].noteLabels.push(labelTag);
-        }
-        else {
-          this.snack.open("Label Already Assigned",'OK',{
-            duration: 1500,
-            horizontalPosition: this.horizontalPosition,
-            verticalPosition: this.verticalPosition,
-          });
-        }
-      }
+    }
   }
 
   delete_label_from_note(labelTag: Label, note: Note, i: number, nl: number) {
-    const resp$ = getHttpsCall('/notes/'+note.id+'/addLabelToNotes/'+labelTag.id+'/remove?access_token='+this.token, 'post');
+    const resp$ = getHttpsCall('/notes/' + note.id + '/addLabelToNotes/' + labelTag.id + '/remove?access_token=' + this.token, 'post');
     resp$.subscribe((ress: any) => {
-      if(note.isPined === true){
+      if (note.isPined === true) {
         this.allPinedNote[i].noteLabels.splice(nl, 1);
-      }
-      else {
+      } else {
         this.allNonPinedNote[i].noteLabels.splice(nl, 1);
       }
     });
@@ -327,15 +323,37 @@ export class CreateNoteComponent implements OnInit{
     const colorDto: ColorDTO = new ColorDTO();
     colorDto.noteIdList = [note.id];
     colorDto.color = colorName;
-    const resp$ = crudHttpsCallWithToken("/notes/changesColorNotes?access_token="+this.token, colorDto,"post")
-      resp$.subscribe(
+    const resp$ = crudHttpsCallWithToken('/notes/changesColorNotes?access_token=' + this.token, colorDto, 'post');
+    resp$.subscribe(
       (response: any) => {
-        if(note.isPined && this.allPinedNote.includes(note)){
+        if (note.isPined && this.allPinedNote.includes(note)) {
           this.allPinedNote[i].color = colorName;
-        }else {
+        } else {
           this.allNonPinedNote[i].color = colorName;
         }
-        console.log("color is successfully applied", response);
-      })
+        console.log('color is successfully applied', response);
+      });
+  }
+
+  makeAcopy(note: Note) {
+    this.newNote = Object.assign(new Note(), note);
+    this.newNote.id = null;
+    this.token = localStorage.getItem('token');
+    this.createNote$ = crudHttpsCallWithToken('/notes/addNotes?access_token=' + this.token, this.newNote, 'post');
+    this.createNote$.subscribe((response: any) => {
+        this.newNote.id = response.status.details.id;
+        if (!this.newNote.isPined) {
+          this.allNonPinedNote.push(response.status.details);
+        } else {
+          this.allPinedNote.push(response.status.details);
+        }
+        this.snack.open('Note copied Sucessfully', 'ok', {
+          duration: 1500,
+          horizontalPosition: this.horizontalPosition,
+          verticalPosition: this.verticalPosition,
+        });
+        this.newNote = undefined;
+      }
+    );
   }
 }

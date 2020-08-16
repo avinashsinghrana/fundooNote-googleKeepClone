@@ -3,7 +3,7 @@ import {Label} from './Label';
 export class Note {
 
   color: string;
-  createdDate: "2020-08-06T05:54:58.869Z"
+  createdDate: string;
   description: string;
   id: string;
   imageUrl: string;
@@ -12,11 +12,10 @@ export class Note {
   isPined: boolean;
   label: Label[];
   linkUrl: "";
-  modifiedDate: "2020-08-06T05:54:58.869Z"
+  modifiedDate: string;
   noteCheckLists: [];
   noteLabels: Label[];
   questionAndAnswerNotes: [];
-  reminder: [];
+  reminder: any[];
   title: string;
-  // user
 }

@@ -17,7 +17,7 @@
          fxLayout="row wrap" fxLayoutGap="10px"
          fxLayoutAlign="start center" fxLayoutAlign.xs="center center" *ngIf="grid()== true">
       <div fxFlex='280px' fxFlex.xs='100' *ngFor="let note of allPinedNote | noteSort: searchTerm; let i = index">
-        <mat-card (mouseenter)="mouseenter(i+'u')"
+        <mat-card [ngStyle]="{'background-color':note.color}" (mouseenter)="mouseenter(i+'u')"
                   (mouseleave)="mouseleave()" class="gridmat" style="margin-top: 8px" fxFlex="100%">
           <!--        <mat-icon *ngIf="isShowing && indexStatus === i" class="check" matTooltip="Select note">check_circle</mat-icon>-->
           <mat-card-content>
@@ -148,7 +148,7 @@
          fxLayout="column wrap" fxLayoutGap="10px"
          fxLayoutAlign="start center" fxLayoutAlign.xs="center center" *ngIf="grid()== false">
       <div fxFlex.xs='100' *ngFor="let note of allPinedNote | noteSort: searchTerm; let i = index">
-        <mat-card (mouseenter)="mouseenter(i+'u')"
+        <mat-card [ngStyle]="{'background-color':note.color}" (mouseenter)="mouseenter(i+'u')"
                   (mouseleave)="mouseleave()" class="listmat1" style="margin-bottom: 10px; margin-top: 10px;"
                   fxFlex="100%">
           <mat-card-content>
@@ -278,7 +278,7 @@ margin-left: 20px;" (click)="add_lebel_to_note(subtask,note,i)">{{subtask.label}
          fxLayout="row wrap" fxLayoutGap="10px"
          fxLayoutAlign="start center" fxLayoutAlign.xs="center center" *ngIf="grid()== true">
       <div fxFlex='280px' fxFlex.xs='100' *ngFor="let note of allNonPinedNote | noteSort: searchTerm; let i = index">
-        <mat-card (mouseenter)="mouseenter(i+'p')"
+        <mat-card [ngStyle]="{'background-color':note.color}" (mouseenter)="mouseenter(i+'p')"
                   (mouseleave)="mouseleave()" class="gridmat" fxFlex="100%">
           <!--<mat-icon *ngIf="isShowing && indexStatus === i" class="check" matTooltip="Select note">check_circle</mat-icon>-->
           <mat-card-content>
@@ -402,7 +402,7 @@ margin-left: 20px;" (click)="add_lebel_to_note(subtask,note,i)">{{subtask.label}
          fxLayout="column wrap" fxLayoutGap="10px"
          fxLayoutAlign="start center" fxLayoutAlign.xs="center center" *ngIf="grid()== false">
       <div fxFlex.xs='100' *ngFor="let note of allNonPinedNote | noteSort: searchTerm; let i = index">
-        <mat-card (mouseenter)="mouseenter(i+'p')"
+        <mat-card [ngStyle]="{'background-color':note.color}" (mouseenter)="mouseenter(i+'p')"
                   (mouseleave)="mouseleave()" class="listmat" style="margin-top: 8px; margin-bottom: 8px" fxFlex="100%">
           <mat-card-content>
             <div fxLayout="row" fxLayoutAlign="space-between center"
